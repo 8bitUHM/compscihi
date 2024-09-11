@@ -21,7 +21,7 @@ module.exports = {
   entry: getEntryPoints("./src/pages"),
   output: {
     filename: "[name].js",
-    path: path.resolve(__dirname, "../public/dist"),
+    path: path.resolve(__dirname, "../../public/dist"),
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".json"],
