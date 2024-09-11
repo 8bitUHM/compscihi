@@ -11,13 +11,13 @@ The project is organized into several components:
 - **compscihi**: The main project directory.
   - **.github/**: GitHub actions CI/CD for deployment automations
   - **client**: CompSciHi frontend source code
-    - **public**: Built frontend
     - **src/**: Source code folder
       - **components/**: Website components
       - **pages/**: Website pages
       - **firebase/**: Firebase config files
     - **webpack/**: Webpack configuration files
-  - **server**: CompSciHi cloud functions source code
+  - **functions**: Cloud functions source code
+  - **public**: Built frontend from client client folder to push to deploy
 
 ## Getting the app running
 
