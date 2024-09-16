@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const Dotenv = require('dotenv-webpack');
+const Dotenv = require("dotenv-webpack");
 
 function getEntryPoints(directory) {
   const entries = {};
@@ -22,6 +22,7 @@ module.exports = {
   output: {
     filename: "[name].js",
     path: path.resolve(__dirname, "../../public/dist"),
+    assetModuleFilename: "assets/[name][ext][query]",
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".json"],
@@ -45,9 +46,19 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: "asset/resource",
+      },
+      {
+        test: /\.(woff(2)?|eot|ttf|otf)$/i,
+        type: "asset/resource",
+      },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
     ],
   },
-  plugins: [
-    new Dotenv(),
-  ],
+  plugins: [new Dotenv()],
 };
