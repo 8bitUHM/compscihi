@@ -4,17 +4,17 @@ import { createRoot } from "react-dom/client";
 import * as pic from "../assets/t.png";
 import "../styles/styles.css";
 
-const Index = () => {
+const Opportunities = () => {
   return (
     <>
       <NavBar />
       <div className="container text-left ttt">
-        This is the home page.
+        This is the opportunities page.
       </div>
     </>
   );
 };
 
-export default Index;
+export default Opportunities;
 const root = document.getElementById("root");
-createRoot(root).render(<Index />);
+createRoot(root).render(<Opportunities />);

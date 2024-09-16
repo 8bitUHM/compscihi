@@ -4,17 +4,17 @@ import { createRoot } from "react-dom/client";
 import * as pic from "../assets/t.png";
 import "../styles/styles.css";
 
-const Index = () => {
+const Contacts = () => {
   return (
     <>
       <NavBar />
       <div className="container text-left ttt">
-        This is the home page.
+        this is the contacts page.
       </div>
     </>
   );
 };
 
-export default Index;
+export default Contacts;
 const root = document.getElementById("root");
-createRoot(root).render(<Index />);
+createRoot(root).render(<Contacts />);
