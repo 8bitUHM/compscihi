@@ -15,6 +15,8 @@ The project is organized into several components:
       - **components/**: Website components
       - **pages/**: Website pages
       - **firebase/**: Firebase config files
+      - **styles/**: Tailwind styles
+      - **types/**: Import type definitions
     - **webpack/**: Webpack configuration files
   - **functions**: Cloud functions source code
   - **public**: Built frontend from client client folder to push to deploy
