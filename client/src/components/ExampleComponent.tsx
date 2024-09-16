@@ -1,9 +1,11 @@
 import * as React from "react";
+import NavBar from "./Navbar";
 
 const ExampleComponent = () => {
   return (
     <>
-      <div>This is an example component.</div>
+      <NavBar />
+      <div>This is the home page.</div>
     </>
   );
 };
