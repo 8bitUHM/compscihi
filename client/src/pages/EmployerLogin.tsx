@@ -8,11 +8,7 @@ const EmployerLogin = () => {
   return (
     <>
       <NavBar />
-
-      {/* Notes:
-       * This is out of the page.
-       * Footer works if you remove NavBar.
-       */}
+      <p className="py-5">This is the employer login page</p>
       <Footer />
     </>
   );

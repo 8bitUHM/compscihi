@@ -9,6 +9,7 @@ const Index = () => {
     <>
       <NavBar />
       <div className="container py-5">This is the home page.</div>
+      <Footer />
     </>
   );
 };
