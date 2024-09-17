@@ -5,6 +5,28 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites":[
+      {
+        "source": "/", 
+        "destination": "/index.html" 
+      },
+      {
+        "source": "/opportunities", 
+        "destination": "/opportunities.html" 
+      },
+      {
+        "source": "/contact", 
+        "destination": "/contact.html" 
+      },
+      {
+        "source": "/student-profile", 
+        "destination": "/student-profile.html" 
+      },
+      {
+        "source": "/student-profiles", 
+        "destination": "/student-profiles.html" 
+      }
     ]
   },
   "storage": {

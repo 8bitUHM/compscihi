@@ -25,12 +25,10 @@ The project is organized into several components:
 
 ### Client/Frontend
 1. Run ```npm install``` to install dependencies
-2. Run ```npm run build``` to create a production build or ```npm run dev``` to start development mode
-3. Using VSCode live server extension, open the index.html file in the admin folder with live server
+2. Run  ```npm run dev``` to start development mode which should give you a local link to view the app
 
 ### Server/Cloud Functions
 TBA
-
 
 ## Development
 

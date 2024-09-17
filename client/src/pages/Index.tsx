@@ -12,6 +12,5 @@ const Index = () => {
   );
 };
 
-export default Index;
 const root = document.getElementById("root");
 createRoot(root).render(<Index />);

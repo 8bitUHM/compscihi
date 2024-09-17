@@ -12,6 +12,5 @@ const Contact = () => {
   );
 };
 
-export default Contact;
 const root = document.getElementById("root");
 createRoot(root).render(<Contact />);
