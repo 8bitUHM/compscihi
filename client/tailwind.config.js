@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./src/**/*.{html,js,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'manoa-green': '#559e83',
+      }
+    },
   },
-  plugins: [],
+  plugins: [require('flowbite/plugin')]
 };
