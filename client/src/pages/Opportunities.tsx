@@ -7,7 +7,7 @@ const Opportunities = () => {
   return (
     <>
       <NavBar />
-      <div className="container py-24">This is the opportunities page.</div>
+      <div className="container py-5">This is the opportunities page.</div>
     </>
   );
 };
