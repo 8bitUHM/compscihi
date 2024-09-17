@@ -4,7 +4,7 @@ import { FC } from "react";
 const NavBar = () => {
     return (
         <>
-            <div className="navbar bg-green-500 text-white">
+            <div className="navbar bg-manoa-green text-white">
                 <div className="navbar-start">
                     <div className="dropdown">
                     <div role="button" className="btn btn-ghost lg:hidden">
@@ -39,15 +39,15 @@ const NavBar = () => {
                 </div>
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">
-                    <li><a href="./">Home</a></li>
+                    <li><a className="btn btn-ghost" href="./">Home</a></li>
                     <li>
-                        <a href="./opportunities.html">Opportunities</a>
+                        <a className="btn btn-ghost" href="./opportunities.html">Opportunities</a>
                     </li>
-                    <li><a href="./contact.html">Contact</a></li>
+                    <li><a className="btn btn-ghost" href="./contact.html">Contact</a></li>
                     </ul>
                 </div>
                 <div className="navbar-end">
-                    {/* <a className="btn btn-ghost text-l">Button</a> */}
+                    <a className="btn btn-ghost">Button</a>
                 </div>
             </div>
         </>

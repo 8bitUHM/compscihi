@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'manoa-green': '#024731',
+        'manoa-green': '#559e83',
       }
     },
   },
