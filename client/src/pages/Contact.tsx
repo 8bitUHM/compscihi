@@ -7,7 +7,7 @@ const Contact = () => {
   return (
     <>
       <NavBar />
-      <div className="container py-24">this is the contact page.</div>
+      <div className="container py-5">this is the contact page.</div>
     </>
   );
 };
