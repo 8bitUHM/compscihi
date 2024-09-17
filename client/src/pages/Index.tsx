@@ -1,7 +1,6 @@
 import * as React from "react";
 import NavBar from "../components/Navbar";
 import { createRoot } from "react-dom/client";
-import * as pic from "../assets/t.png";
 import "../styles/styles.css";
 
 const Index = () => {
