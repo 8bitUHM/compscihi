@@ -1,18 +1,22 @@
 import * as React from "react";
+import { createRoot } from "react-dom/client";
 import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 
-const Index = () => {
+const EmployerLogin = () => {
   return (
     <>
       <NavBar />
-      <div className="container py-24">This is the home page.</div>
+
+      {/* Notes:
+       * This is out of the page.
+       * Footer works if you remove NavBar.
+       */}
       <Footer />
     </>
   );
 };
 
 const root = document.getElementById("root");
-createRoot(root).render(<Index />);
+createRoot(root).render(<EmployerLogin />);
