@@ -7,9 +7,7 @@ const Index = () => {
   return (
     <>
       <NavBar />
-      <div className="container text-left ttt">
-        This is the home page.
-      </div>
+      <div className="container py-24">This is the home page.</div>
     </>
   );
 };
