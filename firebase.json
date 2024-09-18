@@ -26,6 +26,10 @@
       {
         "source": "/student-profiles", 
         "destination": "/student-profiles.html" 
+      },
+      {
+        "source": "/employer-login", 
+        "destination": "/employer-login.html" 
       }
     ]
   },
