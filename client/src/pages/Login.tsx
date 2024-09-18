@@ -4,15 +4,15 @@ import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "../styles/styles.css";
 
-const EmployerLogin = () => {
+const Login = () => {
   return (
     <>
       <NavBar />
-      <p className="py-5">This is the employer login page</p>
+      <p className="py-5">This is the login page</p>
       <Footer />
     </>
   );
 };
 
 const root = document.getElementById("root");
-createRoot(root).render(<EmployerLogin />);
+createRoot(root).render(<Login />);

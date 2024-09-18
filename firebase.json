@@ -16,10 +16,6 @@
         "destination": "/opportunities.html" 
       },
       {
-        "source": "/contact", 
-        "destination": "/contact.html" 
-      },
-      {
         "source": "/student-profile", 
         "destination": "/student-profile.html" 
       },
@@ -28,8 +24,8 @@
         "destination": "/student-profiles.html" 
       },
       {
-        "source": "/employer-login", 
-        "destination": "/employer-login.html" 
+        "source": "/login", 
+        "destination": "/login.html" 
       }
     ]
   },
