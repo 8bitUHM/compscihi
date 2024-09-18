@@ -26,6 +26,7 @@ The project is organized into several components:
 ### Client/Frontend
 1. Run ```npm install``` to install dependencies
 2. Run  ```npm run dev``` to start development mode which should give you a local link to view the app
+3. Using VSCode live server extension, open the index.html file in the admin folder with live server
 
 ### Server/Cloud Functions
 TBA
