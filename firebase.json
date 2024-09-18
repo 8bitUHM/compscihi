@@ -16,16 +16,16 @@
         "destination": "/opportunities.html" 
       },
       {
-        "source": "/contact", 
-        "destination": "/contact.html" 
-      },
-      {
         "source": "/student-profile", 
         "destination": "/student-profile.html" 
       },
       {
         "source": "/student-profiles", 
         "destination": "/student-profiles.html" 
+      },
+      {
+        "source": "/login", 
+        "destination": "/login.html" 
       }
     ]
   },
