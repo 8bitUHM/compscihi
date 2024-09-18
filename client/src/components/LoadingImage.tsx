@@ -12,8 +12,8 @@ const LoadingImage: FC<Props> = (props) => {
 
   return (
     <>
-      <div className="d-flex justify-content-center " style={loadingStyle}>
-        <div className="spinner-border my-5" style={loadingStyle}></div>
+      <div className="flex justify-center" style={loadingStyle}>
+        <div className="animate-spin my-5" style={loadingStyle}></div>
       </div>
 
       <img

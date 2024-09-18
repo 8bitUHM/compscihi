@@ -1082,6 +1082,16 @@ input[type="range"]::-ms-fill-lower {
   max-width: 1280px;
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
 .list-none {
   list-style-type: none;
 }
