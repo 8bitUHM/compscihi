@@ -64,7 +64,7 @@ const Footer: FC = () => {
                 <a
                   className="mx-2 text-base"
                   target="_blank"
-                  href="https://github.com/8bitUHM/8bit-site"
+                  href="https://github.com/8bitUHM/compscihi"
                 >
                   Website Source Code
                 </a>
