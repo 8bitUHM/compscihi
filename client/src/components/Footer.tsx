@@ -7,7 +7,7 @@ const Footer: FC = () => {
       <footer className="w-full py-3 bg-teal-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto">
-            <a href="#" className="flex justify-center">
+            <a href="#" className="flex justify-center text-gray-800">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -50,7 +50,7 @@ const Footer: FC = () => {
                 </a>
               </div> */}
 
-              <div className="flex items-center">
+              <div className="flex items-center text-gray-800">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="15"
@@ -71,7 +71,7 @@ const Footer: FC = () => {
               </div>
             </ul>
 
-            <span className="text-sm text-black text-center block">
+            <span className="text-sm text-gray-800 text-center block">
               ©
               <a href="https://8bituhm.org/" target="_blank">
                 8bitUHM
