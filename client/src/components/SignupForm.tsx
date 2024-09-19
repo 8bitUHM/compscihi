@@ -1,5 +1,6 @@
 import * as React from "react";
 import { FC } from "react";
+import { isRunningLocal } from "../util/routing";
 
 const SignupForm: FC = () => {
   return (
@@ -81,15 +82,28 @@ const SignupForm: FC = () => {
               >
                 Create an account
               </button>
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                Already have an account?{" "}
-                <a
-                  href="./login.html"
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  Login here
-                </a>
-              </p>
+
+              {isRunningLocal() ? (
+                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                  Already have an account?{" "}
+                  <a
+                    href="./login.html"
+                    className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  >
+                    Login here
+                  </a>
+                </p>
+              ) : (
+                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                  Already have an account?{" "}
+                  <a
+                    href="/login"
+                    className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  >
+                    Login here
+                  </a>
+                </p>
+              )}
             </form>
           </div>
         </div>
