@@ -1282,11 +1282,6 @@ input[type="range"]::-ms-fill-lower {
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
 }
 
-.bg-teal-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(175 236 239 / var(--tw-bg-opacity));
-}
-
 .bg-teal-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(6 148 162 / var(--tw-bg-opacity));
@@ -1469,11 +1464,6 @@ input[type="range"]::-ms-fill-lower {
 .text-gray-700 {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
-}
-
-.text-gray-800 {
-  --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
 }
 
 .text-gray-900 {
