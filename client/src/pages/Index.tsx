@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import * as Image2 from "../assets/postbuilding.jpg";
 import LoadingImage from "../components/LoadingImage";
+import { isRunningLocal } from "../util/routing";
 
 const Index = () => {
   return (
@@ -20,30 +21,63 @@ const Index = () => {
               Bringing Hawaii tech opportunities to University of Hawaii
               students, all in one place.
             </p>
-            <a
-              href="./opportunities.html"
-              className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-teal-500 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
-            >
-              View opportunities
-              <svg
-                className="w-5 h-5 ml-2 -mr-1"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-            </a>
-            <a
-              href="./student-profiles.html"
-              className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-            >
-              View student profiles
-            </a>
+            <div className="flex ">
+              {isRunningLocal() ? (
+                <>
+                  <a
+                    href="./opportunities.html"
+                    className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-teal-500 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
+                  >
+                    Opportunities
+                    <svg
+                      className="w-5 h-5 ml-2 -mr-1"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </a>
+                  <a
+                    href="./student-profiles.html"
+                    className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+                  >
+                    Student profiles
+                  </a>
+                </>
+              ) : (
+                <>
+                  <a
+                    href="/opportunities"
+                    className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-teal-500 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
+                  >
+                    Opportunities
+                    <svg
+                      className="w-5 h-5 ml-2 -mr-1"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </a>
+                  <a
+                    href="/student-profiles"
+                    className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+                  >
+                    Student profiles
+                  </a>
+                </>
+              )}
+            </div>
           </div>
           <div className="lg:col-span-5 flex justify-center">
             <LoadingImage
