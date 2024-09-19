@@ -71,7 +71,7 @@ const Footer: FC = () => {
               </div>
             </ul>
 
-            <span className="text-sm text-gray-600 text-center block">
+            <span className="text-sm text-black text-center block">
               ©
               <a href="https://8bituhm.org/" target="_blank">
                 8bitUHM
