@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import * as Image2 from "../assets/postbuilding.jpg";
+import LoadingImage from "../components/LoadingImage";
 
 const Index = () => {
   return (
@@ -45,10 +46,9 @@ const Index = () => {
             </a>
           </div>
           <div className="lg:col-span-5 flex justify-center">
-            <img
-              src={Image2}
+            <LoadingImage
+              imageUri={Image2}
               className="rounded lg:flex lg:mt-0 mt-12 h-auto max-w-full"
-              alt="Post building"
             />
           </div>
         </div>
