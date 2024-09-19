@@ -1011,6 +1011,10 @@ input[type="range"]::-ms-fill-lower {
   margin-right: auto;
 }
 
+.mt-12 {
+  margin-top: 3rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
 }
@@ -1065,6 +1069,10 @@ input[type="range"]::-ms-fill-lower {
   height: 2.25rem;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .w-1\/2 {
   width: 50%;
 }
@@ -1099,6 +1107,10 @@ input[type="range"]::-ms-fill-lower {
 
 .max-w-7xl {
   max-width: 80rem;
+}
+
+.max-w-full {
+  max-width: 100%;
 }
 
 .max-w-screen-sm {
@@ -1710,8 +1722,16 @@ input[type="range"]::-ms-fill-lower {
     grid-column: span 7 / span 7;
   }
 
+  .lg\:mb-72 {
+    margin-bottom: 18rem;
+  }
+
   .lg\:mb-8 {
     margin-bottom: 2rem;
+  }
+
+  .lg\:mt-0 {
+    margin-top: 0px;
   }
 
   .lg\:flex {
