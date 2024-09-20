@@ -159,8 +159,20 @@ const Opportunities = () => {
   return (
     <>
       <NavBar />
-      <div className="container mx-auto">
-        {/* Opportunities Container */}
+      <div className="container mx-auto mt-5">
+        <section className="text-gray-600 body-font">
+          <div className="container px-5 mx-auto">
+            <div className="flex flex-col text-center w-full ">
+              <h1 className="sm:text-3xl text-2xl font-extrabold tracking-tight title-font mb-4 text-gray-900">
+                Hawaii Tech Opportunities
+              </h1>
+              <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
+                Hawaii based tech opportunities for Hawaii tech professionals
+                and students.
+              </p>
+            </div>
+          </div>
+        </section>
 
         <div className="grid md:grid-cols-2 gap-5 my-10 md:mx-0 mx-2">
           {/* {opportunities.map((val, key) => {
