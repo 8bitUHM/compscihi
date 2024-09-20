@@ -4,10 +4,11 @@ import { FC } from "react";
 const Footer: FC = () => {
   return (
     <>
-      <footer className="w-full py-3 bg-teal-600">
+      <hr className="w-6/12 mx-auto h-px  bg-gray-200 border-0 dark:bg-gray-700"></hr>
+      <footer className="w-full py-3 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto">
-            <a href="#" className="flex justify-center text-white">
+            <a href="#" className="flex justify-center text-gray-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -23,7 +24,7 @@ const Footer: FC = () => {
                 />
               </svg>
             </a>
-            <ul className="text-lg flex items-center justify-center flex-col gap-3 md:flex-row md:gap-10 transition-all duration-500 py-2 mb-3 border-b border-gray-200">
+            <ul className="text-lg flex items-center justify-center flex-col gap-3 md:flex-row md:gap-10 transition-all duration-500  mb-1 py-2 ">
               {/* Uncomment for more footer items */}
               {/* <div className="flex items-center">
                 <svg
@@ -50,7 +51,7 @@ const Footer: FC = () => {
                 </a>
               </div> */}
 
-              <div className="flex items-center text-white">
+              <div className="flex items-center text-gray-500">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="15"
@@ -71,7 +72,7 @@ const Footer: FC = () => {
               </div>
             </ul>
 
-            <span className="text-sm text-white text-center block">
+            <span className="text-sm text-gray-500 text-center block">
               ©
               <a href="https://8bituhm.org/" target="_blank">
                 8bitUHM
