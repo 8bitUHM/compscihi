@@ -29,6 +29,12 @@ const Opportunities = () => {
   const [filterData, setFilterData] = React.useState<Map<string, number>>(
     new Map()
   );
+  const [searchQuery, setSearchQuery] = React.useState<string>("");
+  const [sortOrder, setSortOrder] = React.useState<"asc" | "desc">("asc");
+  const [selectedOrder, setSelectedOrder] =
+    React.useState<string>("postedDate");
+  const [locationFilters, setLocationFilters] = React.useState<string[]>([]);
+  const [jobTypeFilters, setJobTypeFilters] = React.useState<string[]>([]);
 
   React.useEffect(() => {
     const filterData = new Map();
@@ -73,7 +79,7 @@ const Opportunities = () => {
     });
 
     setFilterData(filterData);
-    // setOpportunities(mockOpportunities);
+    setOpportunities(mockOpportunities);
   }, []);
 
   const mockOpportunities: Opportunity[] = [
@@ -256,6 +262,99 @@ const Opportunities = () => {
     },
   ];
 
+  const filterOpportunities = () => {
+    let filteredOpportunities = [...mockOpportunities];
+
+    // Filter based on search query
+    if (searchQuery) {
+      filteredOpportunities = filteredOpportunities.filter(
+        (opportunity) =>
+          opportunity.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          opportunity.company.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Filter based on location type
+    if (locationFilters.length > 0) {
+      filteredOpportunities = filteredOpportunities.filter((opportunity) =>
+        locationFilters.includes(opportunity.locationType)
+      );
+    }
+
+    // Filter based on job type
+    if (jobTypeFilters.length > 0) {
+      filteredOpportunities = filteredOpportunities.filter((opportunity) =>
+        jobTypeFilters.includes(opportunity.jobType)
+      );
+    }
+
+    // Sort opportunities based on the selected order and sort order
+    filteredOpportunities.sort((a, b) => {
+      let aValue: string | number | undefined;
+      let bValue: string | number | undefined;
+
+      // Map selectedOrder to specific Opportunity fields
+      switch (selectedOrder) {
+        case "postedDate":
+          aValue = new Date(a.postedDate).getTime();
+          bValue = new Date(b.postedDate).getTime();
+          break;
+        case "title":
+          aValue = a.title;
+          bValue = b.title;
+          break;
+        case "pay":
+          aValue = a.pay || 0; // Handle undefined pay values
+          bValue = b.pay || 0;
+          break;
+        default:
+          aValue = 0;
+          bValue = 0;
+      }
+
+      // Sorting logic
+      if (sortOrder === "asc") {
+        return aValue > bValue ? 1 : -1;
+      } else {
+        return aValue < bValue ? 1 : -1;
+      }
+    });
+
+    setOpportunities(filteredOpportunities);
+  };
+
+  React.useEffect(() => {
+    filterOpportunities();
+  }, [searchQuery, locationFilters, jobTypeFilters, sortOrder, selectedOrder]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const toggleLocationFilter = (locationType: string) => {
+    setLocationFilters((prev) =>
+      prev.includes(locationType)
+        ? prev.filter((filter) => filter !== locationType)
+        : [...prev, locationType]
+    );
+  };
+
+  const toggleJobTypeFilter = (jobType: string) => {
+    setJobTypeFilters((prev) =>
+      prev.includes(jobType)
+        ? prev.filter((filter) => filter !== jobType)
+        : [...prev, jobType]
+    );
+  };
+
+  const handleSortOrderChange = (order: "asc" | "desc") => {
+    setSortOrder(order);
+  };
+
+  const handleSelectedOrderChange = (order: string) => {
+    setSelectedOrder(order);
+  };
+
   const opportunity = (opportunity: Opportunity, key: number) => {
     if (opportunity.active) {
       return (
@@ -430,18 +529,21 @@ const Opportunities = () => {
                   id="simple-search"
                   className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Search"
-                  required={true}
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  required
                 />
               </div>
             </form>
           </div>
+
           <div className="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
             <div className="flex items-center w-full space-x-3 md:w-auto">
               <button
-                id="orderDropdownButton"
-                data-dropdown-toggle="orderDropdown"
+                onClick={() =>
+                  handleSortOrderChange(sortOrder === "asc" ? "desc" : "asc")
+                }
                 className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                type="button"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -454,24 +556,12 @@ const Opportunities = () => {
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3"
+                    d="M3.75 6.75h16.5M3.75 12h16.5M12 17.25h8.25"
                   />
                 </svg>
-                Order
-                <svg
-                  className="-mr-1 ml-1.5 w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path
-                    clipRule="evenodd"
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  />
-                </svg>
+                {sortOrder === "asc" ? "Ascending" : "Descending"}
               </button>
+
               <div
                 id="orderDropdown"
                 className="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow-xl w-44 dark:bg-gray-700 dark:divide-gray-600"
@@ -504,21 +594,7 @@ const Opportunities = () => {
                 className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                 type="button"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-4 mr-2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 6.75h16.5M3.75 12h16.5M12 17.25h8.25"
-                  />
-                </svg>
-                Sort
+                Sort By
                 <svg
                   className="-mr-1 ml-1.5 w-5 h-5"
                   fill="currentColor"
@@ -533,6 +609,42 @@ const Opportunities = () => {
                   />
                 </svg>
               </button>
+
+              <div
+                id="sortDropdown"
+                className="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow-xl w-44 dark:bg-gray-700 dark:divide-gray-600"
+              >
+                <ul
+                  className="py-1 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="sortDropdownButton"
+                >
+                  <li>
+                    <button
+                      className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      onClick={() => handleSelectedOrderChange("postedDate")}
+                    >
+                      Date Posted
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      onClick={() => handleSelectedOrderChange("title")}
+                    >
+                      Title
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      onClick={() => handleSelectedOrderChange("pay")}
+                    >
+                      Salary
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
               <div
                 id="sortDropdown"
                 className="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow-xl w-44 dark:bg-gray-700 dark:divide-gray-600"
@@ -609,7 +721,7 @@ const Opportunities = () => {
               >
                 <ul
                   className="space-y-2 text-sm"
-                  aria-labelledby="dropdownDefault"
+                  aria-labelledby="filterDropdownButton"
                 >
                   {/* Location Type Filter */}
                   <li className="font-medium text-gray-700 dark:text-gray-100">
@@ -620,42 +732,44 @@ const Opportunities = () => {
                     <input
                       id="remote"
                       type="checkbox"
-                      defaultValue=""
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                      onChange={() => toggleLocationFilter("Remote")}
                     />
                     <label
                       htmlFor="remote"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Remote ({`${filterData.get("remote")}`})
+                      Remote ({filterData.get("remote")})
                     </label>
                   </li>
+
                   <li className="flex items-center">
                     <input
                       id="onsite"
                       type="checkbox"
-                      defaultValue=""
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                      onChange={() => toggleLocationFilter("On-site")}
                     />
                     <label
                       htmlFor="onsite"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      On-site ({`${filterData.get("on-site")}`})
+                      On-site ({filterData.get("on-site")})
                     </label>
                   </li>
+
                   <li className="flex items-center">
                     <input
                       id="hybrid"
                       type="checkbox"
-                      defaultValue=""
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                      onChange={() => toggleLocationFilter("Hybrid")}
                     />
                     <label
                       htmlFor="hybrid"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Hybrid ({`${filterData.get("hybrid")}`})
+                      Hybrid ({filterData.get("hybrid")})
                     </label>
                   </li>
 
@@ -668,56 +782,59 @@ const Opportunities = () => {
                     <input
                       id="fulltime"
                       type="checkbox"
-                      defaultValue=""
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                      onChange={() => toggleJobTypeFilter("Full-time")}
                     />
                     <label
                       htmlFor="fulltime"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Full-time ({`${filterData.get("full-time")}`})
+                      Full-time ({filterData.get("full-time")})
                     </label>
                   </li>
+
                   <li className="flex items-center">
                     <input
                       id="parttime"
                       type="checkbox"
-                      defaultValue=""
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                      onChange={() => toggleJobTypeFilter("Part-time")}
                     />
                     <label
                       htmlFor="parttime"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Part-time ({`${filterData.get("part-time")}`})
+                      Part-time ({filterData.get("part-time")})
                     </label>
                   </li>
+
                   <li className="flex items-center">
                     <input
                       id="contract"
                       type="checkbox"
-                      defaultValue=""
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                      onChange={() => toggleJobTypeFilter("Contract")}
                     />
                     <label
                       htmlFor="contract"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Contract ({`${filterData.get("contract")}`})
+                      Contract ({filterData.get("contract")})
                     </label>
                   </li>
+
                   <li className="flex items-center">
                     <input
                       id="internship"
                       type="checkbox"
-                      defaultValue=""
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                      onChange={() => toggleJobTypeFilter("Internship")}
                     />
                     <label
                       htmlFor="internship"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Internship ({`${filterData.get("internship")}`})
+                      Internship ({filterData.get("internship")})
                     </label>
                   </li>
                 </ul>
