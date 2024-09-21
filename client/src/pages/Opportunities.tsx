@@ -387,7 +387,11 @@ const Opportunities = () => {
   return (
     <>
       <NavBar />
-      <div className="container mx-auto mt-5">
+      <div
+        className="container mx-auto mt-5"
+        data-aos="fade-up"
+        data-aos-duration="1250"
+      >
         <section className="text-gray-600 body-font">
           <div className="container px-5 mx-auto">
             <div className="flex flex-col text-center w-full ">
