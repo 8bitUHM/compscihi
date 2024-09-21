@@ -1760,6 +1760,11 @@ input[type="range"]::-ms-fill-lower {
   color: rgb(6 148 162 / var(--tw-text-opacity));
 }
 
+.text-teal-900 {
+  --tw-text-opacity: 1;
+  color: rgb(1 68 81 / var(--tw-text-opacity));
+}
+
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
