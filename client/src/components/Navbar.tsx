@@ -6,14 +6,14 @@ import * as logo from "../assets/logo.svg";
 const NavBar: FC = () => {
   return isRunningLocal() ? (
     <>
-      <nav className="bg-white dark:bg-gray-900 sticky w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
+      <nav className="bg-white dark:bg-gray-900 sticky w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 ">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <a
             href="./"
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
             <img src={logo} className="h-8" alt="Flowbite Logo" />
-            <span className="self-center text-2xl font-bold text-teal-900 whitespace-nowrap">
+            <span className="self-center text-2xl font-bold bg-clip-text bg-gradient-to-r to-cyan-700 from-green-700 text-transparent whitespace-nowrap">
               CompSciHi
             </span>
           </a>
@@ -196,7 +196,7 @@ const NavBar: FC = () => {
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
             <img src={logo} className="h-8" alt="Flowbite Logo" />
-            <span className="self-center text-2xl font-bold text-teal-900 whitespace-nowrap">
+            <span className="self-center text-2xl font-bold bg-clip-text bg-gradient-to-r to-cyan-700 from-green-700 text-transparent whitespace-nowrap">
               CompSciHi
             </span>
           </a>
