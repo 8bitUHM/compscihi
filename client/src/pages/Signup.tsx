@@ -4,8 +4,12 @@ import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
 import SignupForm from "../components/SignupForm";
 import "../styles/styles.css";
+import { useEffect } from "react";
+import { initFlowbite } from "flowbite";
 
 const Signup = () => {
+  useEffect(() => initFlowbite(), []);
+
   return (
     <>
       <NavBar />
