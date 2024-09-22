@@ -10,13 +10,13 @@ const SignupForm: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false); // New loading state
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
 
     if (password !== confirmPassword) {
       setError("Passwords do not match");
@@ -27,13 +27,13 @@ const SignupForm: React.FC = () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       setSuccess("Account created successfully!");
-      setEmail(""); // Clear fields on success
+      setEmail("");
       setPassword("");
       setConfirmPassword("");
     } catch (error: any) {
       setError("Failed to create an account: " + error.message);
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     }
   };
 
@@ -100,7 +100,7 @@ const SignupForm: React.FC = () => {
                   required={true}
                 />
               </div>
-              {/* Admin Key field ignored for now */}
+
               <button
                 type="submit"
                 className="w-full text-white bg-teal-600 hover:bg-teal-700 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm md:text-base px-5 py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
@@ -108,7 +108,7 @@ const SignupForm: React.FC = () => {
               >
                 {isLoading ? "Creating account..." : "Create an account"}
               </button>
-              {/* Display success, error, or loading message */}
+
               {isLoading && (
                 <p className="text-sm text-gray-600 dark:text-gray-300 flex items-center">
                   <svg
@@ -137,27 +137,15 @@ const SignupForm: React.FC = () => {
               {error && <p className="text-red-600 text-sm">{error}</p>}
               {success && <p className="text-green-600 text-sm">{success}</p>}
 
-              {isRunningLocal() ? (
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Already have an account?{" "}
-                  <a
-                    href="./login.html"
-                    className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                  >
-                    Login here
-                  </a>
-                </p>
-              ) : (
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Already have an account?{" "}
-                  <a
-                    href="/login"
-                    className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                  >
-                    Login here
-                  </a>
-                </p>
-              )}
+              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                Already have an account?{" "}
+                <a
+                  href={isRunningLocal() ? "./login.html" : "/login"}
+                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                >
+                  Login here
+                </a>
+              </p>
             </form>
           </div>
         </div>
