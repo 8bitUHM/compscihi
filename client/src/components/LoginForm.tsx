@@ -20,6 +20,7 @@ const LoginForm: FC = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setSuccess("Login successful!");
+      document.getElementById("login-button-wrapper").style.display = "none";
       setEmail("");
       setPassword("");
     } catch (error: any) {

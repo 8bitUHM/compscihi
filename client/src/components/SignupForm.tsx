@@ -27,6 +27,7 @@ const SignupForm: React.FC = () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       setSuccess("Account created successfully!");
+      document.getElementById("login-button-wrapper").style.display = "none";
       setEmail("");
       setPassword("");
       setConfirmPassword("");
