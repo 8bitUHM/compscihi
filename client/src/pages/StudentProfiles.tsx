@@ -3,8 +3,12 @@ import NavBar from "../components/Navbar";
 import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import Footer from "../components/Footer";
+import { useEffect } from "react";
+import { initFlowbite } from "flowbite";
 
 const StudentProfiles = () => {
+  useEffect(() => initFlowbite(), []);
+
   return (
     <>
       <NavBar />

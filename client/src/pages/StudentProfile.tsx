@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import { useState, useEffect } from "react";
 import Footer from "../components/Footer";
+import { initFlowbite } from "flowbite";
 
 const StudentProfile = () => {
   const [userId, setUserId] = useState<string | null>(null);
@@ -12,7 +13,9 @@ const StudentProfile = () => {
     const params = new URLSearchParams(window.location.search);
     const userIdParam = params.get("user-id");
     setUserId(userIdParam);
+    initFlowbite();
   }, []);
+
   return (
     <>
       <NavBar />
