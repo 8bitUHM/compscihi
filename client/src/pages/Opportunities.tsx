@@ -28,7 +28,6 @@ type Opportunity = {
 
 const Opportunities = () => {
   // For the dropdown components to work like expected on mobile devices
-  useEffect(() => initFlowbite(), []);
 
   const [opportunities, setOpportunities] = React.useState<Opportunity[]>([]);
   const [filterData, setFilterData] = React.useState<Map<string, number>>(
@@ -36,6 +35,8 @@ const Opportunities = () => {
   );
 
   React.useEffect(() => {
+    initFlowbite();
+
     const filterData = new Map();
 
     filterData.set("remote", 0);
@@ -78,7 +79,7 @@ const Opportunities = () => {
     });
 
     setFilterData(filterData);
-    // setOpportunities(mockOpportunities);
+    setOpportunities(mockOpportunities);
   }, []);
 
   const mockOpportunities: Opportunity[] = [
@@ -268,56 +269,7 @@ const Opportunities = () => {
           key={key}
           className="w-full  p-6 bg-white border border-gray-200 rounded-lg shadow"
         >
-          <div
-            id={`medium-modal-${key}`}
-            tabIndex={-1}
-            aria-hidden="true"
-            className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
-          >
-            <div className="relative p-4 w-full max-w-2xl max-h-full">
-              <div className="relative bg-gradient-to-r from-cyan-700 to-green-600 rounded-lg shadow-xl ">
-                <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                  <h3 className="text-xl font-semibold text-gray-100 dark:text-white">
-                    Apply to {opportunity.title}
-                  </h3>
-                  <button
-                    type="button"
-                    className="text-white bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
-                    data-modal-hide={`medium-modal-${key}`}
-                  >
-                    <svg
-                      className="w-3 h-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 14 14"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                      />
-                    </svg>
-                    <span className="sr-only">Close modal</span>
-                  </button>
-                </div>
-                <div className="p-4 md:p-5 space-y-4">
-                  <p className="text-base leading-relaxed text-gray-100 ">
-                    {opportunity.applicationInstructions}
-                  </p>
-                  {opportunity.applyLink ? (
-                    <p className="text-base leading-relaxed text-gray-100 underline">
-                      <a target="_blank" href={opportunity.applyLink}>
-                        {opportunity.applyLink}
-                      </a>
-                    </p>
-                  ) : null}
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Card */}
           <h5 className=" text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
             {opportunity.title}
           </h5>
@@ -372,18 +324,68 @@ const Opportunities = () => {
               ))}
             </div>
           ) : null}
-          <button
-            className="relative inline-flex items-center justify-center p-0.5 mb-2 mt-3 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
-            data-modal-target={`medium-modal-${key}`}
-            data-modal-toggle={`medium-modal-${key}`}
+
+          {/* Accordian */}
+          <div
+            id={`accordion-color-${key}`}
+            data-accordion="collapse"
+            data-active-classes="bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-white"
+            className="mt-3"
           >
-            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-              Apply
-            </span>
-          </button>
-          <p className="text-blue-400">
+            <h2 id="accordion-color-heading-2">
+              <button
+                type="button"
+                className="rounded flex items-center justify-between w-full p-3 font-medium rtl:text-right text-gray-500 border  border-teal-200 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-gray-800 gap-3"
+                data-accordion-target={`#accordion-color-body-${key}`}
+                aria-expanded="false"
+                aria-controls={`accordion-color-body-${key}`}
+              >
+                <span>
+                  <p className="font-bold text-lg bg-clip-text bg-gradient-to-r to-cyan-700 from-green-700 text-transparent">
+                    Apply{" "}
+                  </p>
+                </span>
+                <svg
+                  data-accordion-icon=""
+                  className="w-3 h-3 rotate-180 shrink-0"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 10 6"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5 5 1 1 5"
+                  />
+                </svg>
+              </button>
+            </h2>
+            <div
+              id={`accordion-color-body-${key}`}
+              className="hidden"
+              aria-labelledby="accordion-color-heading-2"
+            >
+              <div className="p-3 border rounded border-teal-200 dark:border-gray-700">
+                <p className="mb-2 text-gray-500 dark:text-gray-400">
+                  {opportunity.applicationInstructions}
+                </p>
+                {opportunity.applyLink ? (
+                  <p className="text-base leading-relaxed text-gray-500 underline">
+                    <a target="_blank" href={opportunity.applyLink}>
+                      {opportunity.applyLink}
+                    </a>
+                  </p>
+                ) : null}
+              </div>
+            </div>
+          </div>
+
+          {/* <p className="text-blue-400">
             <small>{opportunity.clicks} people clicked apply</small>
-          </p>
+          </p> */}
         </div>
       );
     }
