@@ -16,6 +16,10 @@
         "destination": "/opportunities.html" 
       },
       {
+        "source": "/opportunity", 
+        "destination": "/opportunity.html" 
+      },
+      {
         "source": "/student-profile", 
         "destination": "/student-profile.html" 
       },
