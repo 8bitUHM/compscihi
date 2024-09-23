@@ -1226,6 +1226,10 @@ input[type="range"]::-ms-fill-lower {
   max-width: 100%;
 }
 
+.max-w-screen-md {
+  max-width: 768px;
+}
+
 .max-w-screen-sm {
   max-width: 640px;
 }
@@ -2260,6 +2264,10 @@ input[type="range"]::-ms-fill-lower {
     grid-column: span 7 / span 7;
   }
 
+  .lg\:mb-6 {
+    margin-bottom: 1.5rem;
+  }
+
   .lg\:mb-8 {
     margin-bottom: 2rem;
   }
@@ -2282,6 +2290,11 @@ input[type="range"]::-ms-fill-lower {
 
   .lg\:gap-8 {
     gap: 2rem;
+  }
+
+  .lg\:px-12 {
+    padding-left: 3rem;
+    padding-right: 3rem;
   }
 
   .lg\:px-6 {
@@ -2327,6 +2340,11 @@ input[type="range"]::-ms-fill-lower {
   .xl\:text-6xl {
     font-size: 3.75rem;
     line-height: 1;
+  }
+
+  .xl\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
 }
 
