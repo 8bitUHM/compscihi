@@ -34,6 +34,10 @@
       {
         "source": "/account-details", 
         "destination": "/account-details.html" 
+      },
+      {
+        "source": "/opportunity-postings", 
+        "destination": "/opportunity-postings.html" 
       }
     ]
   },
