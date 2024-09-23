@@ -3,6 +3,8 @@ import NavBar from "../components/Navbar";
 import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import Footer from "../components/Footer";
+import { useEffect } from "react";
+import { initFlowbite } from "flowbite";
 
 type Opportunity = {
   id: string;
@@ -25,6 +27,9 @@ type Opportunity = {
 };
 
 const Opportunities = () => {
+  // For the dropdown components to work like expected on mobile devices
+  useEffect(() => initFlowbite(), []);
+
   const [opportunities, setOpportunities] = React.useState<Opportunity[]>([]);
   const [filterData, setFilterData] = React.useState<Map<string, number>>(
     new Map()
@@ -486,7 +491,11 @@ const Opportunities = () => {
   return (
     <>
       <NavBar />
-      <div className="container mx-auto mt-5">
+      <div
+        className="container mx-auto mt-5"
+        data-aos="fade-up"
+        data-aos-duration="1250"
+      >
         <section className="text-gray-600 body-font">
           <div className="container px-5 mx-auto">
             <div className="flex flex-col text-center w-full ">

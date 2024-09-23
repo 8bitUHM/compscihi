@@ -30,6 +30,14 @@
       {
         "source": "/signup", 
         "destination": "/signup.html" 
+      },
+      {
+        "source": "/account-details", 
+        "destination": "/account-details.html" 
+      },
+      {
+        "source": "/opportunity-postings", 
+        "destination": "/opportunity-postings.html" 
       }
     ]
   },
