@@ -5,32 +5,48 @@ import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import { useEffect } from "react";
 import { initFlowbite } from "flowbite";
-import { auth } from "../firebase/firebase";
+import { auth, getAccountType } from "../firebase/firebase";
 import { useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { isAuthorizedOpportunityPoster } from "../firebase/firebase";
 
-const AccountDetails = () => {
+const OpportunityPostings = () => {
   const [user, setUser] = useState<null | { email: string }>(null);
   const [page404Display, setPage404Display] = useState({ display: "none" });
   const [accountDetailsDisplay, setAccountDetailsDisplay] = useState({
     display: "none",
   });
   const [loadingStyle, changeLoadingStyle] = useState({});
+  const [accountType, setAccountType] = useState<string>("");
 
   useEffect(() => {
     initFlowbite();
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser({ email: user.email || "" });
-        setAccountDetailsDisplay({ display: "" });
-        changeLoadingStyle({ display: "none" });
+        const callAccountType = async () => {
+          const isAuthorizedPoster = await isAuthorizedOpportunityPoster(
+            user.uid
+          );
+          const accountType = await getAccountType(user.uid);
+          setAccountType(accountType);
+          if (isAuthorizedPoster) {
+            setUser({ email: user.email || "" });
+            setAccountDetailsDisplay({ display: "" });
+          } else {
+            setUser(null);
+            setPage404Display({ display: "" });
+          }
+          changeLoadingStyle({ display: "none" });
+        };
+        callAccountType();
       } else {
         setUser(null);
         setPage404Display({ display: "" });
         changeLoadingStyle({ display: "none" });
       }
     });
+
     return () => unsubscribe();
   }, []);
 
@@ -64,10 +80,11 @@ const AccountDetails = () => {
           <span className="sr-only">Loading...</span>
         </div>
 
-        {/* Container to show if user is logged in */}
-        <div style={accountDetailsDisplay} id="account-details-wrapper">
-          <p>Aloha {user ? `${user.email}` : ``}!</p>
-          <p>The account details page is still under development.</p>
+        {/* Container to show if user is logged in & an account type thats not normal */}
+        <div style={accountDetailsDisplay} id="opportunity-postings-wrapper">
+          <p>Aloha {user ? `${user.email}!` : ``}</p>
+          <p>Your account is of type {accountType}</p>
+          <p>The opprtunity postings page is still under development.</p>
         </div>
 
         {/* Container to show if user is NOT logged in */}
@@ -79,7 +96,7 @@ const AccountDetails = () => {
                   401
                 </h1>
                 <p className="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">
-                  You're not logged in.
+                  Unauthorized Access
                 </p>
 
                 <a
@@ -99,4 +116,4 @@ const AccountDetails = () => {
 };
 
 const root = document.getElementById("root");
-createRoot(root).render(<AccountDetails />);
+createRoot(root).render(<OpportunityPostings />);
