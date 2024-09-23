@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { initFlowbite } from "flowbite";
 import { auth, getAccountType } from "../firebase/firebase";
 import { useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, sendEmailVerification } from "firebase/auth";
 import { isAuthorizedOpportunityPoster } from "../firebase/firebase";
 
 const OpportunityPostings = () => {
@@ -18,6 +18,11 @@ const OpportunityPostings = () => {
   });
   const [loadingStyle, changeLoadingStyle] = useState({});
   const [accountType, setAccountType] = useState<string>("");
+  const [userVerified, setUserVerified] = useState<boolean>(false);
+  const [verificationSendFeedbackSuccess, setVerificationSendFeedbackSuccess] =
+    useState<string>("");
+  const [verificationSendFeedbackFailure, setVerificationSendFeedbackFailure] =
+    useState<string>("");
 
   useEffect(() => {
     initFlowbite();
@@ -33,6 +38,7 @@ const OpportunityPostings = () => {
           if (isAuthorizedPoster) {
             setUser({ email: user.email || "" });
             setAccountDetailsDisplay({ display: "" });
+            setUserVerified(user.emailVerified);
           } else {
             setUser(null);
             setPage404Display({ display: "" });
@@ -82,9 +88,55 @@ const OpportunityPostings = () => {
 
         {/* Container to show if user is logged in & an account type thats not normal */}
         <div style={accountDetailsDisplay} id="opportunity-postings-wrapper">
-          <p>Aloha {user ? `${user.email}!` : ``}</p>
-          <p>Your account is of type {accountType}</p>
-          <p>The opprtunity postings page is still under development.</p>
+          {userVerified ? (
+            <div className="container mx-auto">
+              <p>Aloha {user ? `${user.email}` : ``}!</p>
+              <p>The opportunity postings page is still under development.</p>
+            </div>
+          ) : (
+            <section className="bg-white dark:bg-gray-900">
+              <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+                <div className="mx-auto max-w-screen-sm text-center">
+                  <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-teal-500 dark:text-primary-500">
+                    401
+                  </h1>
+                  <p className="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">
+                    Your account is not yet verified.
+                  </p>
+                  <small>
+                    Verify your account with the link in your email or re-send
+                    the verification below and refresh the page.
+                  </small>
+
+                  <button
+                    onClick={() => {
+                      try {
+                        sendEmailVerification(auth.currentUser);
+                        setVerificationSendFeedbackSuccess(
+                          "Verification link sent successfully!"
+                        );
+                      } catch (e) {
+                        setVerificationSendFeedbackFailure(
+                          `Failed to send verification link, ${e}, please refresh the page and try again.`
+                        );
+                      }
+                    }}
+                    className="inline-flex text-white bg-teal-500 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900 my-4"
+                  >
+                    Re-send verification link
+                  </button>
+                  <br></br>
+                  <small className="text-green-500">
+                    {verificationSendFeedbackSuccess}
+                  </small>
+                  <br></br>
+                  <small className="text-red-500">
+                    {verificationSendFeedbackFailure}
+                  </small>
+                </div>
+              </div>
+            </section>
+          )}
         </div>
 
         {/* Container to show if user is NOT logged in */}
