@@ -29,6 +29,7 @@ const NavBar: FC = () => {
     });
     setAccountDisplay({ display: "none" });
     document.getElementById("login-button-wrapper").style.display = "";
+    document.getElementById("account-details").style.display = "none";
   };
 
   return (
@@ -111,7 +112,11 @@ const NavBar: FC = () => {
                   <ul className="py-2" aria-labelledby="user-menu-button">
                     <li>
                       <a
-                        href="#"
+                        href={
+                          isRunningLocal()
+                            ? "./account-details.html"
+                            : "/account-details"
+                        }
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                       >
                         Account Details

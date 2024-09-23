@@ -30,6 +30,10 @@
       {
         "source": "/signup", 
         "destination": "/signup.html" 
+      },
+      {
+        "source": "/account-details", 
+        "destination": "/account-details.html" 
       }
     ]
   },
