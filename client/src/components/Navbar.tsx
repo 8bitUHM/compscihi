@@ -32,6 +32,7 @@ const NavBar: FC = () => {
             setAccountDisplay({ display: "" });
           }
           setUser({ email: user.email || "" });
+          setLoginDisplay({ display: "none" });
           changeLoadingStyle({ display: "none" });
         };
         callAccountType();
@@ -39,6 +40,7 @@ const NavBar: FC = () => {
         setUser(null);
         setLoginDisplay({ display: "" });
         changeLoadingStyle({ display: "none" });
+        handleSignOut();
       }
     });
 
