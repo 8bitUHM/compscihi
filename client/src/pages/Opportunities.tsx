@@ -79,7 +79,7 @@ const Opportunities = () => {
     });
 
     setFilterData(filterData);
-    setOpportunities(mockOpportunities);
+    // setOpportunities(mockOpportunities);
   }, []);
 
   const mockOpportunities: Opportunity[] = [
