@@ -18,16 +18,15 @@ const NavBar: FC = () => {
         const callAccountType = async () => {
           const accountType = await getAccountType(user.uid);
           setAccountType(accountType);
-          setEmail(user.email);
-          setLoggedIn(true);
-          setLoading(false);
         };
         callAccountType();
+        setEmail(user.email);
+        setLoggedIn(true);
+        setLoading(false);
       } else {
         setLoading(false);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
