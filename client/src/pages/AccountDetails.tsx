@@ -32,6 +32,7 @@ const AccountDetails = () => {
         setUserVerified(user.emailVerified);
         setLoading(false);
       } else {
+        setLoggedIn(false)
         setLoading(false);
       }
     });

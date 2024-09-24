@@ -24,6 +24,7 @@ const NavBar: FC = () => {
         setLoggedIn(true);
         setLoading(false);
       } else {
+        setLoggedIn(false)
         setLoading(false);
       }
     });
