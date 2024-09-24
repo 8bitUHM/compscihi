@@ -6,7 +6,7 @@ import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import { initFlowbite } from "flowbite";
 import { auth, getAccountType } from "../firebase/firebase";
-import { onAuthStateChanged, sendEmailVerification } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import ResendVerification from "../components/ResendVerification";
 
 const AccountDetails = () => {
@@ -14,10 +14,6 @@ const AccountDetails = () => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [userVerified, setUserVerified] = useState<boolean>(false);
-  const [verificationSendFeedbackSuccess, setVerificationSendFeedbackSuccess] =
-    useState<string>("");
-  const [verificationSendFeedbackFailure, setVerificationSendFeedbackFailure] =
-    useState<string>("");
   const [accountType, setAccountType] = useState<string>("");
 
   useEffect(() => {

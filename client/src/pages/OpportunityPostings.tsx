@@ -14,10 +14,6 @@ const OpportunityPostings = () => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [userVerified, setUserVerified] = useState<boolean>(false);
-  const [verificationSendFeedbackSuccess, setVerificationSendFeedbackSuccess] =
-    useState<string>("");
-  const [verificationSendFeedbackFailure, setVerificationSendFeedbackFailure] =
-    useState<string>("");
   const [accountType, setAccountType] = useState<string>("");
 
   useEffect(() => {
