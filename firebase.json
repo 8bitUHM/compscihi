@@ -42,6 +42,10 @@
       {
         "source": "/opportunity-postings", 
         "destination": "/opportunity-postings.html" 
+      },
+      {
+        "source": "/forgot-password", 
+        "destination": "/opportunity-postings.html" 
       }
     ]
   },
