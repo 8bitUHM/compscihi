@@ -71,7 +71,7 @@ const Login = () => {
                 </div>
               ) : (
                 <>
-                  <ResendVerification />
+                  <ResendVerification header="You're logged in" />
                 </>
               )}
             </>

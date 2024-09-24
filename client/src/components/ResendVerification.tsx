@@ -3,7 +3,11 @@ import { FC, useState } from "react";
 import { auth } from "../firebase/firebase";
 import { sendEmailVerification } from "firebase/auth";
 
-const ResendVerification = () => {
+interface Props {
+  header: string;
+}
+
+const ResendVerification: FC<Props> = (props) => {
   const [verificationSendFeedbackSuccess, setVerificationSendFeedbackSuccess] =
     useState<string>("");
   const [verificationSendFeedbackFailure, setVerificationSendFeedbackFailure] =
@@ -14,17 +18,17 @@ const ResendVerification = () => {
       <section className="bg-white dark:bg-gray-900">
         <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
           <div className="mx-auto max-w-screen-sm text-center">
-            <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-teal-500 dark:text-primary-500">
-              401
-            </h1>
-            <p className="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">
+            <h2 className="mb-4 text-5xl tracking-tight font-extrabold lg:text-6xl text-teal-500 dark:text-primary-500">
+              {props.header}
+            </h2>
+            <p className="mb-4 text-2xl tracking-tight font-bold text-gray-900 md:text-2xl dark:text-white">
               Your account is not yet verified.
             </p>
             <small>
               Verify your account with the link in your email or re-send the
               verification below and refresh the page.
             </small>
-
+            <br></br>
             <button
               onClick={() => {
                 try {

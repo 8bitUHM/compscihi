@@ -66,7 +66,7 @@ const OpportunityPostings = () => {
                       </p>
                     </div>
                   ) : (
-                    <ResendVerification />
+                    <ResendVerification header="401" />
                   )}
                 </div>
               </>

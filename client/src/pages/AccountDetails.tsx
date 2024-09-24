@@ -79,7 +79,7 @@ const AccountDetails = () => {
                       </div>
                     </section>
                   ) : (
-                    <ResendVerification />
+                    <ResendVerification header="401" />
                   )}
                 </div>
               </>
