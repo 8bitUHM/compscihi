@@ -3,7 +3,7 @@ import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
 import * as logo from "../assets/logo.svg";
 import { auth } from "../firebase/firebase";
@@ -11,6 +11,8 @@ import { sendPasswordResetEmail } from "firebase/auth";
 
 const ForgotPassword = () => {
   useEffect(() => initFlowbite(), []);
+
+  const [email, setEmail] = useState<string>("");
 
   return (
     <>
@@ -48,11 +50,15 @@ const ForgotPassword = () => {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="name@company.com"
                   required
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                  }}
                 />
               </div>
               <button
                 type="submit"
                 className="w-full text-white bg-teal-600 hover:bg-teal-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                onClick={() => sendPasswordResetEmail(auth, email)}
               >
                 Reset password
               </button>
