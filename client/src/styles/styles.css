@@ -2180,10 +2180,6 @@ input[type="range"]::-ms-fill-lower {
     display: none;
   }
 
-  .md\:h-screen {
-    height: 100vh;
-  }
-
   .md\:w-1\/2 {
     width: 50%;
   }
