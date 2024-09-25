@@ -13,6 +13,22 @@ const ForgotPassword = () => {
   useEffect(() => initFlowbite(), []);
 
   const [email, setEmail] = useState<string>("");
+  const [success, setSuccess] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setSuccess("Login successful!");
+      setEmail("");
+    } catch (error: any) {
+      setError("Failed to login: " + error.message);
+    }   
+  }
 
   return (
     <>
@@ -35,7 +51,7 @@ const ForgotPassword = () => {
             <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Reset Password
             </h2>
-            <form className="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="#">
+            <form className="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="#" onSubmit={handleSubmit}>
               <div>
                 <label
                   htmlFor="email"
@@ -62,6 +78,8 @@ const ForgotPassword = () => {
               >
                 Reset password
               </button>
+              {error && <p className="text-red-600 text-sm">{error}</p>}
+              {success && <p className="text-green-600 text-sm">{success}</p>}
             </form>
           </div>
         </div>
