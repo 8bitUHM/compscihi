@@ -23,7 +23,7 @@ const ForgotPassword = () => {
 
     try {
       await sendPasswordResetEmail(auth, email);
-      setSuccess("Login successful!");
+      setSuccess("Email has been sent!");
       setEmail("");
     } catch (error: any) {
       setError("Failed to login: " + error.message);
