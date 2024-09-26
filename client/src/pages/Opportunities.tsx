@@ -554,21 +554,43 @@ const Opportunities = () => {
                 }
                 className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-4 mr-2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 6.75h16.5M3.75 12h16.5M12 17.25h8.25"
-                  />
-                </svg>
-                {sortOrder === "asc" ? "Ascending" : "Descending"}
+                {sortOrder === "asc" ? (
+                  <svg
+                    className="h-4 w-4 text-gray-600"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    {" "}
+                    <path stroke="none" d="M0 0h24v24H0z" />{" "}
+                    <line x1="4" y1="6" x2="11" y2="6" />{" "}
+                    <line x1="4" y1="12" x2="11" y2="12" />{" "}
+                    <line x1="4" y1="18" x2="13" y2="18" />{" "}
+                    <polyline points="15 9 18 6 21 9" />{" "}
+                    <line x1="18" y1="6" x2="18" y2="18" />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-4 mr-2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 6.75h8.25M3.75 12h16.5M3.75 17.25h16.5"
+                    />
+                  </svg>
+                )}
+                {sortOrder === "asc" ? " Ascending" : " Descending"}
               </button>
 
               <div
@@ -583,9 +605,7 @@ const Opportunities = () => {
                     <a
                       href="#"
                       className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Ascending
-                    </a>
+                    ></a>
                   </li>
                   <li>
                     <a
