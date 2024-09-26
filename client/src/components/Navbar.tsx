@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState, FC } from "react";
-import { auth, getAccountType } from "../firebase/firebase";
+import { auth } from "../firebase/firebase";
 import { isRunningLocal } from "../util/routing";
 import * as logo from "../assets/logo.svg";
 import { onAuthStateChanged, signOut } from "firebase/auth";
@@ -15,11 +15,6 @@ const NavBar: FC = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        const callAccountType = async () => {
-          const accountType = await getAccountType(user.uid);
-          setAccountType(accountType);
-        };
-        callAccountType();
         setEmail(user.email);
         setLoggedIn(true);
         setLoading(false);

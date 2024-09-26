@@ -1,11 +1,24 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFunctions } from "firebase/functions";
-import { getDatabase, ref, get } from "firebase/database";
+import { getDatabase, ref, set } from "firebase/database";
 
-type AccountInfo = {
-  accountType: string;
-  email: string;
+type ProfileProject = {
+  name: string;
+  description: string;
+  githubLink: string | null;
+};
+
+type UserProfileData = {
+  name: string;
+  contactEmail: string | null;
+  contactPhone: string | null;
+  pictureUrl: string | null;
+  desription: string;
+  socials: string[] | null;
+  resumeLink: string | null;
+  skills: string[] | null;
+  projects: ProfileProject[] | null;
 };
 
 const firebaseConfig = {
@@ -24,39 +37,15 @@ const functions = getFunctions();
 const auth = getAuth(app);
 const database = getDatabase(app);
 
-const getAccountType = async (userId: string): Promise<string> => {
-  try {
-    const snapshot = await get(ref(database, "users/" + userId));
-
-    if (snapshot.exists()) {
-      const data: AccountInfo = snapshot.val();
-
-      return data.accountType || null;
-    } else {
-      console.log("No data available");
-      return null;
-    }
-  } catch (error) {
-    console.error("Error getting account type:", error);
-    return null;
-  }
+const setUserData = (
+  userId: string,
+  email: string,
+  profileData: UserProfileData
+) => {
+  set(ref(database, "users/" + userId), {
+    email: email,
+    profileData: profileData,
+  });
 };
 
-const isAuthorizedOpportunityPoster = async (
-  userId: string
-): Promise<boolean> => {
-  const accountType = await getAccountType(userId);
-  return (
-    accountType === "employer" ||
-    accountType === "authorized-poster" ||
-    accountType === "admin"
-  );
-};
-
-export {
-  getAccountType,
-  isAuthorizedOpportunityPoster,
-  functions,
-  auth,
-  database,
-};
+export { functions, auth, database, setUserData };
