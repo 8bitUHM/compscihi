@@ -40,12 +40,8 @@
         "destination": "/account-details.html" 
       },
       {
-        "source": "/opportunity-postings", 
-        "destination": "/opportunity-postings.html" 
-      },
-      {
         "source": "/forgot-password", 
-        "destination": "/opportunity-postings.html" 
+        "destination": "/forgot-password.html" 
       }
     ]
   },
