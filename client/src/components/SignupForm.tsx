@@ -3,50 +3,27 @@ import { useState } from "react";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import { isRunningLocal } from "../util/routing";
-import { functions } from "../firebase/firebase";
-import { httpsCallable } from "firebase/functions";
-import { database } from "../firebase/firebase";
-import { ref, set } from "firebase/database";
-
-type ValidateAdminKeyResponse = {
-  validKey: boolean;
-  accountType: any;
-  input: any;
-  inputTypeOf: any;
-};
+import { setUserData } from "../firebase/firebase";
 
 const SignupForm: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [adminKey, setAdminKey] = useState("");
+  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const validateAdminKey = httpsCallable(functions, "validateAdminKey");
-
-  const createUserData = (
-    userId: string,
-    email: string,
-    accountType: string
-  ) => {
-    set(ref(database, "users/" + userId), {
-      email: email,
-      accountType: accountType,
-    });
-  };
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const postAccountSuccess = (successMessage: string): void => {
     setSuccess(successMessage);
-    document.getElementById("login-button-wrapper").style.display = "none";
+    setUsername("");
     setEmail("");
     setPassword("");
     setConfirmPassword("");
-    setAdminKey("");
   };
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -62,38 +39,17 @@ const SignupForm: React.FC = () => {
     }
 
     try {
-      if (adminKey.length > 0) {
-        const res = await validateAdminKey({ key: adminKey });
-        const data = res.data as ValidateAdminKeyResponse;
-        if (!data.validKey || data.accountType === "normal") {
-          setError("Invalid admin key.");
-          return;
-        }
-        const newUser = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        sendEmailVerification(auth.currentUser);
-        createUserData(newUser.user.uid, newUser.user.email, data.accountType);
-        postAccountSuccess(
-          `${
-            (data.accountType as string).charAt(0).toUpperCase() +
-            (data.accountType as string).slice(1)
-          } account created successfully! Verify your account with the link sent to your email.`
-        );
-      } else {
-        const newUser = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        sendEmailVerification(auth.currentUser);
-        createUserData(newUser.user.uid, newUser.user.email, "normal");
-        postAccountSuccess(
-          "Account created successfully! Verify your account with the link sent to your email."
-        );
-      }
+      const newUser = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await sendEmailVerification(auth.currentUser);
+      await updateProfile(newUser.user, { displayName: username });
+      setUserData(newUser.user.uid, newUser.user.displayName, email, null);
+      postAccountSuccess(
+        "Account created successfully! Verify your account with the link sent to your email."
+      );
     } catch (error: any) {
       setError("Failed to create an account: " + error.message);
     } finally {
@@ -115,7 +71,27 @@ const SignupForm: React.FC = () => {
                   htmlFor="email"
                   className="block mb-2 text-sm md:text-base font-medium text-gray-900 dark:text-white after:content-['*'] after:text-red-700 after:md:text-lg"
                 >
-                  Your email
+                  Username
+                </label>
+                <input
+                  type="username"
+                  name="username"
+                  id="username"
+                  minLength={6}
+                  maxLength={25}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm md:text-base rounded-lg focus:ring-teal-600 focus:border-teal-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500"
+                  placeholder="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required={true}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm md:text-base font-medium text-gray-900 dark:text-white after:content-['*'] after:text-red-700 after:md:text-lg"
+                >
+                  Email
                 </label>
                 <input
                   type="email"
@@ -136,6 +112,8 @@ const SignupForm: React.FC = () => {
                   Password
                 </label>
                 <input
+                  minLength={6}
+                  maxLength={25}
                   type="password"
                   name="password"
                   id="password"
@@ -154,6 +132,8 @@ const SignupForm: React.FC = () => {
                   Confirm password
                 </label>
                 <input
+                  minLength={6}
+                  maxLength={25}
                   type="password"
                   name="confirm-password"
                   id="confirm-password"
@@ -162,20 +142,6 @@ const SignupForm: React.FC = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required={true}
-                />
-              </div>
-
-              <div>
-                <label className="block mb-2 text-sm md:text-base font-medium text-gray-900 dark:text-white ">
-                  Admin Key (Optional)
-                </label>
-                <input
-                  type="password"
-                  placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm md:text-base rounded-lg focus:ring-teal-600 focus:border-teal-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500"
-                  value={adminKey}
-                  onChange={(e) => setAdminKey(e.target.value)}
-                  required={false}
                 />
               </div>
 

@@ -4,74 +4,38 @@ import { auth } from "../firebase/firebase";
 import { isRunningLocal } from "../util/routing";
 import * as logo from "../assets/logo.svg";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { isAuthorizedOpportunityPoster } from "../firebase/firebase";
-import { getAccountType } from "../firebase/firebase";
+import { initFlowbite } from "flowbite";
 
 const NavBar: FC = () => {
-  const [user, setUser] = useState<null | { email: string }>(null);
-  const [loginDisplay, setLoginDisplay] = useState({ display: "none" });
-  const [accountDisplay, setAccountDisplay] = useState({ display: "none" });
-  const [authorizedAccountDisplay, setAuthorizedAccountDisplay] = useState({
-    display: "none",
-  });
-  const [accountType, setAccountType] = useState<string>("");
-  const [loadingStyle, changeLoadingStyle] = useState({});
+  const [email, setEmail] = useState<null | string>(null);
+  const [username, setUsername] = useState<null | string>(null);
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        const callAccountType = async () => {
-          const isAuthorizedPoster = await isAuthorizedOpportunityPoster(
-            user.uid
-          );
-          const accountType = await getAccountType(user.uid);
-          setAccountType(accountType);
-          if (isAuthorizedPoster) {
-            setAuthorizedAccountDisplay({ display: "" });
-          } else {
-            setAccountDisplay({ display: "" });
-          }
-          setUser({ email: user.email || "" });
-          changeLoadingStyle({ display: "none" });
-        };
-        callAccountType();
+        setEmail(user.email);
+        setUsername(user.displayName);
+        setLoggedIn(true);
+        setLoading(false);
       } else {
-        setUser(null);
-        setLoginDisplay({ display: "" });
-        changeLoadingStyle({ display: "none" });
+        setLoggedIn(false);
+        setLoading(false);
       }
     });
-
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    initFlowbite();
+  }, [loading, loggedIn]);
 
   const handleSignOut = () => {
     signOut(auth).catch((error) => {
       console.error("Error signing out:", error);
     });
-    setAccountDisplay({ display: "none" });
-    setAuthorizedAccountDisplay({ display: "none" });
-
-    const idWrappersToHideOrShow: { id: string; hideOrShow: string }[] = [
-      { id: "login-button-wrapper", hideOrShow: "show" },
-      { id: "account-details-wrapper", hideOrShow: "hide" },
-      { id: "opportunity-postings-wrapper", hideOrShow: "hide" },
-      ,
-    ];
-    idWrappersToHideOrShow.forEach(
-      (wrapperToHideOrShow: { id: string; hideOrShow: string }): void => {
-        try {
-          if (wrapperToHideOrShow.hideOrShow === "hide") {
-            document.getElementById(wrapperToHideOrShow.id).style.display =
-              "none";
-          } else if (wrapperToHideOrShow.hideOrShow === "show") {
-            document.getElementById(wrapperToHideOrShow.id).style.display = "";
-          }
-        } catch (e) {
-          console.log("Trying to hide or show wrapper thats not yet loaded", e);
-        }
-      }
-    );
+    setLoggedIn(false);
   };
 
   return (
@@ -90,209 +54,135 @@ const NavBar: FC = () => {
           <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
               {/* Loading Icon */}
-              <div
-                role="status"
-                className="flex justify-center"
-                style={loadingStyle}
-              >
-                <svg
-                  aria-hidden="true"
-                  className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-teal-500"
-                  viewBox="0 0 100 101"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  style={loadingStyle}
-                >
-                  <path
-                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                    fill="currentFill"
-                  />
-                </svg>
-                <span className="sr-only">Loading...</span>
-              </div>
-
-              {/* Login button */}
-              <a
-                href={isRunningLocal() ? "./login.html" : "/login"}
-                style={loginDisplay}
-                id="login-button-wrapper"
-              >
-                <button
-                  type="button"
-                  className="flex items-center text-white bg-teal-500 hover:bg-teal-600 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-                  id="login-button"
-                >
+              {loading ? (
+                <div role="status" className="flex justify-center">
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                    className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-teal-500"
+                    viewBox="0 0 100 101"
                     fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6 mr-2"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                      fill="currentColor"
                     />
-                  </svg>
-                  Login
-                </button>
-              </a>
-
-              {/* Dropdown for logged in AND normal privelage accounts */}
-              <div style={accountDisplay}>
-                <button
-                  type="button"
-                  className="flex items-center text-white bg-teal-500 hover:bg-teal-600 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-                  id="user-menu-button"
-                  aria-expanded="false"
-                  data-dropdown-toggle="user-dropdown"
-                  data-dropdown-placement="bottom"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6 mr-2"
-                  >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                      fill="currentFill"
                     />
                   </svg>
-                  {!user ? "" : `${user.email.split("@")[0].slice(0, 6)}`}
-                </button>
-                <div
-                  className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                  id="user-dropdown"
-                >
-                  <div className="px-4 py-3">
-                    <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
-                      {!user ? "" : user.email}
-                    </span>
-                  </div>
-                  <ul className="py-2" aria-labelledby="user-menu-button">
-                    <li>
-                      <a
-                        href={
-                          isRunningLocal()
-                            ? "./account-details.html"
-                            : "/account-details"
-                        }
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                      >
-                        Account Details
-                      </a>
-                    </li>
-
-                    <li>
-                      <a
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          handleSignOut();
-                        }}
-                      >
-                        Sign out
-                      </a>
-                    </li>
-                  </ul>
+                  <span className="sr-only">Loading...</span>
                 </div>
-              </div>
+              ) : (
+                <>
+                  {loggedIn ? (
+                    <>
+                      {/* Dropdown for logged in AND normal privelage accounts */}
+                      <div>
+                        <button
+                          type="button"
+                          className="flex items-center text-white bg-teal-500 hover:bg-teal-600 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+                          id="normal-user-menu-button"
+                          aria-expanded="false"
+                          data-dropdown-toggle="normal-user-dropdown"
+                          data-dropdown-placement="bottom"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="size-6"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                            />
+                          </svg>
+                        </button>
+                        <div
+                          className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                          id="normal-user-dropdown"
+                        >
+                          <div className="px-4 py-3">
+                            <span className="block text-sm  text-gray-500 truncate dark:text-gray-400"></span>
 
-              {/* Dropdown for logged in AND non-normal privelage accounts */}
-              <div style={authorizedAccountDisplay}>
-                <button
-                  type="button"
-                  className="flex items-center text-white bg-teal-500 hover:bg-teal-600 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-                  id="user-menu-button"
-                  aria-expanded="false"
-                  data-dropdown-toggle="authorized-user-dropdown"
-                  data-dropdown-placement="bottom"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6 mr-2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                    />
-                  </svg>
-                  {!user ? "" : `${user.email.split("@")[0].slice(0, 6)}`}
-                </button>
-                <div
-                  className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                  id="authorized-user-dropdown"
-                >
-                  <div className="px-4 py-3">
-                    <span className="block text-sm text-green-500 dark:text-white">
-                      {!user
-                        ? ""
-                        : `${(
-                            accountType.charAt(0).toUpperCase() +
-                            accountType.slice(1)
-                          ).replace(new RegExp("-", "g"), " ")} account`}
-                    </span>
+                            <span className="block text-sm text-gray-900 dark:text-white">
+                              {!username ? "" : username}
+                            </span>
+                            <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
+                              {!email ? "" : email}
+                            </span>
+                          </div>
+                          <ul
+                            className="py-2"
+                            aria-labelledby="normal-user-menu-button"
+                          >
+                            <li>
+                              <a
+                                href={
+                                  isRunningLocal()
+                                    ? "./account-details.html"
+                                    : "/account-details"
+                                }
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                              >
+                                Account Details
+                              </a>
+                            </li>
 
-                    <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
-                      {!user ? "" : user.email}
-                    </span>
-                  </div>
-                  <ul className="py-2" aria-labelledby="user-menu-button">
-                    <li>
+                            <li>
+                              <a
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  handleSignOut();
+                                }}
+                              >
+                                Sign out
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Login button */}
                       <a
-                        href={
-                          isRunningLocal()
-                            ? "./account-details.html"
-                            : "/account-details"
-                        }
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                        href={isRunningLocal() ? "./login.html" : "/login"}
+                        // style={loginDisplay}
+                        id="login-button-wrapper"
                       >
-                        Account Details
+                        <button
+                          type="button"
+                          className="flex items-center text-white bg-teal-500 hover:bg-teal-600 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+                          id="login-button"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="size-6 mr-2"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                            />
+                          </svg>
+                          Login
+                        </button>
                       </a>
-                    </li>
-
-                    <li>
-                      <a
-                        href={
-                          isRunningLocal()
-                            ? "./opportunity-postings.html"
-                            : "/opportunity-postings"
-                        }
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                      >
-                        Opportunity Postings
-                      </a>
-                    </li>
-
-                    <li>
-                      <a
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          handleSignOut();
-                        }}
-                      >
-                        Sign out
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+                    </>
+                  )}
+                </>
+              )}
             </div>
             <button
               data-collapse-toggle="navbar-dropdown"
