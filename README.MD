@@ -18,7 +18,7 @@ The project is organized into several components:
       - **styles/**: Tailwind styles
       - **types/**: Import type definitions
     - **webpack/**: Webpack configuration files
-  - **server**: Cloud functions source code
+  - **server**: Django server
     - **core/**: Main or 'host' app
       - **settings.py**: Configuration settings for the project, including database settings, middleware, installed apps, and other project-specific configurations. Models are defined here.
       - **urls.py**: URL configuration for the project, mapping URLs to views.
