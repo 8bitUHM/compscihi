@@ -39,10 +39,12 @@ const database = getDatabase(app);
 
 const setUserData = (
   userId: string,
+  username:string,
   email: string,
   profileData: UserProfileData
 ) => {
   set(ref(database, "users/" + userId), {
+    username:username,
     email: email,
     profileData: profileData,
   });

@@ -3,21 +3,24 @@ import { useState } from "react";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import { isRunningLocal } from "../util/routing";
 import { setUserData } from "../firebase/firebase";
 
 const SignupForm: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const postAccountSuccess = (successMessage: string): void => {
     setSuccess(successMessage);
+    setUsername("");
     setEmail("");
     setPassword("");
     setConfirmPassword("");
@@ -41,8 +44,9 @@ const SignupForm: React.FC = () => {
         email,
         password
       );
-      sendEmailVerification(auth.currentUser);
-      setUserData(newUser.user.uid, email, null);
+      await sendEmailVerification(auth.currentUser);
+      await updateProfile(newUser.user, { displayName: username });
+      setUserData(newUser.user.uid, newUser.user.displayName, email, null);
       postAccountSuccess(
         "Account created successfully! Verify your account with the link sent to your email."
       );
@@ -67,7 +71,27 @@ const SignupForm: React.FC = () => {
                   htmlFor="email"
                   className="block mb-2 text-sm md:text-base font-medium text-gray-900 dark:text-white after:content-['*'] after:text-red-700 after:md:text-lg"
                 >
-                  Your email
+                  Username
+                </label>
+                <input
+                  type="username"
+                  name="username"
+                  id="username"
+                  minLength={6}
+                  maxLength={25}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm md:text-base rounded-lg focus:ring-teal-600 focus:border-teal-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500"
+                  placeholder="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required={true}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm md:text-base font-medium text-gray-900 dark:text-white after:content-['*'] after:text-red-700 after:md:text-lg"
+                >
+                  Email
                 </label>
                 <input
                   type="email"
@@ -88,6 +112,8 @@ const SignupForm: React.FC = () => {
                   Password
                 </label>
                 <input
+                  minLength={6}
+                  maxLength={25}
                   type="password"
                   name="password"
                   id="password"
@@ -106,6 +132,8 @@ const SignupForm: React.FC = () => {
                   Confirm password
                 </label>
                 <input
+                  minLength={6}
+                  maxLength={25}
                   type="password"
                   name="confirm-password"
                   id="confirm-password"

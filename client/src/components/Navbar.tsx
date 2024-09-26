@@ -8,7 +8,7 @@ import { initFlowbite } from "flowbite";
 
 const NavBar: FC = () => {
   const [email, setEmail] = useState<null | string>(null);
-  const [accountType, setAccountType] = useState<string>("");
+  const [username, setUsername] = useState<null | string>(null);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -16,6 +16,7 @@ const NavBar: FC = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setEmail(user.email);
+        setUsername(user.displayName);
         setLoggedIn(true);
         setLoading(false);
       } else {
@@ -28,7 +29,7 @@ const NavBar: FC = () => {
 
   useEffect(() => {
     initFlowbite();
-  }, [accountType]);
+  }, [loading, loggedIn]);
 
   const handleSignOut = () => {
     signOut(auth).catch((error) => {
@@ -93,7 +94,7 @@ const NavBar: FC = () => {
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className="size-6 mr-2"
+                            className="size-6"
                           >
                             <path
                               strokeLinecap="round"
@@ -101,13 +102,17 @@ const NavBar: FC = () => {
                               d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                             />
                           </svg>
-                          {!email ? "" : `${email.split("@")[0].slice(0, 6)}`}
                         </button>
                         <div
                           className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
                           id="normal-user-dropdown"
                         >
                           <div className="px-4 py-3">
+                            <span className="block text-sm  text-gray-500 truncate dark:text-gray-400"></span>
+
+                            <span className="block text-sm text-gray-900 dark:text-white">
+                              {!username ? "" : username}
+                            </span>
                             <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
                               {!email ? "" : email}
                             </span>
