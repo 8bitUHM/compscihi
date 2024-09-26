@@ -5,7 +5,6 @@ import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
-import * as logo from "../assets/logo.svg";
 import { auth } from "../firebase/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
 
