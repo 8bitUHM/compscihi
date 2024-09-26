@@ -71,7 +71,7 @@ const Signup = () => {
                 </div>
               ) : (
                 <>
-                  <ResendVerification header="You're logged in" />
+                  <ResendVerification />
                 </>
               )}
             </>
