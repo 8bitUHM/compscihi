@@ -271,7 +271,6 @@ const Opportunities = () => {
   const filterOpportunities = () => {
     let filteredOpportunities = [...mockOpportunities];
 
-    // Filter based on search query
     if (searchQuery) {
       filteredOpportunities = filteredOpportunities.filter(
         (opportunity) =>
@@ -280,26 +279,22 @@ const Opportunities = () => {
       );
     }
 
-    // Filter based on location type
     if (locationFilters.length > 0) {
       filteredOpportunities = filteredOpportunities.filter((opportunity) =>
-        locationFilters.includes(opportunity.locationType)
+        locationFilters.every((filter) => filter === opportunity.locationType)
       );
     }
 
-    // Filter based on job type
     if (jobTypeFilters.length > 0) {
       filteredOpportunities = filteredOpportunities.filter((opportunity) =>
-        jobTypeFilters.includes(opportunity.jobType)
+        jobTypeFilters.every((filter) => filter === opportunity.jobType)
       );
     }
 
-    // Sort opportunities based on the selected order and sort order
     filteredOpportunities.sort((a, b) => {
       let aValue: string | number | undefined;
       let bValue: string | number | undefined;
 
-      // Map selectedOrder to specific Opportunity fields
       switch (selectedOrder) {
         case "postedDate":
           aValue = new Date(a.postedDate).getTime();
@@ -318,7 +313,6 @@ const Opportunities = () => {
           bValue = 0;
       }
 
-      // Sorting logic
       if (sortOrder === "asc") {
         return aValue > bValue ? 1 : -1;
       } else {
@@ -555,6 +549,7 @@ const Opportunities = () => {
                   handleSortOrderChange(sortOrder === "asc" ? "desc" : "asc")
                 }
                 className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                style={{ height: 38.48 }}
               >
                 {sortOrder === "asc" ? (
                   <svg
@@ -578,21 +573,26 @@ const Opportunities = () => {
                   </svg>
                 ) : (
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
+                    className="h-4 w-4 text-gray-500"
+                    width="24"
+                    height="24"
                     viewBox="0 0 24 24"
-                    strokeWidth={1.5}
+                    stroke-width="2"
                     stroke="currentColor"
-                    className="size-4 mr-2"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 6.75h8.25M3.75 12h16.5M3.75 17.25h16.5"
-                    />
+                    {" "}
+                    <path stroke="none" d="M0 0h24v24H0z" />{" "}
+                    <line x1="4" y1="6" x2="13" y2="6" />{" "}
+                    <line x1="4" y1="12" x2="11" y2="12" />{" "}
+                    <line x1="4" y1="18" x2="11" y2="18" />{" "}
+                    <polyline points="15 15 18 18 21 15" />{" "}
+                    <line x1="18" y1="6" x2="18" y2="18" />
                   </svg>
                 )}
-                {sortOrder === "asc" ? " Ascending" : " Descending"}
+                {sortOrder === "asc" ? " " : " "}
               </button>
 
               <div
@@ -655,6 +655,22 @@ const Opportunities = () => {
                       onClick={() => handleSelectedOrderChange("postedDate")}
                     >
                       Date Posted
+                      {selectedOrder === "postedDate" && (
+                        <svg
+                          className="inline w-4 h-4 ml-2 text-gray-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
                     </button>
                   </li>
                   <li>
@@ -663,6 +679,22 @@ const Opportunities = () => {
                       onClick={() => handleSelectedOrderChange("title")}
                     >
                       Title
+                      {selectedOrder === "title" && (
+                        <svg
+                          className="inline w-4 h-4 ml-2 text-gray-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
                     </button>
                   </li>
                   <li>
@@ -671,6 +703,22 @@ const Opportunities = () => {
                       onClick={() => handleSelectedOrderChange("pay")}
                     >
                       Salary
+                      {selectedOrder === "pay" && (
+                        <svg
+                          className="inline w-4 h-4 ml-2 text-gray-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
                     </button>
                   </li>
                 </ul>
