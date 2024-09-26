@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import { initFlowbite } from "flowbite";
-import { auth, getAccountType } from "../firebase/firebase";
+import { auth } from "../firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import ResendVerification from "../components/ResendVerification";
 import LoadingIcon from "../components/LoadingIcon";
@@ -15,16 +15,10 @@ const AccountDetails = () => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [userVerified, setUserVerified] = useState<boolean>(false);
-  const [accountType, setAccountType] = useState<string>("");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        const callAccountType = async () => {
-          const accountType = await getAccountType(user.uid);
-          setAccountType(accountType);
-        };
-        callAccountType();
         setLoggedIn(true);
         setEmail(user.email);
         setUserVerified(user.emailVerified);

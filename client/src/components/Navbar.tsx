@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState, FC } from "react";
-import { auth, getAccountType } from "../firebase/firebase";
+import { auth } from "../firebase/firebase";
 import { isRunningLocal } from "../util/routing";
 import * as logo from "../assets/logo.svg";
 import { onAuthStateChanged, signOut } from "firebase/auth";
@@ -15,16 +15,11 @@ const NavBar: FC = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        const callAccountType = async () => {
-          const accountType = await getAccountType(user.uid);
-          setAccountType(accountType);
-        };
-        callAccountType();
         setEmail(user.email);
         setLoggedIn(true);
         setLoading(false);
       } else {
-        setLoggedIn(false)
+        setLoggedIn(false);
         setLoading(false);
       }
     });
@@ -82,176 +77,72 @@ const NavBar: FC = () => {
                 <>
                   {loggedIn ? (
                     <>
-                      {accountType === "admin" ||
-                      "employer" ||
-                      "authorized-poster" ? (
-                        <>
-                          {/* Dropdown for logged in AND non-normal privelage accounts */}
-                          <div>
-                            <button
-                              type="button"
-                              className="flex items-center text-white bg-teal-500 hover:bg-teal-600 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-                              id="authorized-user-menu-button"
-                              aria-expanded="false"
-                              data-dropdown-toggle="dropdown"
-                              data-dropdown-placement="bottom"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="size-6 mr-2"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                                />
-                              </svg>
-                              {!email
-                                ? ""
-                                : `${email.split("@")[0].slice(0, 6)}`}
-                            </button>
-                            <div
-                              className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                              id="dropdown"
-                            >
-                              <div className="px-4 py-3">
-                                <span className="block text-sm text-green-500 dark:text-white">
-                                  {!email
-                                    ? ""
-                                    : `${(
-                                        accountType.charAt(0).toUpperCase() +
-                                        accountType.slice(1)
-                                      ).replace(
-                                        new RegExp("-", "g"),
-                                        " "
-                                      )} account`}
-                                </span>
-
-                                <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
-                                  {!email ? "" : email}
-                                </span>
-                              </div>
-                              <ul
-                                className="py-2"
-                                aria-labelledby="authorized-user-menu-button"
-                              >
-                                <li>
-                                  <a
-                                    href={
-                                      isRunningLocal()
-                                        ? "./account-details.html"
-                                        : "/account-details"
-                                    }
-                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                                  >
-                                    Account Details
-                                  </a>
-                                </li>
-
-                                <li>
-                                  <a
-                                    href={
-                                      isRunningLocal()
-                                        ? "./opportunity-postings.html"
-                                        : "/opportunity-postings"
-                                    }
-                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                                  >
-                                    Opportunity Postings
-                                  </a>
-                                </li>
-
-                                <li>
-                                  <a
-                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() => {
-                                      handleSignOut();
-                                    }}
-                                  >
-                                    Sign out
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
+                      {/* Dropdown for logged in AND normal privelage accounts */}
+                      <div>
+                        <button
+                          type="button"
+                          className="flex items-center text-white bg-teal-500 hover:bg-teal-600 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+                          id="normal-user-menu-button"
+                          aria-expanded="false"
+                          data-dropdown-toggle="normal-user-dropdown"
+                          data-dropdown-placement="bottom"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="size-6 mr-2"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                            />
+                          </svg>
+                          {!email ? "" : `${email.split("@")[0].slice(0, 6)}`}
+                        </button>
+                        <div
+                          className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                          id="normal-user-dropdown"
+                        >
+                          <div className="px-4 py-3">
+                            <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
+                              {!email ? "" : email}
+                            </span>
                           </div>
-                        </>
-                      ) : (
-                        <>
-                          {/* Dropdown for logged in AND normal privelage accounts */}
-                          <div>
-                            <button
-                              type="button"
-                              className="flex items-center text-white bg-teal-500 hover:bg-teal-600 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-                              id="normal-user-menu-button"
-                              aria-expanded="false"
-                              data-dropdown-toggle="normal-user-dropdown"
-                              data-dropdown-placement="bottom"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="size-6 mr-2"
+                          <ul
+                            className="py-2"
+                            aria-labelledby="normal-user-menu-button"
+                          >
+                            <li>
+                              <a
+                                href={
+                                  isRunningLocal()
+                                    ? "./account-details.html"
+                                    : "/account-details"
+                                }
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                                />
-                              </svg>
-                              {!email
-                                ? ""
-                                : `${email.split("@")[0].slice(0, 6)}`}
-                            </button>
-                            <div
-                              className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                              id="normal-user-dropdown"
-                            >
-                              <div className="px-4 py-3">
-                                <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
-                                  {!email ? "" : email}
-                                </span>
-                              </div>
-                              <ul
-                                className="py-2"
-                                aria-labelledby="normal-user-menu-button"
-                              >
-                                <li>
-                                  <a
-                                    href={
-                                      isRunningLocal()
-                                        ? "./account-details.html"
-                                        : "/account-details"
-                                    }
-                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                                  >
-                                    Account Details
-                                  </a>
-                                </li>
+                                Account Details
+                              </a>
+                            </li>
 
-                                <li>
-                                  <a
-                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() => {
-                                      handleSignOut();
-                                    }}
-                                  >
-                                    Sign out
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </>
-                      )}
+                            <li>
+                              <a
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  handleSignOut();
+                                }}
+                              >
+                                Sign out
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
                     </>
                   ) : (
                     <>
