@@ -85,7 +85,7 @@ const Opportunities = () => {
     });
 
     setFilterData(filterData);
-    // setOpportunities(mockOpportunities);
+    setOpportunities(mockOpportunities);
   }, []);
 
   const mockOpportunities: Opportunity[] = [
@@ -487,11 +487,7 @@ const Opportunities = () => {
   return (
     <>
       <NavBar />
-      <div
-        className="container mx-auto mt-5"
-        data-aos="fade-up"
-        data-aos-duration="1250"
-      >
+      <div className="container mx-auto mt-5">
         <section className="text-gray-600 body-font">
           <div className="container px-5 mx-auto">
             <div className="flex flex-col text-center w-full ">
@@ -922,8 +918,12 @@ const Opportunities = () => {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-5 my-10 md:mx-0 mx-2">
-          {opportunities.map((val, key) => opportunity(val, key))}
+        <div
+          className="grid md:grid-cols-2 gap-5 my-10 md:mx-0 mx-2"
+          data-aos="fade-up"
+          data-aos-duration="1250"
+        >
+          {/* {opportunities.map((val, key) => opportunity(val, key))} */}
         </div>
       </div>
       <Footer />
