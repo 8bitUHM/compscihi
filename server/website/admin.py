@@ -8,19 +8,20 @@ class OpportunityAdmin(admin.ModelAdmin):
         "title", 
         "company", 
         "location", 
-        "location_type",  # Updated to snake_case
-        "job_type",       # Updated to snake_case
+        "location_type", 
+        "job_type",    
         "active", 
-        "posted_date",    # Updated to snake_case
-        "expire_date"     # Updated to snake_case
+        "posted_date",    
+        "expire_date"     
     )
     search_fields = ("title", "company", "location")
-    list_filter = ("location_type", "job_type", "active")  # Updated to snake_case
-    ordering = ("-posted_date",)  # Updated to snake_case
-    readonly_fields = ('id',)
-
+    list_filter = ("location_type", "job_type", "active")  
+    ordering = ("-posted_date",) 
+    readonly_fields = ('id','posted_by')
+        
     def save_model(self, request, obj, form, change):
         if not obj.id:
             obj.id = obj.generate_unique_hash_id()
+        if not obj.posted_by:
+            obj.posted_by = request.user
         super().save_model(request, obj, form, change)
-

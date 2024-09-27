@@ -2,6 +2,7 @@ from django.db import models
 import uuid
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User
 
 class Opportunity(models.Model):
   LOCATION_TYPE_CHOICES = [
@@ -18,7 +19,8 @@ class Opportunity(models.Model):
     ("Co-op", "Co-op"),
   ]
   
-  id = models.CharField(max_length=255, primary_key=True, unique=True, help_text="Unique identifier for the opportunity.")
+  id = models.CharField(max_length=255, primary_key=True, unique=True, help_text="Unique identifier for the opportunity. Auto-filled on save.")
+  posted_by = models.ForeignKey(User, null=True, on_delete=models.CASCADE, help_text="Opportunity posted by user. Auto-filled on save.")
   active = models.BooleanField(default=True, help_text="Indicates whether the opportunity is currently active and available.")
   title = models.CharField(max_length=255, help_text="The title of the job opportunity (e.g., Software Engineer, Data Analyst).")
   company = models.CharField(max_length=255, help_text="The name of the company offering the opportunity.")
