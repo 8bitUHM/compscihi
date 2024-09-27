@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'db_file_storage',
     'corsheaders',
     'rest_framework',
+    'tailwind',
+    'theme',
 ]
 
 MIDDLEWARE = [
@@ -324,3 +326,10 @@ JAZZMIN_SETTINGS = {
     # Add a language dropdown into the admin
     "language_chooser": True,
 }
+
+TAILWIND_APP_NAME = 'theme'
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
