@@ -17,4 +17,10 @@ class OpportunityAdmin(admin.ModelAdmin):
     search_fields = ("title", "company", "location")
     list_filter = ("location_type", "job_type", "active")  # Updated to snake_case
     ordering = ("-posted_date",)  # Updated to snake_case
+    readonly_fields = ('id',)
+
+    def save_model(self, request, obj, form, change):
+        if not obj.id:
+            obj.id = obj.generate_unique_hash_id()
+        super().save_model(request, obj, form, change)
 
