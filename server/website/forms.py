@@ -64,7 +64,7 @@ class CustomUserCreationForm(UserCreationForm):
 
   class Meta(UserCreationForm.Meta):
     model = User
-    fields = ("username", "email", "password1", "password2", "signup_key")
+    fields = ("email", "password1", "password2", "signup_key")
 
   def save(self, commit=True):
     user = super().save(commit=False)
@@ -79,7 +79,10 @@ class CustomUserCreationForm(UserCreationForm):
       raise ValidationError("Invalid signup key.")
 
     if commit:
+      cleaned_data = super().clean()  
+      user.username = cleaned_data.get('email').split("@")[0]
       user.is_active = False
+      user.is_staff=True
       user.save()
       user.groups.add(default_group)
   
