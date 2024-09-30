@@ -1,7 +1,16 @@
 from django.contrib import admin
-from .models import Opportunity
+from .models import Opportunity, OpportunitySkill, OpportunityQualification, OpportunityBenefit
 
 # Register your models here.
+class OpportunityQualificationInline(admin.StackedInline):
+    model = OpportunityQualification
+
+class OpportunitySkillInline(admin.StackedInline):
+    model = OpportunitySkill
+
+class OpportunityBenefitInline(admin.StackedInline):
+    model = OpportunityBenefit
+
 @admin.register(Opportunity)
 class OpportunityAdmin(admin.ModelAdmin):
     list_display = (
@@ -18,7 +27,9 @@ class OpportunityAdmin(admin.ModelAdmin):
     list_filter = ("location_type", "job_type", "active")  
     ordering = ("-posted_date",) 
     readonly_fields = ('id','posted_by')
-        
+
+    inlines = [OpportunityQualificationInline, OpportunitySkillInline, OpportunityBenefitInline]
+
     def save_model(self, request, obj, form, change):
         if not obj.id:
             obj.id = obj.generate_unique_hash_id()

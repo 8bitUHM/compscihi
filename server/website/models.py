@@ -57,3 +57,24 @@ class Opportunity(models.Model):
 
   class Meta:
     verbose_name_plural = "Opportunities"
+
+class OpportunityQualification(models.Model):
+    opportunity = models.ForeignKey(Opportunity, related_name='qualifications', on_delete=models.CASCADE)
+    qualification = models.CharField(max_length=255, help_text="Qualification required for the opportunity.")
+
+    def __str__(self):
+        return self.qualification
+
+class OpportunitySkill(models.Model):
+    opportunity = models.ForeignKey(Opportunity, related_name='skills', on_delete=models.CASCADE)
+    skill = models.CharField(max_length=255, help_text="Skill required for the opportunity.")
+
+    def __str__(self):
+        return self.skill
+
+class OpportunityBenefit(models.Model):
+    opportunity = models.ForeignKey(Opportunity, related_name='benefits', on_delete=models.CASCADE)
+    benefit = models.CharField(max_length=255, help_text="Benefit offered for the opportunity.")
+
+    def __str__(self):
+        return self.benefit
