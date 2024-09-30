@@ -1,5 +1,8 @@
-{% extends "base.html" %} {% block title %} CompSciHi Portal {% endblock %}
-{%block content %}
+{% extends "base.html" %} 
+{% block title %} 
+CompSciHi Portal 
+{% endblock %}
+{%block content %} 
 {% load static %}
 <section class="bg-gray-900">
   <div
@@ -36,9 +39,7 @@
             {{ form.username }}
           </div>
           <div>
-            <label
-              for="email"
-              class="block mb-2 text-sm font-medium text-white"
+            <label for="email" class="block mb-2 text-sm font-medium text-white"
               >Your email</label
             >
             {{ form.email }}
@@ -75,14 +76,18 @@
             >
           </p>
           {% if form.errors %}
-          <div class="text-red-500">
+          <div >
             <ul>
               {% for field, error in form.errors.items %}
-              <li><small>{{ error }}</small></li>
+                {% if error == "Success" %}
+                    <small class="text-green-500">Account created successfully.</small>
+                {% else %}
+                    <li><small class="text-red-500">{{ error }}</small></li>
+                {% endif %} 
               {% endfor %}
             </ul>
           </div>
-          {% endif %}
+          {% endif %} 
         </form>
       </div>
     </div>

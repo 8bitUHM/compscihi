@@ -13,6 +13,7 @@ def signup(request):
     form = CustomUserCreationForm(request.POST)
     if form.is_valid():
       form.save()
+      form.errors['success'] = "Success"
   else:
     form = CustomUserCreationForm()
   return render(request, 'pages/signup.html', {'form': form})
