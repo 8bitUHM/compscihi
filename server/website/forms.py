@@ -23,8 +23,6 @@ class ResendVerificationForm(forms.Form):
     
     return self.cleaned_data
     
-    
-
 class LoginForm(AuthenticationForm):
   username = forms.CharField(
       widget=forms.TextInput(
