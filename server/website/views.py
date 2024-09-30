@@ -13,9 +13,7 @@ def signup(request):
   if request.method == 'POST':
     form = CustomUserCreationForm(request.POST)
     if form.is_valid():
-      user = form.save(commit=False) 
-      user.is_active = False  
-      user.save()
+      user = form.save()
       send_email(user)
       form.errors['success'] = "Success"
       
