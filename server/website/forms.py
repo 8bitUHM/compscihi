@@ -4,6 +4,50 @@ from django.contrib.auth.models import Group, User
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 import os
+from django.contrib.auth import authenticate
+
+
+class LoginForm(AuthenticationForm):
+  username = forms.CharField(
+      widget=forms.TextInput(
+          attrs={
+              "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+          }
+      )
+  )
+  password = forms.CharField(
+      widget=forms.PasswordInput(
+          attrs={
+              "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+          }
+      )
+  )
+  
+  def clean(self):
+    username_or_email = self.cleaned_data.get('username')
+    password = self.cleaned_data.get('password')
+
+    if username_or_email and password:
+      if '@' in username_or_email:
+        try:
+          user = User.objects.get(email=username_or_email)
+          username = user.username  
+        except User.DoesNotExist:
+          raise forms.ValidationError("Invalid email or password.")
+      else:
+        username = username_or_email
+        user = User.objects.get(username = username)
+          
+      if not user.is_active:
+        raise forms.ValidationError("Your email is not yet verified.")
+
+      self.user_cache = authenticate(self.request, username=username, password=password)
+      
+      if self.user_cache is None:
+        raise forms.ValidationError("Invalid username or password.")
+
+    return self.cleaned_data
+  
 
 class CustomUserCreationForm(UserCreationForm):
   signup_key = forms.CharField(max_length=50, required=True, widget=forms.PasswordInput(attrs={

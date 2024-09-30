@@ -26,72 +26,43 @@ CompSciHi Portal
         <h1
           class="text-xl font-bold leading-tight tracking-tight md:text-2xl text-white"
         >
-          Create a portal account
+          Login to your portal account
         </h1>
         <form class="space-y-4 md:space-y-6" method="post">
           {% csrf_token %}
           <div>
             <label
-              for="username"
+              for="username-or-email"
               class="block mb-2 text-sm font-medium text-white"
-              >Your username</label
+              >Your username or email</label
             >
             {{ form.username }}
           </div>
           <div>
-            <label for="email" class="block mb-2 text-sm font-medium text-white"
-              >Your email</label
+            <label for="password" class="block mb-2 text-sm font-medium text-white"
+              >Your password</label
             >
-            {{ form.email }}
+            {{ form.password }}
           </div>
-          <div>
-            <label
-              for="password"
-              class="block mb-2 text-sm font-medium text-white"
-              >Password</label
-            >
-            {{ form.password1 }}
-          </div>
-          <div>
-            <label
-              for="confirm-password"
-              class="block mb-2 text-sm font-medium text-white"
-              >Confirm password</label
-            >
-            {{ form.password2 }}
-          </div>
-          <div>
-            <label
-              for="signup-key"
-              class="block mb-2 text-sm font-medium text-white"
-              >Sign up key</label
-            >
-            {{ form.signup_key }}
-          </div>
-
           <button
             type="submit"
             class="w-full text-white bg-teal-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           >
-            Create an account
+            Login
           </button>
           <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-            Already have an account?
+            Don't have an account?
             <a
-              href="/admin"
+              href="/signup"
               class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-              >Login here</a
+              >Sign up here</a
             >
           </p>
           {% if form.errors %}
           <div >
             <ul>
               {% for field, error in form.errors.items %}
-                {% if error == "Success" %}
-                    <small class="text-green-500">Account created successfully. Verify your email with the link sent to your email.</small>
-                {% else %}
-                    <li><small class="text-red-500">{{ error }}</small></li>
-                {% endif %} 
+                <li><small class="text-red-500">{{ error }}</small></li>
               {% endfor %}
             </ul>
           </div>
