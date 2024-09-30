@@ -29,4 +29,4 @@ class WebsiteLoginView(LoginView):
     return super().form_valid(form)
   
 class WebsiteLogoutView(LogoutView):
-  next_page = '/'
+  next_page = '/admin'

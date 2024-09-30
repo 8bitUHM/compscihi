@@ -35,8 +35,11 @@ class LoginForm(AuthenticationForm):
         except User.DoesNotExist:
           raise forms.ValidationError("Invalid email or password.")
       else:
-        username = username_or_email
-        user = User.objects.get(username = username)
+        try:
+          username = username_or_email
+          user = User.objects.get(username = username)
+        except User.DoesNotExist:
+          raise forms.ValidationError("Invalid email or password.")
           
       if not user.is_active:
         raise forms.ValidationError("Your email is not yet verified.")
