@@ -80,7 +80,7 @@ CompSciHi Portal
             <ul>
               {% for field, error in form.errors.items %}
                 {% if error == "Success" %}
-                    <small class="text-green-500">Account created successfully.</small>
+                    <small class="text-green-500">Account created successfully. Verify your email with the link sent to your email.</small>
                 {% else %}
                     <li><small class="text-red-500">{{ error }}</small></li>
                 {% endif %} 

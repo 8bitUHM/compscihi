@@ -337,7 +337,7 @@ def password_change_callback(user, password):
     user.set_password(password)
 
 # Global Package Settings
-EMAIL_FROM_ADDRESS = 'noreply<8bituhmanoa@gmail.com>'  # mandatory
+EMAIL_FROM_ADDRESS = 'noreply <8bituhmanoa@gmail.com>'  # mandatory
 EMAIL_PAGE_DOMAIN = os.getenv("EMAIL_PAGE_DOMAIN")  # mandatory (unless you use a custom link)
 EMAIL_MULTI_USER = False  # optional (defaults to False)
 
