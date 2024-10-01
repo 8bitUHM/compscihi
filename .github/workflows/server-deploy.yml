@@ -51,7 +51,7 @@ jobs:
         run: aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 654654366889.dkr.ecr.us-west-2.amazonaws.com
 
       - name: Build Docker image
-        run: docker build --build-arg SECRET_KEY=${{ secrets.SECRET_KEY }} -t compscihi .
+        run: docker build --build-arg SECRET_KEY="${{ secrets.SECRET_KEY }}" -t compscihi .
         working-directory: ./server 
 
       - name: Tag Docker image
