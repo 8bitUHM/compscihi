@@ -15,17 +15,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django_email_verification import urls as email_urls
 
 from django.conf.urls.static import static
 from django.conf import settings
 from db_file_storage.compat import url
 from db_file_storage import views as db_views
+from website.views import WebsiteLoginView, WebsiteLogoutView
 
 urlpatterns = [
+    path('admin/login/', WebsiteLoginView.as_view(), name='admin_login'),
+    path('admin/logout/', WebsiteLogoutView.as_view(), name='admin_logout'),
     path('admin/', admin.site.urls),
     path('', include('website.urls')),
     url(r'^download/', db_views.get_file, {'add_attachment_headers': True},
     name='db_file_storage.download_file'),
-  url(r'^get/', db_views.get_file, {'add_attachment_headers': False},
-     name='db_file_storage.get_file')
+    url(r'^get/', db_views.get_file, {'add_attachment_headers': False},
+     name='db_file_storage.get_file'),
+    path('verify/', include('django_email_verification.urls')),	
+    path('email/', include(email_urls))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
