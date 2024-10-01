@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'wasmeti3km.us-west-2.awsapprunner.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'wasmeti3km.us-west-2.awsapprunner.com', 'portal.compscihi.com']
 
 
 # Application definition
@@ -376,5 +376,7 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PW") # os.environ['password_key'] suggest
 EMAIL_USE_TLS = True
 
 DEFAULT_FROM_EMAIL = 'noreply<no_reply@domain.com>'
+
+CSRF_TRUSTED_ORIGINS = ['https://portal.compscihi.com']
 
 
