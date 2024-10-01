@@ -52,7 +52,7 @@ CompSciHi Portal
               Login
             </button>
           </div>
-          <div class=" mt-5 space-y-1 ">
+          <div class=" mt-6 space-y-1 ">
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
               Don't have an account?
               <a
@@ -79,7 +79,7 @@ CompSciHi Portal
             </p>
           </div>
           {% if form.errors %}
-          <div >
+          <div class="mt-4">
             <ul>
               {% for field, error in form.errors.items %}
                 <li><small class="text-red-500">{{ error }}</small></li>
