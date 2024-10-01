@@ -24,7 +24,15 @@ COPY requirements.txt /app/
 # Install dependencies from requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code into the container
+# Copy package.json and package-lock.json into the container
+COPY theme/static_src/package.json theme/static_src/package-lock.json /app/theme/static_src/
+
+# Change to the theme/static_src directory and install Node.js dependencies
+WORKDIR /app/theme/static_src
+RUN npm install
+
+# Change back to the app directory to copy the rest of the application code
+WORKDIR /app
 COPY . /app/
 
 # Run Tailwind build and collect static files
