@@ -1,0 +1,60 @@
+name: Build and Push Server Docker Image to ECR
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'server/**'
+      - '.github/workflows/server-deploy.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          . venv/bin/activate
+          pip install -r requirements.txt
+        working-directory: ./server
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+
+      - name: Apply migrations
+        run: |
+          . venv/bin/activate
+          python manage.py makemigrations
+          python manage.py migrate --noinput
+        env:
+          CSH_DATABASE_HOST: ${{ secrets.CSH_DATABASE_HOST }}
+          CSH_DATABASE_USER: ${{ secrets.CSH_DATABASE_USER }}
+          CSH_DATABASE_PASSWORD: ${{ secrets.CSH_DATABASE_PASSWORD }}
+        working-directory: ./server  
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        run: aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 654654366889.dkr.ecr.us-west-2.amazonaws.com
+
+      - name: Build Docker image
+        run: docker build -t compscihi .
+        working-directory: ./server 
+
+      - name: Tag Docker image
+        run: docker tag compscihi:latest 654654366889.dkr.ecr.us-west-2.amazonaws.com/compscihi:latest
+
+      - name: Push Docker image to ECR
+        run: docker push 654654366889.dkr.ecr.us-west-2.amazonaws.com/compscihi:latest
