@@ -15,3 +15,8 @@ env.bak/
 venv.bak/ 
 
 local_settings.py
+
+/static/       
+!*/static/   
+
+migrations
