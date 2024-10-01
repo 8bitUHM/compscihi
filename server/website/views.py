@@ -1,11 +1,12 @@
 # example/views.py
 from django.contrib.auth.views import LoginView, LogoutView
 from .forms import CustomUserCreationForm, ResendVerificationForm, LoginForm, ForgotPasswordForm
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import *
 from django_email_verification import send_email, send_password
 from django.contrib.auth.models import User
 from django import forms
+
 
 def signup(request):
   if request.method == 'POST':
@@ -60,3 +61,6 @@ def forgot_password(request):
     form = ForgotPasswordForm()
 
   return render(request, 'pages/forgot-password.html', {'form': form})
+
+def root_route_to_login(request):
+  return redirect("/admin/")
