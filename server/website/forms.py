@@ -7,9 +7,11 @@ import os
 from django.contrib.auth import authenticate
 
 
+inputClass = "border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-teal-500 focus:border-teal-500"
+
 class ForgotPasswordForm(forms.Form):
   email = forms.EmailField(label="Email", max_length=254, widget=forms.EmailInput(attrs={
-    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+    'class': inputClass,
     "placeholder": "Enter your email"
   }))
   
@@ -24,7 +26,7 @@ class ForgotPasswordForm(forms.Form):
 
 class ResendVerificationForm(forms.Form):
   email = forms.EmailField(label="Email", max_length=254, widget=forms.EmailInput(attrs={
-      "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+     'class': inputClass,
       "placeholder": "Enter your email"
   }))
   
@@ -43,14 +45,14 @@ class LoginForm(AuthenticationForm):
   username = forms.CharField(
       widget=forms.TextInput(
           attrs={
-              "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+              'class': inputClass,
           }
       )
   )
   password = forms.CharField(
       widget=forms.PasswordInput(
           attrs={
-              "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+              'class': inputClass,
           }
       )
   )
@@ -86,13 +88,13 @@ class LoginForm(AuthenticationForm):
 
 class CustomUserCreationForm(UserCreationForm):
   signup_key = forms.CharField(max_length=50, required=True, widget=forms.PasswordInput(attrs={
-    'class': "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+    'class': inputClass,
   }))
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
     attrs = {
-      "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+      'class': inputClass,
     }
     for field_name, field in self.fields.items():
       field.widget.attrs.update(attrs)
