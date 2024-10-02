@@ -8,6 +8,26 @@ import { useEffect } from "react";
 import { initFlowbite } from "flowbite";
 import { useState } from "react";
 
+type Opportunity = {
+  id: string;
+  active: boolean;
+  title: string;
+  company: string;
+  location: string;
+  locationType: "Remote" | "On-site" | "Hybrid";
+  pay?: number;
+  payPer?: string;
+  jobType: "Full-time" | "Part-time" | "Contract" | "Internship" | "Co-op";
+  description: string;
+  qualifications: string[];
+  skills: string[];
+  benefits?: string[];
+  postedDate: string;
+  applicationInstructions: string;
+  applyLink?: string;
+  clicks: number;
+};
+
 const Opportunity = () => {
   const [opportunityId, setOpportunityId] = useState<string | null>(null);
 
