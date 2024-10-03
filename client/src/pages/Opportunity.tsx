@@ -52,10 +52,11 @@ const Opportunity = () => {
     payPer: "hour",
     jobType: "Internship",
     description:
-      "Work on real-world projects with our software engineering team to develop new web-based applications.",
+      "Work on real-world projects with our software engineering team to develop new web-based applications. Lorem ipsum dolor foo bar gaz baz",
     qualifications: [
       "Currently pursuing a CS degree",
       "Experience with JavaScript/TypeScript",
+      // "Experience with React",
     ],
     skills: ["JavaScript", "React", "Node.js"],
     benefits: ["Health insurance", "Flexible hours"],
@@ -68,9 +69,10 @@ const Opportunity = () => {
   return (
     <>
       <NavBar />
-      <div className="w-full mt-5 py-5 flex justify-center flex-col gap-7 divide-y-2 lg:divide-y-0 lg:flex-row">
+      <div className="w-full mt-5 py-5 flex justify-center items-center flex-col gap-7">
+        <p className="underline">Back to Opportunities Page</p>
         {/* Job Overview  */}
-        <article className="px-5 pt-5 flex flex-col gap-2 grow-0 lg:w-2/3 xl:w-1/3">
+        <article className="px-5 pt-5 flex flex-col gap-2 ">
           <h1 className="font-bold text-2xl md:text-3xl">
             {mockOpportunity.title}
           </h1>
@@ -92,7 +94,7 @@ const Opportunity = () => {
           </div>
 
           {/* Description */}
-          <div className="pt-3 text-medium text-pretty lg:xl:text-balance">
+          <div className="max-w-lg pt-3 text-medium text-pretty">
             <p>{mockOpportunity.description}</p>
           </div>
 
@@ -114,52 +116,48 @@ const Opportunity = () => {
           <div className="w-fit mt-2 text-sm bg-blue-50 text-green-700 font-medium py-1 px-2 ring-1 ring-inset ring-green-600/20 rounded">
             {`${mockOpportunity.clicks} applied to this job`}
           </div>
-        </article>
 
-        {/* Job Qualifications */}
-        <article className="w-full px-5 py-5 flex flex-col gap-3 lg:w-2/3 xl:w-1/3">
-          <h1 className="font-bold text-2xl md:text-3xl">Qualifications</h1>
+          {/* Job Qualifications */}
+          <div className="py-5 flex flex-col gap-3">
+            <h1 className="font-bold text-2xl md:text-3xl">Qualifications</h1>
 
-          {/* List of Qualifications */}
-          <div className="space-y-4">
-            <ul className="list-none block md:inline-flex lg:block lg:list-disc lg:list-inside ">
-              {mockOpportunity.qualifications.map((val, key) => (
-                <li
-                  className="after:content-[','] last:after:content-[''] md:max-lg:last:before:content-['\00a0']"
-                  key={key}
-                >
-                  {val}
-                </li>
-              ))}
-            </ul>
+            {/* List of Qualifications */}
+            <div className="space-y-4 max-w-prose">
+              <ul className="block list-disc list-inside text-medium text-balance">
+                {mockOpportunity.qualifications.map((val, key) => (
+                  <li key={key}>{val}</li>
+                ))}
+              </ul>
 
-            {/* Skills */}
-            <div className="gap-2 list-inside text-green-600 font-semibold text-medium">
-              <span>Skills:</span>
-              {mockOpportunity.skills.map((val, key) => (
-                <span
-                  key={key}
-                  className="after:content-[','] last:after:content-[''] ms-1 me-1"
-                >
-                  {val}
-                </span>
-              ))}
+              {/* Skills */}
+              <div className="list-inside text-green-600 font-semibold text-medium">
+                {mockOpportunity.skills.map((val, key) => (
+                  <span
+                    key={key}
+                    className="me-2 text-sm bg-blue-50 text-green-700 font-medium py-1 px-2 ring-1 ring-inset ring-green-600/20 rounded-lg"
+                  >
+                    {val}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Application Instructions */}
+            {/* Application Instructions */}
 
-          <div className="mt-4 flex flex-col gap-4 text-base">
-            <span className="font-medium">Interested in Applying?</span>
-            <div>
-              {mockOpportunity.applyLink ? (
-                <p>
-                  {mockOpportunity.applicationInstructions}{" "}
-                  {mockOpportunity.applyLink}
-                </p>
-              ) : (
-                <p>{mockOpportunity.applicationInstructions}</p>
-              )}
+            <div className="mt-4 flex flex-col gap-4 text-base">
+              <span className="font-medium">Interested in Applying?</span>
+              <div>
+                {mockOpportunity.applyLink ? (
+                  <p>
+                    {mockOpportunity.applicationInstructions}{" "}
+                    <span className="underline">
+                      {mockOpportunity.applyLink}
+                    </span>
+                  </p>
+                ) : (
+                  <p>{mockOpportunity.applicationInstructions}</p>
+                )}
+              </div>
             </div>
           </div>
         </article>
