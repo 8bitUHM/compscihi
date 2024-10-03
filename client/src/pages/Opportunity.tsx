@@ -69,17 +69,17 @@ const Opportunity = () => {
   return (
     <>
       <NavBar />
-      <div className="mt-5 py-10 flex justify-center items-center flex-col gap-8 md:flex-row">
+      <div className="w-full mt-5 py-10 flex justify-center flex-col gap-8 md:flex-row">
         {/* Job Overview  */}
-        <article className="px-5 py-5 flex flex-col gap-2 grow-0 justify-center align-start md:w-3/4 lg:w-1/3">
+        <article className="px-5 py-5 flex flex-col gap-2 grow-0 lg:w-1/3">
           <h1 className="font-bold text-2xl md:text-3xl">
             {mockOpportunity.title}
           </h1>
           <div className="space-y-2 text-sm font-medium">
-            <p className="text-gray-500">
+            <span className="text-gray-500">
               <small>{`${mockOpportunity.postedDate} · ${mockOpportunity.company} · 
                 ${mockOpportunity.location} -- ${mockOpportunity.locationType}`}</small>
-            </p>
+            </span>
             {/* Wage/Salary Details */}
             {mockOpportunity.pay && mockOpportunity.payPer ? (
               <p>
@@ -91,19 +91,24 @@ const Opportunity = () => {
               </p>
             )}
           </div>
+
+          {/* Description */}
           <div className="pt-3 text-medium text-pretty lg:xl:text-balance">
             <p>{mockOpportunity.description}</p>
           </div>
+
           {/* Job Benefits */}
           <div className="text-medium pt-3">
-            {mockOpportunity.benefits.map((val, key) => (
-              <div
-                className="inline-flex me-2 text-xs bg-blue-50 text-green-700 font-medium py-1 px-2 ring-1 ring-inset ring-green-600/20 rounded-lg"
-                key={key}
-              >
-                {val}
-              </div>
-            ))}
+            {mockOpportunity.benefits
+              ? mockOpportunity.benefits.map((val, key) => (
+                  <span
+                    className="me-2 text-xs bg-blue-50 text-green-700 font-medium py-1 px-2 ring-1 ring-inset ring-green-600/20 rounded-lg"
+                    key={key}
+                  >
+                    {val}
+                  </span>
+                ))
+              : null}
           </div>
 
           {/* Clicks / Number Applied */}
@@ -112,9 +117,33 @@ const Opportunity = () => {
           </div>
         </article>
         {/* Job Qualifications */}
-        <div className="flex flex-col justify-center align-start px-5 py-5">
-          ipsum
-        </div>
+        <article className="px-5 py-5 flex flex-col gap-2 lg:w-1/3">
+          <h1 className="font-bold text-2xl md:text-3xl">Qualifications</h1>
+
+          {/* List of Qualifications */}
+          <div className="space-y-4">
+            <ul className="list-disc list-inside">
+              {mockOpportunity.qualifications.map((val, key) => (
+                <li key={key}>{val}</li>
+              ))}
+            </ul>
+
+            {/* Skills */}
+            <div className="inline-flex gap-2 list-inside text-green-600 font-semibold text-medium">
+              <span>Skills:</span>
+              {mockOpportunity.skills.map((val, key) => (
+                <span
+                  key={key}
+                  className="after:content-[','] last:after:content-['']"
+                >
+                  {val}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Application Accordion */}
+        </article>
       </div>
       <Footer />
     </>
