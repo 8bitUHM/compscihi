@@ -7,6 +7,7 @@ import "../styles/styles.css";
 import { useEffect } from "react";
 import { initFlowbite } from "flowbite";
 import { useState } from "react";
+import { isRunningLocal } from "../util/routing";
 
 type Opportunity = {
   id: string;
@@ -70,7 +71,12 @@ const Opportunity = () => {
     <>
       <NavBar />
       <div className="w-full mt-5 py-5 flex justify-center items-center flex-col gap-7">
-        <p className="underline">Back to Opportunities Page</p>
+        <a
+          className="underline"
+          href={isRunningLocal ? "./opportunities.html" : "/opportunities"}
+        >
+          Back to Opportunities Page
+        </a>
         {/* Job Overview  */}
         <article className="px-5 pt-5 flex flex-col gap-2 ">
           <h1 className="font-bold text-2xl md:text-3xl">
