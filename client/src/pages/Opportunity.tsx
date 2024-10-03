@@ -52,7 +52,7 @@ const Opportunity = () => {
     payPer: "hour",
     jobType: "Internship",
     description:
-      "Work on real-world projects with our software engineering team to develop new web-based applications. Lorem ipsum dolor foo bar gaz baz",
+      "Work on real-world projects with our software engineering team to develop new web-based applications.",
     qualifications: [
       "Currently pursuing a CS degree",
       "Experience with JavaScript/TypeScript",
