@@ -29,7 +29,6 @@ type Opportunity = {
 };
 
 const Opportunity = () => {
-  const [opportunity, setOpportunity] = useState<Opportunity>();
   const [opportunityId, setOpportunityId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -41,7 +40,7 @@ const Opportunity = () => {
     setOpportunityId(opportunityId);
   }, []);
 
-  // Mock Opportunity
+  // Mock Opportunity for Testing
   const mockOpportunity: Opportunity = {
     id: "38gn3u",
     active: true,
@@ -69,9 +68,9 @@ const Opportunity = () => {
   return (
     <>
       <NavBar />
-      <div className="w-full mt-5 py-10 flex justify-center flex-col gap-8 md:flex-row">
+      <div className="w-full mt-5 py-5 flex justify-center flex-col gap-7 divide-y-2 lg:divide-y-0 lg:flex-row">
         {/* Job Overview  */}
-        <article className="px-5 py-5 flex flex-col gap-2 grow-0 lg:w-1/3">
+        <article className="px-5 pt-5 flex flex-col gap-2 grow-0 lg:w-2/3 xl:w-1/3">
           <h1 className="font-bold text-2xl md:text-3xl">
             {mockOpportunity.title}
           </h1>
@@ -116,25 +115,31 @@ const Opportunity = () => {
             {`${mockOpportunity.clicks} applied to this job`}
           </div>
         </article>
+
         {/* Job Qualifications */}
-        <article className="px-5 py-5 flex flex-col gap-2 lg:w-1/3">
+        <article className="w-full px-5 py-5 flex flex-col gap-3 lg:w-2/3 xl:w-1/3">
           <h1 className="font-bold text-2xl md:text-3xl">Qualifications</h1>
 
           {/* List of Qualifications */}
           <div className="space-y-4">
-            <ul className="list-disc list-inside">
+            <ul className="list-none block md:inline-flex lg:block lg:list-disc lg:list-inside ">
               {mockOpportunity.qualifications.map((val, key) => (
-                <li key={key}>{val}</li>
+                <li
+                  className="after:content-[','] last:after:content-[''] md:max-lg:last:before:content-['\00a0']"
+                  key={key}
+                >
+                  {val}
+                </li>
               ))}
             </ul>
 
             {/* Skills */}
-            <div className="inline-flex gap-2 list-inside text-green-600 font-semibold text-medium">
+            <div className="gap-2 list-inside text-green-600 font-semibold text-medium">
               <span>Skills:</span>
               {mockOpportunity.skills.map((val, key) => (
                 <span
                   key={key}
-                  className="after:content-[','] last:after:content-['']"
+                  className="after:content-[','] last:after:content-[''] ms-1 me-1"
                 >
                   {val}
                 </span>
@@ -142,7 +147,21 @@ const Opportunity = () => {
             </div>
           </div>
 
-          {/* Application Accordion */}
+          {/* Application Instructions */}
+
+          <div className="mt-4 flex flex-col gap-4 text-base">
+            <span className="font-medium">Interested in Applying?</span>
+            <div>
+              {mockOpportunity.applyLink ? (
+                <p>
+                  {mockOpportunity.applicationInstructions}{" "}
+                  {mockOpportunity.applyLink}
+                </p>
+              ) : (
+                <p>{mockOpportunity.applicationInstructions}</p>
+              )}
+            </div>
+          </div>
         </article>
       </div>
       <Footer />
