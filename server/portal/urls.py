@@ -1,7 +1,7 @@
 # example/urls.py
 from django.urls import path
 
-from website.views import signup, resend_verification_email, forgot_password, root_route_to_login
+from portal.views import signup, resend_verification_email, forgot_password, root_route_to_login
 
 urlpatterns = [
   path('signup/', signup, name='signup'),

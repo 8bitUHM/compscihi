@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class MainAppConfig(AppConfig):
+class PortalConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'website'
-    verbose_name ="Opportunity Portal"
+    name = 'portal'
+    verbose_name="Opportunity Portal"

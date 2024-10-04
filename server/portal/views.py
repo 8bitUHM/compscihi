@@ -21,14 +21,14 @@ def signup(request):
   return render(request, 'pages/signup.html', {'form': form})
 
 
-class WebsiteLoginView(LoginView):
+class PortalLoginView(LoginView):
   template_name = "pages/login.html"
   authentication_form = LoginForm
   
   def form_valid(self, form):
     return super().form_valid(form)
   
-class WebsiteLogoutView(LogoutView):
+class PortalLogoutView(LogoutView):
   next_page = '/admin'
   
 def resend_verification_email(request):
