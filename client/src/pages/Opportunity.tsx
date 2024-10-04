@@ -52,7 +52,7 @@ const Opportunity = () => {
     payPer: "hour",
     jobType: "Internship",
     description:
-      "Work on real-world projects with our software engineering team to develop new web-based applications.",
+      "Work on real-world projects with our software engineering team to de",
     qualifications: [
       "Currently pursuing a CS degree",
       "Experience with JavaScript/TypeScript",
@@ -69,7 +69,7 @@ const Opportunity = () => {
   return (
     <>
       <NavBar />
-      <div className="w-full   container mx-auto px-3 flex justify-center">
+      <div className="w-full container mx-auto px-3 ">
         {/* Job Overview  */}
         <article className="pt-5 flex flex-col gap-2 ">
           <div>
@@ -101,7 +101,7 @@ const Opportunity = () => {
           </div>
 
           {/* Description */}
-          <div className="pt-3 text-medium text-pretty">
+          <div className="pt-3 text-medium text-pretty w-full">
             <p>{mockOpportunity.description}</p>
           </div>
 
