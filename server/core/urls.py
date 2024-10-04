@@ -28,6 +28,7 @@ urlpatterns = [
     path('admin/logout/', WebsiteLogoutView.as_view(), name='admin_logout'),
     path('admin/', admin.site.urls),
     path('', include('website.urls')),
+    path('api/', include('api.urls')),
     url(r'^download/', db_views.get_file, {'add_attachment_headers': True},
     name='db_file_storage.download_file'),
     url(r'^get/', db_views.get_file, {'add_attachment_headers': False},
