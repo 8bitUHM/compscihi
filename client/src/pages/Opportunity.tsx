@@ -2,7 +2,6 @@ import * as React from "react";
 import { createRoot } from "react-dom/client";
 import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
-import LoginForm from "../components/LoginForm";
 import "../styles/styles.css";
 import { useEffect } from "react";
 import { initFlowbite } from "flowbite";
@@ -70,15 +69,17 @@ const Opportunity = () => {
   return (
     <>
       <NavBar />
-      <div className="w-full mt-5 py-5 flex justify-center items-center flex-col gap-7">
-        <a
-          className="underline"
-          href={isRunningLocal ? "./opportunities.html" : "/opportunities"}
-        >
-          Back to Opportunities Page
-        </a>
+      <div className="w-full   container mx-auto px-3 flex justify-center">
         {/* Job Overview  */}
-        <article className="px-5 pt-5 flex flex-col gap-2 ">
+        <article className="pt-5 flex flex-col gap-2 ">
+          <div>
+            <a
+              className="underline"
+              href={isRunningLocal ? "./opportunities.html" : "/opportunities"}
+            >
+              Back to Opportunities Page
+            </a>
+          </div>
           <h1 className="font-bold text-2xl md:text-3xl">
             {mockOpportunity.title}
           </h1>
@@ -100,7 +101,7 @@ const Opportunity = () => {
           </div>
 
           {/* Description */}
-          <div className="max-w-lg pt-3 text-medium text-pretty">
+          <div className="pt-3 text-medium text-pretty">
             <p>{mockOpportunity.description}</p>
           </div>
 
@@ -116,11 +117,6 @@ const Opportunity = () => {
                   </span>
                 ))
               : null}
-          </div>
-
-          {/* Clicks / Number Applied */}
-          <div className="w-fit mt-2 text-sm bg-blue-50 text-green-700 font-medium py-1 px-2 ring-1 ring-inset ring-green-600/20 rounded">
-            {`${mockOpportunity.clicks} applied to this job`}
           </div>
 
           {/* Job Qualifications */}
@@ -139,8 +135,8 @@ const Opportunity = () => {
               <div className="list-inside text-green-600 font-semibold text-medium">
                 {mockOpportunity.skills.map((val, key) => (
                   <span
+                    className="me-2 text-xs bg-blue-50 text-green-700 font-medium py-1 px-2 ring-1 ring-inset ring-green-600/20 rounded-lg"
                     key={key}
-                    className="me-2 text-sm bg-blue-50 text-green-700 font-medium py-1 px-2 ring-1 ring-inset ring-green-600/20 rounded-lg"
                   >
                     {val}
                   </span>
