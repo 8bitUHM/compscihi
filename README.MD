@@ -23,7 +23,7 @@ The project is organized into several components:
       - **settings.py**: Configuration settings for the project, including database settings, middleware, installed apps, and other project-specific configurations. Models are defined here.
       - **urls.py**: URL configuration for the project, mapping URLs to views.
     - **db_file_storage/**: File storage systems that allows us to store files by raw bytes and mimetype in database.
-    - **website/**: Website app
+    - **portal/**: Portal app
       - **migrations/**: Database migration files.
       - **static/**: Static files (CSS, JavaScript, images).
       - **templates/**: HTML templates.
