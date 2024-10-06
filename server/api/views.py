@@ -1,17 +1,15 @@
 from django.http import JsonResponse
 from portal.models import Opportunity
-# Create your views here.
+from django.utils import timezone
 
-
-def OpportunityDetailView(request,opportunity_id):
+def OpportunityDetailView(request, opportunity_id):
     try:
         opportunity = Opportunity.objects.get(id=opportunity_id)
+        if opportunity.expire_date and opportunity.expire_date < timezone.now().date():
+            return JsonResponse({"error": "This opportunity has expired"}, status=404)
+
         data = {
             "id": opportunity.id,
-            "posted_by": {
-                "user-id": opportunity.posted_by.id,
-                "user": opportunity.posted_by.username
-                },
             "active": opportunity.active,
             "title": opportunity.title,
             "company": opportunity.company,
