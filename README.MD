@@ -64,11 +64,22 @@ DATABASES = {
   }
 }
 ```
-3. In ./core folder, create a new file called .env and add the environment variables from our project discord channel comp-sci-hi
+3. In ./core folder, create a new file called .env and add the environment variables from our project discord channel compscihi
 
-4. Start tailwind styling compilation by running `python manage.py tailwind start` in a new terminal, make sure that after making changes to UI that uses tailwind, collect static by running `python manage.py collectstatic`
+4. Cd into theme/static_src and run `npm install`
 
-5. Start the app by running `python manage.py runserver` or `python3 manage.py runserver` in terminal
+5. Start tailwind styling compilation by running `python manage.py tailwind start` or `python manage.py tailwind build` to build once
+
+6. Collect all static files with `python manage.py collectstatic`
+
+7. Update your local database by running `python manage.py migrate`
+
+8. Create a superuser for you to log into admin portal with `python manage.py createsuperuser`
+
+9. Run `python manage.py create_fake_opportunity_data` to create 100 fake opportunities
+
+10. Start the app by running `python manage.py runserver` in terminal, the app should be running locally on port 8000, http://127.0.0.1:8000/
+
 ## Development
 
 ### Adding new pages on frontend
