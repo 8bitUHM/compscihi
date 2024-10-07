@@ -49,9 +49,10 @@ INSTALLED_APPS = [
     'db_file_storage',
     'corsheaders',
     'rest_framework',
+    'django_filters',
     'tailwind',
     'theme',
-    'django_email_verification',
+    'django_email_verification'
 ]
 
 MIDDLEWARE = [
