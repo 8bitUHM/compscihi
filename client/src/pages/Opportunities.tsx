@@ -11,9 +11,6 @@ import { formatDate } from "../util/dateformat";
 
 const Opportunities = () => {
   const [opportunities, setOpportunities] = React.useState<Opportunity[]>([]);
-  const [filterData, setFilterData] = React.useState<Map<string, number>>(
-    new Map()
-  );
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [sortOrder, setSortOrder] = React.useState<"asc" | "desc">("asc");
   const [selectedOrder, setSelectedOrder] =
@@ -55,9 +52,8 @@ const Opportunities = () => {
         page: currentPage.toString(),
       }).toString();
 
-      console.log(params);
       const fetchUrl = `${getRootFetchUrl()}/api/opportunities/?${params}`;
-      console.log(fetchUrl);
+      // console.log(fetchUrl);
       const response = await fetch(fetchUrl);
 
       if (!response.ok) {
@@ -574,7 +570,7 @@ const Opportunities = () => {
                       htmlFor="remote"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Remote ({filterData.get("remote")})
+                      Remote
                     </label>
                   </li>
 
@@ -589,7 +585,7 @@ const Opportunities = () => {
                       htmlFor="onsite"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      On-site ({filterData.get("on-site")})
+                      On-site
                     </label>
                   </li>
 
@@ -604,7 +600,7 @@ const Opportunities = () => {
                       htmlFor="hybrid"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Hybrid ({filterData.get("hybrid")})
+                      Hybrid
                     </label>
                   </li>
 
@@ -624,7 +620,7 @@ const Opportunities = () => {
                       htmlFor="fulltime"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Full-time ({filterData.get("full-time")})
+                      Full-time
                     </label>
                   </li>
 
@@ -639,7 +635,7 @@ const Opportunities = () => {
                       htmlFor="parttime"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Part-time ({filterData.get("part-time")})
+                      Part-time
                     </label>
                   </li>
 
@@ -654,7 +650,7 @@ const Opportunities = () => {
                       htmlFor="contract"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Contract ({filterData.get("contract")})
+                      Contract
                     </label>
                   </li>
 
@@ -669,7 +665,7 @@ const Opportunities = () => {
                       htmlFor="internship"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Internship ({filterData.get("internship")})
+                      Internship
                     </label>
                   </li>
                 </ul>
