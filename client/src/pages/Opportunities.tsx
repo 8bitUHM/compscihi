@@ -36,7 +36,15 @@ const Opportunities = () => {
   const [pageReady, setPageReady] = useState<boolean>(false);
   const [canMap, setCanMap] = useState<boolean>(false);
 
-  const [params, setParams] = useState<Parameters>();
+  const [params, setParams] = useState<Parameters>(
+    new Parameters({
+      search: "",
+      location_type: "",
+      job_type: "",
+      ordering: "",
+      page: "",
+    })
+  );
 
   useEffect(() => {
     fetchData();
@@ -77,7 +85,7 @@ const Opportunities = () => {
         page: clientParams.get("page") === null ? `` : clientParams.get("page"),
       });
 
-      console.log(parameters.toStringParams())
+      console.log(parameters.toStringParams());
 
       setParams(parameters);
 
@@ -99,7 +107,6 @@ const Opportunities = () => {
       }
 
       if (data.next !== null) {
-        console.log(data.next);
         setHasNext(true);
       } else {
         setHasNext(false);
@@ -319,7 +326,7 @@ const Opportunities = () => {
                 id="simple-search"
                 className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500"
                 placeholder="Search"
-                // value={params.search}
+                value={params.search}
                 onChange={(e) => {
                   params.updateSearch(e.target.value);
                   setParams(new Parameters({ ...params }));
@@ -327,11 +334,11 @@ const Opportunities = () => {
                 required
               />
               <a
-                // href={
-                //   isRunningLocal
-                //     ? `./opportunities.html?${params.toStringParams()}`
-                //     : `/opportunities?${params.toStringParams()}`
-                // }
+                href={
+                  isRunningLocal
+                    ? `./opportunities.html?${params.toStringParams()}`
+                    : `/opportunities?${params.toStringParams()}`
+                }
                 className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-teal-700 rounded-e-lg border border-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
               >
                 <svg

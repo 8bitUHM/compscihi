@@ -44,10 +44,10 @@ export class Parameters {
   toStringParams = (): string => {
     const params: SearchParameters = {
       search: this.search,
-      job_type: this.job_type,
       location_type: this.location_type,
-      page: this.page,
+      job_type: this.job_type,
       ordering: this.ordering,
+      page: this.page,
     };
 
     return new URLSearchParams(params).toString();
