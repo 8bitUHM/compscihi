@@ -6,30 +6,10 @@ import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
 import { isRunningLocal } from "../util/routing";
-
-type Opportunity = {
-  id: string;
-  active: boolean;
-  title: string;
-  company: string;
-  location: string;
-  location_type: "Remote" | "On-site" | "Hybrid";
-  pay?: number;
-  pay_per?: string;
-  jobType: "Full-time" | "Part-time" | "Contract" | "Internship" | "Co-op";
-  description: string;
-  qualifications: string[];
-  skills: string[];
-  benefits?: string[];
-  posted_date: string;
-  application_instructions: string;
-  apply_link?: string;
-  clicks: number;
-};
+import { Opportunity } from "../types/opportunity";
+import { formatDate } from "../util/dateformat";
 
 const Opportunities = () => {
-  // For the dropdown components to work like expected on mobile devices
-
   const [opportunities, setOpportunities] = React.useState<Opportunity[]>([]);
   const [filterData, setFilterData] = React.useState<Map<string, number>>(
     new Map()
@@ -37,7 +17,7 @@ const Opportunities = () => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [sortOrder, setSortOrder] = React.useState<"asc" | "desc">("asc");
   const [selectedOrder, setSelectedOrder] =
-    React.useState<string>("postedDate");
+    React.useState<string>("posted_date");
   const [locationFilters, setLocationFilters] = React.useState<string[]>([]);
   const [jobTypeFilters, setJobTypeFilters] = React.useState<string[]>([]);
 
@@ -46,6 +26,11 @@ const Opportunities = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
 
+  useEffect(() => {
+    initFlowbite();
+    fetchData();
+  }, [sortOrder, selectedOrder]);
+
   const getRootFetchUrl = (): string => {
     return isRunningLocal()
       ? "http://127.0.0.1:8000"
@@ -53,6 +38,9 @@ const Opportunities = () => {
   };
 
   const fetchData = async () => {
+    setPageReady(false);
+    setCanMap(false);
+
     try {
       const params = new URLSearchParams({
         search: searchQuery,
@@ -77,17 +65,13 @@ const Opportunities = () => {
 
       setOpportunities(data.results);
       setTotalPages(data.total_pages);
+      setCanMap(true);
     } catch (e: any) {
       console.log(e);
     } finally {
       setPageReady(true);
     }
   };
-
-  useEffect(() => {
-    initFlowbite();
-    fetchData();
-  }, []);
 
   const opportunity = (opportunity: Opportunity, key: number) => {
     if (opportunity.active) {
@@ -103,7 +87,9 @@ const Opportunities = () => {
           <div>
             <p>
               <small className="text-gray-500">
-                {`${opportunity.posted_date} · ${opportunity.company} · 
+                {`${formatDate(opportunity.posted_date)} · ${
+                  opportunity.company
+                } · 
                 ${opportunity.location} -- ${opportunity.location_type}`}
               </small>
             </p>
@@ -118,7 +104,7 @@ const Opportunities = () => {
                 {opportunity.pay_per} ·{" "}
               </small>
             ) : null}
-            <small>{opportunity.jobType}</small>
+            <small>{opportunity.job_type}</small>
           </p>
           <div className="text-gray-500 dark:text-gray-400 mb-2">
             <p className="mt-1 mb-1 font-normal ">{opportunity.description}</p>
@@ -218,6 +204,14 @@ const Opportunities = () => {
     }
   };
 
+  const handleSortOrderChange = (order: "asc" | "desc") => {
+    setSortOrder(order);
+  };
+
+  const handleSelectedOrderChange = (order: string) => {
+    setSelectedOrder(order);
+  };
+
   return (
     <>
       <NavBar />
@@ -275,9 +269,9 @@ const Opportunities = () => {
           <div className="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
             <div className="flex items-center w-full space-x-3 md:w-auto">
               <button
-                // onClick={() =>
-                //   handleSortOrderChange(sortOrder === "asc" ? "desc" : "asc")
-                // }
+                onClick={() =>
+                  handleSortOrderChange(sortOrder === "asc" ? "desc" : "asc")
+                }
                 className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                 style={{ height: 38.48 }}
               >
@@ -382,10 +376,10 @@ const Opportunities = () => {
                   <li>
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      // onClick={() => handleSelectedOrderChange("postedDate")}
+                      onClick={() => handleSelectedOrderChange("posted_date")}
                     >
                       Date Posted
-                      {selectedOrder === "postedDate" && (
+                      {selectedOrder === "posted_date" && (
                         <svg
                           className="inline w-4 h-4 ml-2 text-gray-600"
                           fill="none"
@@ -406,7 +400,7 @@ const Opportunities = () => {
                   <li>
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      // onClick={() => handleSelectedOrderChange("title")}
+                      onClick={() => handleSelectedOrderChange("title")}
                     >
                       Title
                       {selectedOrder === "title" && (
@@ -430,7 +424,7 @@ const Opportunities = () => {
                   <li>
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      // onClick={() => handleSelectedOrderChange("pay")}
+                      onClick={() => handleSelectedOrderChange("pay")}
                     >
                       Salary
                       {selectedOrder === "pay" && (
@@ -652,13 +646,44 @@ const Opportunities = () => {
           </div>
         </div>
 
-        <div
-          className="grid md:grid-cols-2 gap-5 my-10 md:mx-0 mx-2"
-          data-aos="fade-up"
-          data-aos-duration="1250"
-        >
-          {opportunities.map((val, key) => opportunity(val, key))}
-        </div>
+        <>
+          {pageReady ? (
+            <>
+              {canMap ? (
+                <div className="grid md:grid-cols-2 gap-5 my-10 md:mx-0 mx-2">
+                  {opportunities.map((val, key) => opportunity(val, key))}
+                </div>
+              ) : (
+                <>
+                  <div>
+                    Uh oh! Something went wrong with our request for data.
+                    Please refresh and try again!
+                  </div>
+                </>
+              )}
+            </>
+          ) : (
+            <div role="status" className="flex justify-center py-10">
+              <svg
+                aria-hidden="true"
+                className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-teal-500"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="currentFill"
+                />
+              </svg>
+              <span className="sr-only">Loading...</span>
+            </div>
+          )}
+        </>
 
         <div className="flex justify-center">
           <nav aria-label="Page navigation example">
