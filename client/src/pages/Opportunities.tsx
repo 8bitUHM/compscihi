@@ -84,9 +84,9 @@ const Opportunities = () => {
 
       setParams(searchParameters);
 
-      const params = new URLSearchParams(searchParameters).toString();
+      const fetchParams = new URLSearchParams(searchParameters).toString();
 
-      const fetchUrl = `${getRootFetchUrl()}/api/opportunities/?${params}`;
+      const fetchUrl = `${getRootFetchUrl()}/api/opportunities/?${fetchParams}`;
       console.log(fetchUrl);
       const response = await fetch(fetchUrl);
 
@@ -324,15 +324,25 @@ const Opportunities = () => {
                 id="simple-search"
                 className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500"
                 placeholder="Search"
-                value={userSearchQuery}
-                onChange={handleSearchChange}
+                value={params.search}
+                onChange={(e) => {
+                  setParams((prevParams) => ({
+                    ...prevParams,
+                    search: e.target.value,
+                  }));
+                }}
                 required
               />
-              <button
-                onClick={() => {
-                  setSearchQuery(userSearchQuery);
-                  setCurrentPage(1);
-                }}
+              <a
+                href={
+                  isRunningLocal
+                    ? `./opportunities.html?${new URLSearchParams(
+                        params
+                      ).toString()}`
+                    : `/opportunities?${new URLSearchParams(
+                        params
+                      ).toString()}}`
+                }
                 className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-teal-700 rounded-e-lg border border-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
               >
                 <svg
@@ -351,7 +361,7 @@ const Opportunities = () => {
                   />
                 </svg>
                 <span className="sr-only">Search</span>
-              </button>
+              </a>
             </div>
             {/* </form> */}
           </div>
