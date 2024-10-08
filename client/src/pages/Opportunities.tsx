@@ -11,28 +11,27 @@ import { formatDate } from "../util/dateformat";
 import { truncateString } from "../util/strings";
 
 const Opportunities = () => {
-  const [opportunities, setOpportunities] = React.useState<Opportunity[]>([]);
-  const [userSearchQuery, setUserSearchQuery] = React.useState<string>("");
-  const [sortOrder, setSortOrder] = React.useState<"asc" | "desc">("desc");
-  const [selectedOrder, setSelectedOrder] =
-    React.useState<string>("posted_date");
+  const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
 
-  const [userLocationFilter, setUserLocationFilter] =
-    React.useState<string>("");
-  const [userJobTypeFilter, setUserJobTypeFilter] = React.useState<string>("");
-
-  const [pageReady, setPageReady] = useState<boolean>(false);
-  const [canMap, setCanMap] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
-
+  const [userSearchQuery, setUserSearchQuery] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [selectedOrder, setSelectedOrder] = useState<string>("posted_date");
+
+  const [userLocationFilter, setUserLocationFilter] = useState<string>("");
+  const [userJobTypeFilter, setUserJobTypeFilter] = useState<string>("");
   const [locationFilter, setLocationFilter] = useState<string>("");
   const [jobTypeFilter, setJobTypeFilter] = useState<string>("");
 
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+
   const [hasNext, setHasNext] = useState<boolean>(false);
   const [hasPrev, setHasPrev] = useState<boolean>(false);
+
+  const [pageReady, setPageReady] = useState<boolean>(false);
+  const [canMap, setCanMap] = useState<boolean>(false);
 
   useEffect(() => {
     fetchData();
