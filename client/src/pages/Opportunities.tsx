@@ -579,8 +579,12 @@ const Opportunities = () => {
                       name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                       onChange={() => {
-                        toggleLocationFilter("Remote");
+                        setParams((prevParams) => ({
+                          ...prevParams,
+                          location_type: "Remote",
+                        }));
                       }}
+                      checked={params.location_type === "Remote"}
                     />
                     <label
                       htmlFor="remote"
@@ -597,8 +601,12 @@ const Opportunities = () => {
                       name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                       onChange={() => {
-                        toggleLocationFilter("On-site");
+                        setParams((prevParams) => ({
+                          ...prevParams,
+                          location_type: "On-site",
+                        }));
                       }}
+                      checked={params.location_type === "On-site"}
                     />
                     <label
                       htmlFor="onsite"
@@ -615,9 +623,12 @@ const Opportunities = () => {
                       name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                       onChange={() => {
-                        toggleLocationFilter("Hybrid");
-                        console.log("hii");
+                        setParams((prevParams) => ({
+                          ...prevParams,
+                          location_type: "Hybrid",
+                        }));
                       }}
+                      checked={params.location_type === "Hybrid"}
                     />
                     <label
                       htmlFor="hybrid"
@@ -639,8 +650,12 @@ const Opportunities = () => {
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                       onChange={() => {
-                        toggleJobTypeFilter("Full-time");
+                        setParams((prevParams) => ({
+                          ...prevParams,
+                          job_type: "Full-time",
+                        }));
                       }}
+                      checked={params.job_type === "Full-time"}
                     />
                     <label
                       htmlFor="fulltime"
@@ -657,8 +672,12 @@ const Opportunities = () => {
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                       onChange={() => {
-                        toggleJobTypeFilter("Part-time");
+                        setParams((prevParams) => ({
+                          ...prevParams,
+                          job_type: "Part-time",
+                        }));
                       }}
+                      checked={params.job_type === "Part-time"}
                     />
                     <label
                       htmlFor="parttime"
@@ -675,8 +694,12 @@ const Opportunities = () => {
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                       onChange={() => {
-                        toggleJobTypeFilter("Contract");
+                        setParams((prevParams) => ({
+                          ...prevParams,
+                          job_type: "Contract",
+                        }));
                       }}
+                      checked={params.job_type === "Contract"}
                     />
                     <label
                       htmlFor="contract"
@@ -693,8 +716,12 @@ const Opportunities = () => {
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                       onChange={() => {
-                        toggleJobTypeFilter("Internship");
+                        setParams((prevParams) => ({
+                          ...prevParams,
+                          job_type: "Internship",
+                        }));
                       }}
+                      checked={params.job_type === "Internship"}
                     />
                     <label
                       htmlFor="internship"
@@ -704,17 +731,41 @@ const Opportunities = () => {
                     </label>
                   </li>
 
-                  <button
-                    onClick={() => {
-                      setCurrentPage(1);
-                      setJobTypeFilter(userJobTypeFilter);
-                      setLocationFilter(userLocationFilter);
-                    }}
-                    type="button"
-                    className="my-1 focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-1 me-2 mb-2 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-                  >
-                    Apply Filters
-                  </button>
+                  <li>
+                    <div className="grid grid-cols-3">
+                      <div>
+                        <button
+                          onClick={() => {
+                            setParams((prevParams) => ({
+                              ...prevParams,
+                              location_type: "",
+                              job_type: "",
+                            }));
+                          }}
+                          className="focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-1 me-2  dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+                        >
+                          Clear Filters
+                        </button>
+                      </div>
+
+                      <div className="flex">
+                        <a
+                          href={
+                            isRunningLocal
+                              ? `./opportunities.html?${new URLSearchParams(
+                                  params
+                                ).toString()}`
+                              : `/opportunities?${new URLSearchParams(
+                                  params
+                                ).toString()}}`
+                          }
+                          className="my-1 focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-1 me-2 mb-2 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+                        >
+                          Apply Filters
+                        </a>
+                      </div>
+                    </div>
+                  </li>
                 </ul>
               </div>
             </div>
