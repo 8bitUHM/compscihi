@@ -140,7 +140,7 @@ const Opportunities = () => {
 
           {/* Accordian */}
           <div
-            id={`accordion-color-${key}`}
+            id={`accordion-color-${opportunity.id}`}
             data-accordion="collapse"
             data-active-classes="bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-white"
             className="mt-3"
@@ -149,9 +149,9 @@ const Opportunities = () => {
               <button
                 type="button"
                 className="rounded flex items-center justify-between w-full p-3 font-medium rtl:text-right text-gray-500 border  border-teal-200 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-gray-800 gap-3"
-                data-accordion-target={`#accordion-color-body-${key}`}
+                data-accordion-target={`#accordion-color-body-${opportunity.id}`}
                 aria-expanded="false"
-                aria-controls={`accordion-color-body-${key}`}
+                aria-controls={`accordion-color-body-${opportunity.id}`}
               >
                 <span>
                   <p className="font-bold text-lg bg-clip-text bg-gradient-to-r to-cyan-700 from-green-700 text-transparent">
@@ -177,7 +177,7 @@ const Opportunities = () => {
               </button>
             </h2>
             <div
-              id={`accordion-color-body-${key}`}
+              id={`accordion-color-body-${opportunity.id}`}
               className="hidden"
               aria-labelledby="accordion-color-heading-2"
             >
@@ -262,6 +262,27 @@ const Opportunities = () => {
                   // onChange={handleSearchChange}
                   required
                 />
+                <button
+                  type="submit"
+                  className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-teal-700 rounded-e-lg border border-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                    />
+                  </svg>
+                  <span className="sr-only">Search</span>
+                </button>
               </div>
             </form>
           </div>
