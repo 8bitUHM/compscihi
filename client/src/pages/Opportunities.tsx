@@ -9,6 +9,7 @@ import { isRunningLocal } from "../util/routing";
 import { Opportunity } from "../types/opportunity";
 import { formatDate } from "../util/dateformat";
 import { truncateString } from "../util/strings";
+import { SearchParameters } from "../types/parameters";
 import { Parameters } from "../types/parameters";
 
 const Opportunities = () => {
@@ -35,13 +36,7 @@ const Opportunities = () => {
   const [pageReady, setPageReady] = useState<boolean>(false);
   const [canMap, setCanMap] = useState<boolean>(false);
 
-  const [params, setParams] = useState<Parameters>({
-    search: "",
-    ordering: "",
-    location_type: "",
-    job_type: "",
-    page: "",
-  });
+  const [params, setParams] = useState<Parameters>();
 
   useEffect(() => {
     fetchData();
@@ -64,7 +59,7 @@ const Opportunities = () => {
     try {
       const clientParams = new URLSearchParams(window.location.search);
 
-      const searchParameters: Parameters = {
+      const parameters = new Parameters({
         search:
           clientParams.get("search") === null ? `` : clientParams.get("search"),
         location_type:
@@ -80,13 +75,13 @@ const Opportunities = () => {
             ? ``
             : clientParams.get("ordering"),
         page: clientParams.get("page") === null ? `` : clientParams.get("page"),
-      };
+      });
 
-      setParams(searchParameters);
+      console.log(parameters.toStringParams())
 
-      const fetchParams = new URLSearchParams(searchParameters).toString();
+      setParams(parameters);
 
-      const fetchUrl = `${getRootFetchUrl()}/api/opportunities/?${fetchParams}`;
+      const fetchUrl = `${getRootFetchUrl()}/api/opportunities/?${parameters.toStringParams()}`;
       console.log(fetchUrl);
       const response = await fetch(fetchUrl);
 
@@ -324,25 +319,19 @@ const Opportunities = () => {
                 id="simple-search"
                 className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500"
                 placeholder="Search"
-                value={params.search}
+                // value={params.search}
                 onChange={(e) => {
-                  setParams((prevParams) => ({
-                    ...prevParams,
-                    search: e.target.value,
-                  }));
+                  params.updateSearch(e.target.value);
+                  setParams(new Parameters({ ...params }));
                 }}
                 required
               />
               <a
-                href={
-                  isRunningLocal
-                    ? `./opportunities.html?${new URLSearchParams(
-                        params
-                      ).toString()}`
-                    : `/opportunities?${new URLSearchParams(
-                        params
-                      ).toString()}}`
-                }
+                // href={
+                //   isRunningLocal
+                //     ? `./opportunities.html?${params.toStringParams()}`
+                //     : `/opportunities?${params.toStringParams()}`
+                // }
                 className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-teal-700 rounded-e-lg border border-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
               >
                 <svg
@@ -578,13 +567,13 @@ const Opportunities = () => {
                       type="radio"
                       name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => {
-                        setParams((prevParams) => ({
-                          ...prevParams,
-                          location_type: "Remote",
-                        }));
-                      }}
-                      checked={params.location_type === "Remote"}
+                      // onChange={() => {
+                      //   setParams((prevParams) => ({
+                      //     ...prevParams,
+                      //     location_type: "Remote",
+                      //   }));
+                      // }}
+                      // checked={params.location_type === "Remote"}
                     />
                     <label
                       htmlFor="remote"
@@ -600,13 +589,13 @@ const Opportunities = () => {
                       type="radio"
                       name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => {
-                        setParams((prevParams) => ({
-                          ...prevParams,
-                          location_type: "On-site",
-                        }));
-                      }}
-                      checked={params.location_type === "On-site"}
+                      // onChange={() => {
+                      //   setParams((prevParams) => ({
+                      //     ...prevParams,
+                      //     location_type: "On-site",
+                      //   }));
+                      // }}
+                      // checked={params.location_type === "On-site"}
                     />
                     <label
                       htmlFor="onsite"
@@ -622,13 +611,13 @@ const Opportunities = () => {
                       type="radio"
                       name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => {
-                        setParams((prevParams) => ({
-                          ...prevParams,
-                          location_type: "Hybrid",
-                        }));
-                      }}
-                      checked={params.location_type === "Hybrid"}
+                      // onChange={() => {
+                      //   setParams((prevParams) => ({
+                      //     ...prevParams,
+                      //     location_type: "Hybrid",
+                      //   }));
+                      // }}
+                      // checked={params.location_type === "Hybrid"}
                     />
                     <label
                       htmlFor="hybrid"
@@ -649,13 +638,13 @@ const Opportunities = () => {
                       type="radio"
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => {
-                        setParams((prevParams) => ({
-                          ...prevParams,
-                          job_type: "Full-time",
-                        }));
-                      }}
-                      checked={params.job_type === "Full-time"}
+                      // onChange={() => {
+                      //   setParams((prevParams) => ({
+                      //     ...prevParams,
+                      //     job_type: "Full-time",
+                      //   }));
+                      // }}
+                      // checked={params.job_type === "Full-time"}
                     />
                     <label
                       htmlFor="fulltime"
@@ -671,13 +660,13 @@ const Opportunities = () => {
                       type="radio"
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => {
-                        setParams((prevParams) => ({
-                          ...prevParams,
-                          job_type: "Part-time",
-                        }));
-                      }}
-                      checked={params.job_type === "Part-time"}
+                      // onChange={() => {
+                      //   setParams((prevParams) => ({
+                      //     ...prevParams,
+                      //     job_type: "Part-time",
+                      //   }));
+                      // }}
+                      // checked={params.job_type === "Part-time"}
                     />
                     <label
                       htmlFor="parttime"
@@ -693,13 +682,13 @@ const Opportunities = () => {
                       type="radio"
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => {
-                        setParams((prevParams) => ({
-                          ...prevParams,
-                          job_type: "Contract",
-                        }));
-                      }}
-                      checked={params.job_type === "Contract"}
+                      // onChange={() => {
+                      //   setParams((prevParams) => ({
+                      //     ...prevParams,
+                      //     job_type: "Contract",
+                      //   }));
+                      // }}
+                      // checked={params.job_type === "Contract"}
                     />
                     <label
                       htmlFor="contract"
@@ -715,13 +704,13 @@ const Opportunities = () => {
                       type="radio"
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => {
-                        setParams((prevParams) => ({
-                          ...prevParams,
-                          job_type: "Internship",
-                        }));
-                      }}
-                      checked={params.job_type === "Internship"}
+                      // onChange={() => {
+                      //   setParams((prevParams) => ({
+                      //     ...prevParams,
+                      //     job_type: "Internship",
+                      //   }));
+                      // }}
+                      // checked={params.job_type === "Internship"}
                     />
                     <label
                       htmlFor="internship"
@@ -735,13 +724,13 @@ const Opportunities = () => {
                     <div className="flex flex-row align-middle space-x-3">
                       <div>
                         <button
-                          onClick={() => {
-                            setParams((prevParams) => ({
-                              ...prevParams,
-                              location_type: "",
-                              job_type: "",
-                            }));
-                          }}
+                          // onClick={() => {
+                          //   setParams((prevParams) => ({
+                          //     ...prevParams,
+                          //     location_type: "",
+                          //     job_type: "",
+                          //   }));
+                          // }}
                           className="focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2  dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
                         >
                           Clear
@@ -750,15 +739,11 @@ const Opportunities = () => {
 
                       <div className="flex">
                         <a
-                          href={
-                            isRunningLocal
-                              ? `./opportunities.html?${new URLSearchParams(
-                                  params
-                                ).toString()}`
-                              : `/opportunities?${new URLSearchParams(
-                                  params
-                                ).toString()}}`
-                          }
+                          // href={
+                          //   isRunningLocal
+                          //     ? `./opportunities.html?${params.toStringParams()}`
+                          //     : `/opportunities?${params.toStringParams()}`
+                          // }
                           className=" focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2 mb-2 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
                         >
                           Apply
@@ -865,15 +850,15 @@ const Opportunities = () => {
               )}
               {hasNext ? (
                 <li>
-                  <button
-                    // href="#"
+                  <a
+                    href="#"
                     onClick={() => {
                       setCurrentPage((prevCurrentPage) => prevCurrentPage + 1);
                     }}
                     className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
                     Next
-                  </button>
+                  </a>
                 </li>
               ) : null}
             </ul>
