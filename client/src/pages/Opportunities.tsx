@@ -9,6 +9,7 @@ import { isRunningLocal } from "../util/routing";
 import { Opportunity } from "../types/opportunity";
 import { formatDate } from "../util/dateformat";
 import { truncateString } from "../util/strings";
+import { Parameters } from "../types/parameters";
 
 const Opportunities = () => {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
@@ -34,6 +35,14 @@ const Opportunities = () => {
   const [pageReady, setPageReady] = useState<boolean>(false);
   const [canMap, setCanMap] = useState<boolean>(false);
 
+  const [params, setParams] = useState<Parameters>({
+    search: null,
+    ordering: null,
+    location_type: null,
+    job_type: null,
+    page: null,
+  });
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -55,7 +64,7 @@ const Opportunities = () => {
     try {
       const clientParams = new URLSearchParams(window.location.search);
 
-      const params = new URLSearchParams({
+      const searchParameters: Parameters = {
         search:
           clientParams.get("search") === null ? `` : clientParams.get("search"),
         location_type:
@@ -71,7 +80,11 @@ const Opportunities = () => {
             ? ``
             : clientParams.get("ordering"),
         page: clientParams.get("page") === null ? `` : clientParams.get("page"),
-      }).toString();
+      };
+
+      setParams(searchParameters);
+
+      const params = new URLSearchParams(searchParameters).toString();
 
       const fetchUrl = `${getRootFetchUrl()}/api/opportunities/?${params}`;
       console.log(fetchUrl);
