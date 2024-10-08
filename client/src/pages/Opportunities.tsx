@@ -136,11 +136,15 @@ const Opportunities = () => {
             <small>{opportunity.job_type}</small>
           </p>
           <div className="text-gray-500 dark:text-gray-400 mb-2">
-            <p className="mt-1 mb-1 font-normal ">
-              {truncateString(opportunity.description, 250)}
+            <p className="mt-1 font-normal">
+              {truncateString(opportunity.description, 150)}
             </p>
 
-            <ul className="list-disc ml-4">
+            <small className="text-blue-600 hover:underline">
+              <a href="#">Read full job description</a>
+            </small>
+
+            <ul className="list-disc ml-4 mt-1">
               {opportunity.qualifications.map((val, key) => (
                 <li key={key}>{val}</li>
               ))}
@@ -761,7 +765,7 @@ const Opportunities = () => {
                       onClick={() => {
                         setCurrentPage(index + 1);
                       }}
-                      className="flex items-center justify-center px-4 h-10 leading-tight text-teal-200 bg-teal-700 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                      className="flex items-center justify-center px-4 h-10 leading-tight text-teal-200 bg-teal-700 border border-gray-300 hover:bg-teal-600 hover:text-teal-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                       {index + 1}
                     </button>
