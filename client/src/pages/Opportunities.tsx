@@ -17,6 +17,7 @@ const Opportunities = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+
   const [selectedOrder, setSelectedOrder] = useState<string>("posted_date");
 
   const [userLocationFilter, setUserLocationFilter] = useState<string>("");
@@ -235,6 +236,7 @@ const Opportunities = () => {
   };
 
   const handleSortOrderChange = (order: "asc" | "desc") => {
+    setCurrentPage(1);
     setSortOrder(order);
   };
 
@@ -307,6 +309,7 @@ const Opportunities = () => {
               <button
                 onClick={() => {
                   setSearchQuery(userSearchQuery);
+                  setCurrentPage(1);
                 }}
                 className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-teal-700 rounded-e-lg border border-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
               >
@@ -671,6 +674,7 @@ const Opportunities = () => {
 
                   <button
                     onClick={() => {
+                      setCurrentPage(1);
                       setJobTypeFilter(userJobTypeFilter);
                       setLocationFilter(userLocationFilter);
                     }}
@@ -749,19 +753,33 @@ const Opportunities = () => {
                   </button>
                 </li>
               ) : null}
-              {Array.from({ length: totalPages }).map((_, index) => (
-                <li key={index}>
-                  <button
-                    // href="#"
-                    onClick={() => {
-                      setCurrentPage(index + 1);
-                    }}
-                    className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                  >
-                    {index + 1}
-                  </button>
-                </li>
-              ))}
+              {Array.from({ length: totalPages }).map((_, index) =>
+                index + 1 === currentPage ? (
+                  <li key={index}>
+                    <button
+                      // href="#"
+                      onClick={() => {
+                        setCurrentPage(index + 1);
+                      }}
+                      className="flex items-center justify-center px-4 h-10 leading-tight text-teal-200 bg-teal-700 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      {index + 1}
+                    </button>
+                  </li>
+                ) : (
+                  <li key={index}>
+                    <button
+                      // href="#"
+                      onClick={() => {
+                        setCurrentPage(index + 1);
+                      }}
+                      className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      {index + 1}
+                    </button>
+                  </li>
+                )
+              )}
               {hasNext ? (
                 <li>
                   <button
