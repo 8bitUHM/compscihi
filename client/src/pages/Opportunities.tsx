@@ -8,26 +8,32 @@ import { initFlowbite } from "flowbite";
 import { isRunningLocal } from "../util/routing";
 import { Opportunity } from "../types/opportunity";
 import { formatDate } from "../util/dateformat";
+import { truncateString } from "../util/strings";
 
 const Opportunities = () => {
   const [opportunities, setOpportunities] = React.useState<Opportunity[]>([]);
-  const [searchQuery, setSearchQuery] = React.useState<string>("");
+  const [userSearchQuery, setUserSearchQuery] = React.useState<string>("");
   const [sortOrder, setSortOrder] = React.useState<"asc" | "desc">("asc");
   const [selectedOrder, setSelectedOrder] =
     React.useState<string>("posted_date");
-  const [locationFilters, setLocationFilters] = React.useState<string[]>([]);
-  const [jobTypeFilters, setJobTypeFilters] = React.useState<string[]>([]);
+
+  const [userLocationFilter, setUserLocationFilter] =
+    React.useState<string>("");
+  const [userJobTypeFilter, setUserJobTypeFilter] = React.useState<string>("");
 
   const [pageReady, setPageReady] = useState<boolean>(false);
   const [canMap, setCanMap] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
 
-  const [userSearched, setUserSearched] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const [locationFilter, setLocationFilter] = React.useState<string>("");
+  const [jobTypeFilter, setJobTypeFilter] = React.useState<string>("");
 
   useEffect(() => {
     fetchData();
-  }, [sortOrder, selectedOrder, userSearched]);
+  }, [sortOrder, selectedOrder, searchQuery, locationFilter, jobTypeFilter]);
 
   useEffect(() => {
     initFlowbite();
@@ -45,15 +51,15 @@ const Opportunities = () => {
 
     try {
       const params = new URLSearchParams({
-        search: userSearched,
-        location_type: locationFilters.join(","),
-        job_type: jobTypeFilters.join(","),
+        search: searchQuery,
+        location_type: locationFilter,
+        job_type: jobTypeFilter,
         ordering: `${sortOrder === "asc" ? "" : "-"}${selectedOrder}`,
         page: currentPage.toString(),
       }).toString();
 
       const fetchUrl = `${getRootFetchUrl()}/api/opportunities/?${params}`;
-      // console.log(fetchUrl);
+      console.log(fetchUrl);
       const response = await fetch(fetchUrl);
 
       if (!response.ok) {
@@ -108,7 +114,9 @@ const Opportunities = () => {
             <small>{opportunity.job_type}</small>
           </p>
           <div className="text-gray-500 dark:text-gray-400 mb-2">
-            <p className="mt-1 mb-1 font-normal ">{opportunity.description}</p>
+            <p className="mt-1 mb-1 font-normal ">
+              {truncateString(opportunity.description, 250)}
+            </p>
 
             <ul className="list-disc ml-4">
               {opportunity.qualifications.map((val, key) => (
@@ -214,7 +222,15 @@ const Opportunities = () => {
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+    setUserSearchQuery(e.target.value);
+  };
+
+  const toggleLocationFilter = (locationType: string) => {
+    setUserLocationFilter(locationType);
+  };
+
+  const toggleJobTypeFilter = (jobType: string) => {
+    setUserJobTypeFilter(jobType);
   };
 
   return (
@@ -263,13 +279,13 @@ const Opportunities = () => {
                 id="simple-search"
                 className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500"
                 placeholder="Search"
-                value={searchQuery}
+                value={userSearchQuery}
                 onChange={handleSearchChange}
                 required
               />
               <button
                 onClick={() => {
-                  setUserSearched(searchQuery);
+                  setSearchQuery(userSearchQuery);
                 }}
                 className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-teal-700 rounded-e-lg border border-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
               >
@@ -454,7 +470,7 @@ const Opportunities = () => {
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       onClick={() => handleSelectedOrderChange("pay")}
                     >
-                      Salary
+                      Pay
                       {selectedOrder === "pay" && (
                         <svg
                           className="inline w-4 h-4 ml-2 text-gray-600"
@@ -562,9 +578,12 @@ const Opportunities = () => {
                   <li className="flex items-center">
                     <input
                       id="remote"
-                      type="checkbox"
+                      type="radio"
+                      name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      // onChange={() => toggleLocationFilter("Remote")}
+                      onChange={() => {
+                        toggleLocationFilter("Remote");
+                      }}
                     />
                     <label
                       htmlFor="remote"
@@ -577,9 +596,12 @@ const Opportunities = () => {
                   <li className="flex items-center">
                     <input
                       id="onsite"
-                      type="checkbox"
+                      type="radio"
+                      name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      // onChange={() => toggleLocationFilter("On-site")}
+                      onChange={() => {
+                        toggleLocationFilter("On-site");
+                      }}
                     />
                     <label
                       htmlFor="onsite"
@@ -592,9 +614,13 @@ const Opportunities = () => {
                   <li className="flex items-center">
                     <input
                       id="hybrid"
-                      type="checkbox"
+                      type="radio"
+                      name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      // onChange={() => toggleLocationFilter("Hybrid")}
+                      onChange={() => {
+                        toggleLocationFilter("Hybrid");
+                        console.log("hii");
+                      }}
                     />
                     <label
                       htmlFor="hybrid"
@@ -612,9 +638,12 @@ const Opportunities = () => {
                   <li className="flex items-center">
                     <input
                       id="fulltime"
-                      type="checkbox"
+                      type="radio"
+                      name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      // onChange={() => toggleJobTypeFilter("Full-time")}
+                      onChange={() => {
+                        toggleJobTypeFilter("Full-time");
+                      }}
                     />
                     <label
                       htmlFor="fulltime"
@@ -627,9 +656,12 @@ const Opportunities = () => {
                   <li className="flex items-center">
                     <input
                       id="parttime"
-                      type="checkbox"
+                      type="radio"
+                      name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      // onChange={() => toggleJobTypeFilter("Part-time")}
+                      onChange={() => {
+                        toggleJobTypeFilter("Part-time");
+                      }}
                     />
                     <label
                       htmlFor="parttime"
@@ -642,9 +674,12 @@ const Opportunities = () => {
                   <li className="flex items-center">
                     <input
                       id="contract"
-                      type="checkbox"
+                      type="radio"
+                      name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      // onChange={() => toggleJobTypeFilter("Contract")}
+                      onChange={() => {
+                        toggleJobTypeFilter("Contract");
+                      }}
                     />
                     <label
                       htmlFor="contract"
@@ -657,9 +692,12 @@ const Opportunities = () => {
                   <li className="flex items-center">
                     <input
                       id="internship"
-                      type="checkbox"
+                      type="radio"
+                      name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      // onChange={() => toggleJobTypeFilter("Internship")}
+                      onChange={() => {
+                        toggleJobTypeFilter("Internship");
+                      }}
                     />
                     <label
                       htmlFor="internship"
@@ -668,6 +706,17 @@ const Opportunities = () => {
                       Internship
                     </label>
                   </li>
+
+                  <button
+                    onClick={() => {
+                      setJobTypeFilter(userJobTypeFilter);
+                      setLocationFilter(userLocationFilter);
+                    }}
+                    type="button"
+                    className="my-1 focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-1 me-2 mb-2 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+                  >
+                    Apply Filters
+                  </button>
                 </ul>
               </div>
             </div>
@@ -692,7 +741,7 @@ const Opportunities = () => {
                 </>
               ) : (
                 <>
-                  <div>
+                  <div className="text-center py-10">
                     Uh oh! Something went wrong with our request for data.
                     Please refresh and try again!
                   </div>
