@@ -24,16 +24,26 @@ const Opportunities = () => {
   const [pageReady, setPageReady] = useState<boolean>(false);
   const [canMap, setCanMap] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const [locationFilter, setLocationFilter] = React.useState<string>("");
-  const [jobTypeFilter, setJobTypeFilter] = React.useState<string>("");
+  const [locationFilter, setLocationFilter] = useState<string>("");
+  const [jobTypeFilter, setJobTypeFilter] = useState<string>("");
+
+  const [hasNext, setHasNext] = useState<boolean>(false);
+  const [hasPrev, setHasPrev] = useState<boolean>(false);
 
   useEffect(() => {
     fetchData();
-  }, [sortOrder, selectedOrder, searchQuery, locationFilter, jobTypeFilter]);
+  }, [
+    sortOrder,
+    selectedOrder,
+    searchQuery,
+    locationFilter,
+    jobTypeFilter,
+    currentPage,
+  ]);
 
   useEffect(() => {
     initFlowbite();
@@ -68,10 +78,22 @@ const Opportunities = () => {
       }
 
       const data = await response.json();
-      console.log(data);
 
+      if (data.previous !== null) {
+        setHasPrev(true);
+      } else {
+        setHasPrev(false);
+      }
+
+      if (data.next !== null) {
+        console.log(data.next);
+        setHasNext(true);
+      } else {
+        setHasNext(false);
+      }
+
+      setTotalPages(Math.ceil(data.count / 10));
       setOpportunities(data.results);
-      setTotalPages(data.total_pages);
       setCanMap(true);
     } catch (e: any) {
       console.log(e);
@@ -715,63 +737,45 @@ const Opportunities = () => {
         <div className="flex justify-center">
           <nav aria-label="Page navigation example">
             <ul className="inline-flex -space-x-px text-base h-10">
-              <li>
-                <a
-                  href="#"
-                  className="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  Previous
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  1
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  2
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  aria-current="page"
-                  className="flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-                >
-                  3
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  4
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  5
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  Next
-                </a>
-              </li>
+              {hasPrev ? (
+                <li>
+                  <button
+                    // href="#"
+                    onClick={() => {
+                      setCurrentPage((prevCurrentPage) => prevCurrentPage - 1);
+                    }}
+                    className="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  >
+                    Previous
+                  </button>
+                </li>
+              ) : null}
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <li key={index}>
+                  <button
+                    // href="#"
+                    onClick={() => {
+                      setCurrentPage(index + 1);
+                    }}
+                    className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  >
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+              {hasNext ? (
+                <li>
+                  <button
+                    // href="#"
+                    onClick={() => {
+                      setCurrentPage((prevCurrentPage) => prevCurrentPage + 1);
+                    }}
+                    className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  >
+                    Next
+                  </button>
+                </li>
+              ) : null}
             </ul>
           </nav>
         </div>
