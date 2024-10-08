@@ -27,9 +27,12 @@ const Opportunities = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
 
   useEffect(() => {
-    initFlowbite();
     fetchData();
   }, [sortOrder, selectedOrder]);
+
+  useEffect(() => {
+    initFlowbite();
+  }, [opportunities]);
 
   const getRootFetchUrl = (): string => {
     return isRunningLocal()
