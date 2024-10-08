@@ -574,13 +574,11 @@ const Opportunities = () => {
                       type="radio"
                       name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      // onChange={() => {
-                      //   setParams((prevParams) => ({
-                      //     ...prevParams,
-                      //     location_type: "Remote",
-                      //   }));
-                      // }}
-                      // checked={params.location_type === "Remote"}
+                      onChange={() => {
+                        params.updateLocationType("Remote");
+                        setParams(new Parameters({ ...params }));
+                      }}
+                      checked={params.location_type === "Remote"}
                     />
                     <label
                       htmlFor="remote"
@@ -596,13 +594,11 @@ const Opportunities = () => {
                       type="radio"
                       name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      // onChange={() => {
-                      //   setParams((prevParams) => ({
-                      //     ...prevParams,
-                      //     location_type: "On-site",
-                      //   }));
-                      // }}
-                      // checked={params.location_type === "On-site"}
+                      onChange={() => {
+                        params.updateLocationType("On-site");
+                        setParams(new Parameters({ ...params }));
+                      }}
+                      checked={params.location_type === "On-site"}
                     />
                     <label
                       htmlFor="onsite"
@@ -618,13 +614,11 @@ const Opportunities = () => {
                       type="radio"
                       name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      // onChange={() => {
-                      //   setParams((prevParams) => ({
-                      //     ...prevParams,
-                      //     location_type: "Hybrid",
-                      //   }));
-                      // }}
-                      // checked={params.location_type === "Hybrid"}
+                      onChange={() => {
+                        params.updateLocationType("Hybrid");
+                        setParams(new Parameters({ ...params }));
+                      }}
+                      checked={params.location_type === "Hybrid"}
                     />
                     <label
                       htmlFor="hybrid"
@@ -645,13 +639,11 @@ const Opportunities = () => {
                       type="radio"
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      // onChange={() => {
-                      //   setParams((prevParams) => ({
-                      //     ...prevParams,
-                      //     job_type: "Full-time",
-                      //   }));
-                      // }}
-                      // checked={params.job_type === "Full-time"}
+                      onChange={() => {
+                        params.updateJobType("Full-time");
+                        setParams(new Parameters({ ...params }));
+                      }}
+                      checked={params.job_type === "Full-time"}
                     />
                     <label
                       htmlFor="fulltime"
@@ -667,13 +659,11 @@ const Opportunities = () => {
                       type="radio"
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      // onChange={() => {
-                      //   setParams((prevParams) => ({
-                      //     ...prevParams,
-                      //     job_type: "Part-time",
-                      //   }));
-                      // }}
-                      // checked={params.job_type === "Part-time"}
+                      onChange={() => {
+                        params.updateJobType("Part-time");
+                        setParams(new Parameters({ ...params }));
+                      }}
+                      checked={params.job_type === "Part-time"}
                     />
                     <label
                       htmlFor="parttime"
@@ -689,13 +679,11 @@ const Opportunities = () => {
                       type="radio"
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      // onChange={() => {
-                      //   setParams((prevParams) => ({
-                      //     ...prevParams,
-                      //     job_type: "Contract",
-                      //   }));
-                      // }}
-                      // checked={params.job_type === "Contract"}
+                      onChange={() => {
+                        params.updateJobType("Contract");
+                        setParams(new Parameters({ ...params }));
+                      }}
+                      checked={params.job_type === "Contract"}
                     />
                     <label
                       htmlFor="contract"
@@ -711,13 +699,11 @@ const Opportunities = () => {
                       type="radio"
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      // onChange={() => {
-                      //   setParams((prevParams) => ({
-                      //     ...prevParams,
-                      //     job_type: "Internship",
-                      //   }));
-                      // }}
-                      // checked={params.job_type === "Internship"}
+                      onChange={() => {
+                        params.updateJobType("Internship");
+                        setParams(new Parameters({ ...params }));
+                      }}
+                      checked={params.job_type === "Internship"}
                     />
                     <label
                       htmlFor="internship"
@@ -731,13 +717,11 @@ const Opportunities = () => {
                     <div className="flex flex-row align-middle space-x-3">
                       <div>
                         <button
-                          // onClick={() => {
-                          //   setParams((prevParams) => ({
-                          //     ...prevParams,
-                          //     location_type: "",
-                          //     job_type: "",
-                          //   }));
-                          // }}
+                          onChange={() => {
+                            params.updateJobType("");
+                            params.updateLocationType("");
+                            setParams(new Parameters({ ...params }));
+                          }}
                           className="focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2  dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
                         >
                           Clear
@@ -746,11 +730,11 @@ const Opportunities = () => {
 
                       <div className="flex">
                         <a
-                          // href={
-                          //   isRunningLocal
-                          //     ? `./opportunities.html?${params.toStringParams()}`
-                          //     : `/opportunities?${params.toStringParams()}`
-                          // }
+                          href={
+                            isRunningLocal
+                              ? `./opportunities.html?${params.toStringParams()}`
+                              : `/opportunities?${params.toStringParams()}`
+                          }
                           className=" focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2 mb-2 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
                         >
                           Apply
