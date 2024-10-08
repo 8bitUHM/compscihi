@@ -36,11 +36,11 @@ const Opportunities = () => {
   const [canMap, setCanMap] = useState<boolean>(false);
 
   const [params, setParams] = useState<Parameters>({
-    search: null,
-    ordering: null,
-    location_type: null,
-    job_type: null,
-    page: null,
+    search: "",
+    ordering: "",
+    location_type: "",
+    job_type: "",
+    page: "",
   });
 
   useEffect(() => {
@@ -354,9 +354,9 @@ const Opportunities = () => {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                   />
                 </svg>
@@ -381,11 +381,11 @@ const Opportunities = () => {
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"
-                    stroke-width="2"
+                    strokeWidth="2"
                     stroke="currentColor"
                     fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
                     {" "}
                     <path stroke="none" d="M0 0h24v24H0z" />{" "}
@@ -401,11 +401,11 @@ const Opportunities = () => {
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"
-                    stroke-width="2"
+                    strokeWidth="2"
                     stroke="currentColor"
                     fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
                     {" "}
                     <path stroke="none" d="M0 0h24v24H0z" />{" "}
