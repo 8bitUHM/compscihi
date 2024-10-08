@@ -732,7 +732,7 @@ const Opportunities = () => {
                   </li>
 
                   <li>
-                    <div className="grid grid-cols-3">
+                    <div className="flex flex-row align-middle space-x-3">
                       <div>
                         <button
                           onClick={() => {
@@ -742,9 +742,9 @@ const Opportunities = () => {
                               job_type: "",
                             }));
                           }}
-                          className="focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-1 me-2  dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+                          className="focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2  dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
                         >
-                          Clear Filters
+                          Clear
                         </button>
                       </div>
 
@@ -759,9 +759,9 @@ const Opportunities = () => {
                                   params
                                 ).toString()}}`
                           }
-                          className="my-1 focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-1 me-2 mb-2 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+                          className=" focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2 mb-2 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
                         >
-                          Apply Filters
+                          Apply
                         </a>
                       </div>
                     </div>
