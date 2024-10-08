@@ -36,14 +36,7 @@ const Opportunities = () => {
 
   useEffect(() => {
     fetchData();
-  }, [
-    sortOrder,
-    selectedOrder,
-    searchQuery,
-    locationFilter,
-    jobTypeFilter,
-    currentPage,
-  ]);
+  }, []);
 
   useEffect(() => {
     initFlowbite();
@@ -60,12 +53,24 @@ const Opportunities = () => {
     setCanMap(false);
 
     try {
+      const clientParams = new URLSearchParams(window.location.search);
+
       const params = new URLSearchParams({
-        search: searchQuery,
-        location_type: locationFilter,
-        job_type: jobTypeFilter,
-        ordering: `${sortOrder === "asc" ? "" : "-"}${selectedOrder}`,
-        page: currentPage.toString(),
+        search:
+          clientParams.get("search") === null ? `` : clientParams.get("search"),
+        location_type:
+          clientParams.get("location_type") === null
+            ? ``
+            : clientParams.get("location_type"),
+        job_type:
+          clientParams.get("job_type") === null
+            ? ``
+            : clientParams.get("job_type"),
+        ordering:
+          clientParams.get("ordering") === null
+            ? ``
+            : clientParams.get("ordering"),
+        page: clientParams.get("page") === null ? `` : clientParams.get("page"),
       }).toString();
 
       const fetchUrl = `${getRootFetchUrl()}/api/opportunities/?${params}`;
