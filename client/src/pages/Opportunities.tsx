@@ -13,7 +13,7 @@ import { truncateString } from "../util/strings";
 const Opportunities = () => {
   const [opportunities, setOpportunities] = React.useState<Opportunity[]>([]);
   const [userSearchQuery, setUserSearchQuery] = React.useState<string>("");
-  const [sortOrder, setSortOrder] = React.useState<"asc" | "desc">("asc");
+  const [sortOrder, setSortOrder] = React.useState<"asc" | "desc">("desc");
   const [selectedOrder, setSelectedOrder] =
     React.useState<string>("posted_date");
 
