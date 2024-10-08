@@ -3,8 +3,9 @@ import NavBar from "../components/Navbar";
 import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import Footer from "../components/Footer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
+import { isRunningLocal } from "../util/routing";
 
 type Opportunity = {
   id: string;
@@ -12,17 +13,17 @@ type Opportunity = {
   title: string;
   company: string;
   location: string;
-  locationType: "Remote" | "On-site" | "Hybrid";
+  location_type: "Remote" | "On-site" | "Hybrid";
   pay?: number;
-  payPer?: string;
+  pay_per?: string;
   jobType: "Full-time" | "Part-time" | "Contract" | "Internship" | "Co-op";
   description: string;
   qualifications: string[];
   skills: string[];
   benefits?: string[];
-  postedDate: string;
-  applicationInstructions: string;
-  applyLink?: string;
+  posted_date: string;
+  application_instructions: string;
+  apply_link?: string;
   clicks: number;
 };
 
@@ -40,320 +41,53 @@ const Opportunities = () => {
   const [locationFilters, setLocationFilters] = React.useState<string[]>([]);
   const [jobTypeFilters, setJobTypeFilters] = React.useState<string[]>([]);
 
-  React.useEffect(() => {
+  const [pageReady, setPageReady] = useState<boolean>(false);
+  const [canMap, setCanMap] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+
+  const getRootFetchUrl = (): string => {
+    return isRunningLocal()
+      ? "http://127.0.0.1:8000"
+      : "https://portal.compscihi.com";
+  };
+
+  const fetchData = async () => {
+    try {
+      const params = new URLSearchParams({
+        search: searchQuery,
+        location_type: locationFilters.join(","),
+        job_type: jobTypeFilters.join(","),
+        ordering: `${sortOrder === "asc" ? "" : "-"}${selectedOrder}`,
+        page: currentPage.toString(),
+      }).toString();
+
+      console.log(params);
+      const fetchUrl = `${getRootFetchUrl()}/api/opportunities/?${params}`;
+      console.log(fetchUrl);
+      const response = await fetch(fetchUrl);
+
+      if (!response.ok) {
+        setPageReady(true);
+        throw new Error("Failed to fetch opportunities");
+      }
+
+      const data = await response.json();
+      console.log(data);
+
+      setOpportunities(data.results);
+      setTotalPages(data.total_pages);
+    } catch (e: any) {
+      console.log(e);
+    } finally {
+      setPageReady(true);
+    }
+  };
+
+  useEffect(() => {
     initFlowbite();
-
-    const filterData = new Map();
-
-    filterData.set("remote", 0);
-    filterData.set("on-site", 0);
-    filterData.set("hybrid", 0);
-    filterData.set("full-time", 0);
-    filterData.set("part-time", 0);
-    filterData.set("contract", 0);
-    filterData.set("internship", 0);
-
-    mockOpportunities.forEach((opportunity) => {
-      // Switch case for location type
-      switch (opportunity.locationType) {
-        case "Remote":
-          filterData.set("remote", filterData.get("remote")! + 1);
-          break;
-        case "On-site":
-          filterData.set("on-site", filterData.get("on-site")! + 1);
-          break;
-        case "Hybrid":
-          filterData.set("hybrid", filterData.get("hybrid")! + 1);
-          break;
-      }
-
-      // Switch case for job type
-      switch (opportunity.jobType) {
-        case "Full-time":
-          filterData.set("full-time", filterData.get("full-time")! + 1);
-          break;
-        case "Part-time":
-          filterData.set("part-time", filterData.get("part-time")! + 1);
-          break;
-        case "Contract":
-          filterData.set("contract", filterData.get("contract")! + 1);
-          break;
-        case "Internship":
-          filterData.set("internship", filterData.get("internship")! + 1);
-          break;
-      }
-    });
-
-    setFilterData(filterData);
-    setOpportunities(mockOpportunities);
+    fetchData();
   }, []);
-
-  const mockOpportunities: Opportunity[] = [
-    {
-      id: "op-001",
-      active: true,
-      title: "Software Engineer Intern",
-      company: "TechCorp",
-      location: "Honolulu, HI",
-      locationType: "Hybrid",
-      pay: 20,
-      payPer: "hour",
-      jobType: "Internship",
-      description:
-        "Work on real-world projects with our software engineering team to develop new web-based applications.",
-      qualifications: [
-        "Currently pursuing a CS degree",
-        "Experience with JavaScript/TypeScript",
-      ],
-      skills: ["JavaScript", "React", "Node.js"],
-      benefits: ["Health insurance", "Flexible hours"],
-      postedDate: "2024-09-18",
-      applicationInstructions: "Apply via our company website.",
-      applyLink: "https://techcorp.com/apply",
-      clicks: 57,
-    },
-    {
-      id: "op-002",
-      active: true,
-      title: "Full Stack Developer",
-      company: "Innovate Solutions",
-      location: "Remote",
-      locationType: "Remote",
-      pay: 85000,
-      payPer: "year",
-      jobType: "Full-time",
-      description:
-        "Develop and maintain web applications using modern frameworks and cloud technologies.",
-      qualifications: [
-        "3+ years experience in web development",
-        "Familiar with cloud services",
-      ],
-      skills: ["JavaScript", "Node.js", "AWS", "React"],
-      benefits: ["401(k)", "Paid time off"],
-      postedDate: "2024-09-15",
-      applicationInstructions: "Send resume to careers@innovatesolutions.com.",
-      applyLink: "https://innovatesolutions.com/apply",
-      clicks: 102,
-    },
-    {
-      id: "op-003",
-      active: true,
-      title: "DevOps Engineer",
-      company: "CloudStream",
-      location: "San Francisco, CA",
-      locationType: "On-site",
-      pay: 110000,
-      payPer: "year",
-      jobType: "Full-time",
-      description:
-        "Maintain and improve CI/CD pipelines, and ensure the smooth deployment of cloud services.",
-      qualifications: [
-        "Experience with CI/CD tools",
-        "Knowledge of Docker and Kubernetes",
-      ],
-      skills: ["Jenkins", "Docker", "Kubernetes", "AWS"],
-      benefits: ["Health insurance", "Stock options"],
-      postedDate: "2024-09-10",
-      applicationInstructions: "Apply via LinkedIn.",
-      clicks: 78,
-    },
-    {
-      id: "op-004",
-      active: true,
-      title: "Data Scientist",
-      company: "Insight Analytics",
-      location: "Austin, TX",
-      locationType: "Hybrid",
-      pay: 95000,
-      payPer: "year",
-      jobType: "Full-time",
-      description:
-        "Analyze large datasets and develop models to drive business insights.",
-      qualifications: [
-        "2+ years experience in data science",
-        "Proficiency in Python and SQL",
-      ],
-      skills: ["Python", "SQL", "Machine Learning", "TensorFlow"],
-      benefits: ["Health insurance", "Remote flexibility"],
-      postedDate: "2024-09-12",
-      applicationInstructions: "Submit your application on our website.",
-      applyLink: "https://insightanalytics.com/careers",
-      clicks: 64,
-    },
-    {
-      id: "op-005",
-      active: false,
-      title: "Front-End Developer",
-      company: "Creative Labs",
-      location: "Mililani, HI",
-      locationType: "On-site",
-      jobType: "Contract",
-      description:
-        "Build and enhance user interfaces for mobile and web platforms using modern technologies.",
-      qualifications: [
-        "Experience with HTML, CSS, and JavaScript",
-        "Familiarity with Figma or other design tools",
-      ],
-      skills: ["HTML", "CSS", "JavaScript", "Vue.js"],
-      postedDate: "2024-09-01",
-      applicationInstructions: "Contact us via email with your portfolio.",
-      clicks: 53,
-    },
-    {
-      id: "op-006",
-      active: true,
-      title: "UI/UX Designer",
-      company: "Digital Creations",
-      location: "New York, NY",
-      locationType: "Hybrid",
-      pay: 75000,
-      payPer: "year",
-      jobType: "Full-time",
-      description:
-        "Design user interfaces and improve user experience for our range of web and mobile applications.",
-      qualifications: [
-        "2+ years experience in UI/UX design",
-        "Proficiency in design tools like Sketch or Figma",
-      ],
-      skills: ["UI Design", "UX Research", "Figma", "Sketch"],
-      benefits: ["Dental insurance", "Remote flexibility"],
-      postedDate: "2024-09-18",
-      applicationInstructions: "Submit portfolio on our careers page.",
-      applyLink: "https://digitalcreations.com/jobs",
-      clicks: 89,
-    },
-    {
-      id: "op-007",
-      active: true,
-      title: "Mobile App Developer",
-      company: "Appify",
-      location: "Los Angeles, CA",
-      locationType: "Remote",
-      jobType: "Contract",
-      description:
-        "Develop cross-platform mobile applications using Flutter and Dart.",
-      qualifications: [
-        "Experience in mobile app development",
-        "Knowledge of Flutter and Dart",
-      ],
-      skills: ["Flutter", "Dart", "iOS", "Android"],
-      postedDate: "2024-09-20",
-      applicationInstructions: "Send your resume to hr@appify.com.",
-      clicks: 77,
-    },
-    {
-      id: "op-008",
-      active: true,
-      title: "Cybersecurity Analyst",
-      company: "SafeNet",
-      location: "Chicago, IL",
-      locationType: "On-site",
-      pay: 85000,
-      payPer: "year",
-      jobType: "Full-time",
-      description:
-        "Monitor and improve the organization's security posture by detecting and responding to threats.",
-      qualifications: ["2+ years in cybersecurity", "Familiar with SIEM tools"],
-      skills: [
-        "Network Security",
-        "Threat Detection",
-        "Incident Response",
-        "SIEM",
-      ],
-      benefits: ["Health insurance", "401(k) matching"],
-      postedDate: "2024-09-16",
-      applicationInstructions: "Apply via company website.",
-      applyLink: "https://safenet.com/careers",
-      clicks: 90,
-    },
-  ];
-
-  const filterOpportunities = () => {
-    let filteredOpportunities = [...mockOpportunities];
-
-    if (searchQuery) {
-      filteredOpportunities = filteredOpportunities.filter(
-        (opportunity) =>
-          opportunity.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          opportunity.company.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    if (locationFilters.length > 0) {
-      filteredOpportunities = filteredOpportunities.filter((opportunity) =>
-        locationFilters.every((filter) => filter === opportunity.locationType)
-      );
-    }
-
-    if (jobTypeFilters.length > 0) {
-      filteredOpportunities = filteredOpportunities.filter((opportunity) =>
-        jobTypeFilters.every((filter) => filter === opportunity.jobType)
-      );
-    }
-
-    filteredOpportunities.sort((a, b) => {
-      let aValue: string | number | undefined;
-      let bValue: string | number | undefined;
-
-      switch (selectedOrder) {
-        case "postedDate":
-          aValue = new Date(a.postedDate).getTime();
-          bValue = new Date(b.postedDate).getTime();
-          break;
-        case "title":
-          aValue = a.title;
-          bValue = b.title;
-          break;
-        case "pay":
-          aValue = a.pay || 0; // Handle undefined pay values
-          bValue = b.pay || 0;
-          break;
-        default:
-          aValue = 0;
-          bValue = 0;
-      }
-
-      if (sortOrder === "asc") {
-        return aValue > bValue ? 1 : -1;
-      } else {
-        return aValue < bValue ? 1 : -1;
-      }
-    });
-
-    setOpportunities(filteredOpportunities);
-  };
-
-  React.useEffect(() => {
-    filterOpportunities();
-  }, [searchQuery, locationFilters, jobTypeFilters, sortOrder, selectedOrder]);
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
-
-  const toggleLocationFilter = (locationType: string) => {
-    setLocationFilters((prev) =>
-      prev.includes(locationType)
-        ? prev.filter((filter) => filter !== locationType)
-        : [...prev, locationType]
-    );
-  };
-
-  const toggleJobTypeFilter = (jobType: string) => {
-    setJobTypeFilters((prev) =>
-      prev.includes(jobType)
-        ? prev.filter((filter) => filter !== jobType)
-        : [...prev, jobType]
-    );
-  };
-
-  const handleSortOrderChange = (order: "asc" | "desc") => {
-    setSortOrder(order);
-  };
-
-  const handleSelectedOrderChange = (order: string) => {
-    setSelectedOrder(order);
-  };
 
   const opportunity = (opportunity: Opportunity, key: number) => {
     if (opportunity.active) {
@@ -369,19 +103,19 @@ const Opportunities = () => {
           <div>
             <p>
               <small className="text-gray-500">
-                {`${opportunity.postedDate} · ${opportunity.company} · 
-                ${opportunity.location} -- ${opportunity.locationType}`}
+                {`${opportunity.posted_date} · ${opportunity.company} · 
+                ${opportunity.location} -- ${opportunity.location_type}`}
               </small>
             </p>
           </div>
           <p>
-            {opportunity.pay && opportunity.payPer ? (
+            {opportunity.pay && opportunity.pay_per ? (
               <small>
                 $
                 {opportunity.pay
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-                per {opportunity.payPer} ·{" "}
+                {opportunity.pay_per} ·{" "}
               </small>
             ) : null}
             <small>{opportunity.jobType}</small>
@@ -463,12 +197,12 @@ const Opportunities = () => {
             >
               <div className="p-3 border rounded border-teal-200 dark:border-gray-700">
                 <p className="mb-2 text-gray-500 dark:text-gray-400">
-                  {opportunity.applicationInstructions}
+                  {opportunity.application_instructions}
                 </p>
-                {opportunity.applyLink ? (
+                {opportunity.apply_link ? (
                   <p className="text-base leading-relaxed text-gray-500 underline">
-                    <a target="_blank" href={opportunity.applyLink}>
-                      {opportunity.applyLink}
+                    <a target="_blank" href={opportunity.apply_link}>
+                      {opportunity.apply_link}
                     </a>
                   </p>
                 ) : null}
@@ -487,7 +221,7 @@ const Opportunities = () => {
   return (
     <>
       <NavBar />
-      <div className="container mx-auto mt-5">
+      <div className="container mx-auto my-5">
         <section className="text-gray-600 body-font">
           <div className="container px-5 mx-auto">
             <div className="flex flex-col text-center w-full ">
@@ -531,7 +265,7 @@ const Opportunities = () => {
                   className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Search"
                   value={searchQuery}
-                  onChange={handleSearchChange}
+                  // onChange={handleSearchChange}
                   required
                 />
               </div>
@@ -541,9 +275,9 @@ const Opportunities = () => {
           <div className="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
             <div className="flex items-center w-full space-x-3 md:w-auto">
               <button
-                onClick={() =>
-                  handleSortOrderChange(sortOrder === "asc" ? "desc" : "asc")
-                }
+                // onClick={() =>
+                //   handleSortOrderChange(sortOrder === "asc" ? "desc" : "asc")
+                // }
                 className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                 style={{ height: 38.48 }}
               >
@@ -648,7 +382,7 @@ const Opportunities = () => {
                   <li>
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      onClick={() => handleSelectedOrderChange("postedDate")}
+                      // onClick={() => handleSelectedOrderChange("postedDate")}
                     >
                       Date Posted
                       {selectedOrder === "postedDate" && (
@@ -672,7 +406,7 @@ const Opportunities = () => {
                   <li>
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      onClick={() => handleSelectedOrderChange("title")}
+                      // onClick={() => handleSelectedOrderChange("title")}
                     >
                       Title
                       {selectedOrder === "title" && (
@@ -696,7 +430,7 @@ const Opportunities = () => {
                   <li>
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      onClick={() => handleSelectedOrderChange("pay")}
+                      // onClick={() => handleSelectedOrderChange("pay")}
                     >
                       Salary
                       {selectedOrder === "pay" && (
@@ -808,7 +542,7 @@ const Opportunities = () => {
                       id="remote"
                       type="checkbox"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => toggleLocationFilter("Remote")}
+                      // onChange={() => toggleLocationFilter("Remote")}
                     />
                     <label
                       htmlFor="remote"
@@ -823,7 +557,7 @@ const Opportunities = () => {
                       id="onsite"
                       type="checkbox"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => toggleLocationFilter("On-site")}
+                      // onChange={() => toggleLocationFilter("On-site")}
                     />
                     <label
                       htmlFor="onsite"
@@ -838,7 +572,7 @@ const Opportunities = () => {
                       id="hybrid"
                       type="checkbox"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => toggleLocationFilter("Hybrid")}
+                      // onChange={() => toggleLocationFilter("Hybrid")}
                     />
                     <label
                       htmlFor="hybrid"
@@ -858,7 +592,7 @@ const Opportunities = () => {
                       id="fulltime"
                       type="checkbox"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => toggleJobTypeFilter("Full-time")}
+                      // onChange={() => toggleJobTypeFilter("Full-time")}
                     />
                     <label
                       htmlFor="fulltime"
@@ -873,7 +607,7 @@ const Opportunities = () => {
                       id="parttime"
                       type="checkbox"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => toggleJobTypeFilter("Part-time")}
+                      // onChange={() => toggleJobTypeFilter("Part-time")}
                     />
                     <label
                       htmlFor="parttime"
@@ -888,7 +622,7 @@ const Opportunities = () => {
                       id="contract"
                       type="checkbox"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => toggleJobTypeFilter("Contract")}
+                      // onChange={() => toggleJobTypeFilter("Contract")}
                     />
                     <label
                       htmlFor="contract"
@@ -903,7 +637,7 @@ const Opportunities = () => {
                       id="internship"
                       type="checkbox"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => toggleJobTypeFilter("Internship")}
+                      // onChange={() => toggleJobTypeFilter("Internship")}
                     />
                     <label
                       htmlFor="internship"
@@ -923,7 +657,71 @@ const Opportunities = () => {
           data-aos="fade-up"
           data-aos-duration="1250"
         >
-          {/* {opportunities.map((val, key) => opportunity(val, key))} */}
+          {opportunities.map((val, key) => opportunity(val, key))}
+        </div>
+
+        <div className="flex justify-center">
+          <nav aria-label="Page navigation example">
+            <ul className="inline-flex -space-x-px text-base h-10">
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  Previous
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  1
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  2
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  aria-current="page"
+                  className="flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+                >
+                  3
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  4
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  5
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  Next
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
       <Footer />
