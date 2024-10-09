@@ -59,7 +59,7 @@ class OpportunityListView(ListAPIView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(expire_date__gte=timezone.now().date())
+        queryset = queryset.filter(expire_date__gte=timezone.now().date(), active=True)
         return queryset
     
 class AllOpportunities(APIView):
