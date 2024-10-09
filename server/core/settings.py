@@ -114,14 +114,14 @@ if 'test' in sys.argv:
         'DEFAULT_RENDERER_CLASSES': (
             'rest_framework.renderers.JSONRenderer',
         ),
-        # 'DEFAULT_AUTHENTICATION_CLASSES': [
-        #     'rest_framework.authentication.BasicAuthentication',
-        #     "rest_framework.authentication.TokenAuthentication",
-        #     "rest_framework.authentication.SessionAuthentication",
-        # ],
-        # 'DEFAULT_PERMISSION_CLASSES': [
-        #     'rest_framework.permissions.IsAuthenticated',
-        # ]
+        'DEFAULT_AUTHENTICATION_CLASSES': [
+            'rest_framework.authentication.BasicAuthentication',
+            "rest_framework.authentication.TokenAuthentication",
+            "rest_framework.authentication.SessionAuthentication",
+        ],
+        'DEFAULT_PERMISSION_CLASSES': [
+            'rest_framework.permissions.IsAuthenticated',
+        ]
     }
 
 # Password validation
@@ -181,17 +181,21 @@ except ImportError:
         'DEFAULT_RENDERER_CLASSES': (
             'rest_framework.renderers.JSONRenderer',
         ),
-        'DEFAULT_AUTHENTICATION_CLASSES': [
-            'rest_framework.authentication.BasicAuthentication',
-            "rest_framework.authentication.TokenAuthentication",
-            "rest_framework.authentication.SessionAuthentication",
-        ],
-        'DEFAULT_PERMISSION_CLASSES': [
-            'rest_framework.permissions.IsAuthenticated',
-        ]
+        # 'DEFAULT_AUTHENTICATION_CLASSES': [
+        #     'rest_framework.authentication.BasicAuthentication',
+        #     "rest_framework.authentication.TokenAuthentication",
+        #     "rest_framework.authentication.SessionAuthentication",
+        # ],
+        # 'DEFAULT_PERMISSION_CLASSES': [
+        #     'rest_framework.permissions.IsAuthenticated',
+        # ]
     }
     
 # CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGINS = [
+    'https://compscihi.com',
+    'http://127.0.0.1:5500'
+]
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)

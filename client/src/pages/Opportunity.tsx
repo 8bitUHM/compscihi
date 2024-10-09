@@ -75,7 +75,11 @@ const Opportunity = () => {
           <div>
             <a
               className="underline"
-              href={isRunningLocal ? "./opportunities.html" : "/opportunities"}
+              href={
+                isRunningLocal
+                  ? "./opportunities.html?search=&location_type=&job_type=&ordering=-posted_date&page=1"
+                  : "/opportunities?search=&location_type=&job_type=&ordering=-posted_date&page=1"
+              }
             >
               Back to Opportunities Page
             </a>
