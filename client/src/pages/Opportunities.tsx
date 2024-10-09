@@ -5,11 +5,12 @@ import "../styles/styles.css";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
-import { isRunningLocal, getOpportunitiesRootPage } from "../util/routing";
+import { getOpportunitiesRootPage } from "../util/routing";
 import { Opportunity } from "../types/opportunity";
 import { formatDate } from "../util/dateformat";
 import { truncateString } from "../util/strings";
 import { Parameters } from "../types/parameters";
+import { getRootOpportunityFetchUrl } from "../util/routing";
 
 const Opportunities = () => {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
@@ -20,7 +21,6 @@ const Opportunities = () => {
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
-
   const [hasNext, setHasNext] = useState<boolean>(false);
   const [hasPrev, setHasPrev] = useState<boolean>(false);
 
@@ -44,12 +44,6 @@ const Opportunities = () => {
   useEffect(() => {
     initFlowbite();
   }, [opportunities]);
-
-  const getRootFetchUrl = (): string => {
-    return isRunningLocal()
-      ? "http://127.0.0.1:8000"
-      : "https://portal.compscihi.com";
-  };
 
   const fetchData = async () => {
     setPageReady(false);
@@ -75,12 +69,9 @@ const Opportunities = () => {
             : clientParams.get("ordering"),
         page: clientParams.get("page") === null ? `` : clientParams.get("page"),
       });
-
-      console.log(parameters.toStringParams());
-
       setParams(parameters);
 
-      const fetchUrl = `${getRootFetchUrl()}/api/opportunities/?${parameters.toStringParams()}`;
+      const fetchUrl = `${getRootOpportunityFetchUrl()}/api/opportunities/?${parameters.toStringParams()}`;
       console.log(fetchUrl);
       const response = await fetch(fetchUrl);
 
@@ -344,13 +335,19 @@ const Opportunities = () => {
           <div className="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
             <div className="flex items-center w-full space-x-3 md:w-auto">
               <button
-                onClick={() =>
-                  handleSortOrderChange(sortOrder === "asc" ? "desc" : "asc")
-                }
+                onClick={() => {
+                  if (params.ordering.charAt(0) === "-") {
+                    params.updateOrdering(params.ordering.substring(1));
+                  } else {
+                    params.updateOrdering("-" + params.ordering);
+                  }
+                  const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
+                  window.location.href = newHref;
+                }}
                 className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                 style={{ height: 38.48 }}
               >
-                {sortOrder === "asc" ? (
+                {params.ordering.charAt(0) !== "-" ? (
                   <svg
                     className="h-4 w-4 text-gray-600"
                     width="24"
@@ -391,7 +388,6 @@ const Opportunities = () => {
                     <line x1="18" y1="6" x2="18" y2="18" />
                   </svg>
                 )}
-                {sortOrder === "asc" ? " " : " "}
               </button>
 
               <button
