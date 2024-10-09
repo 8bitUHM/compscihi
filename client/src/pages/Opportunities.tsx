@@ -717,10 +717,12 @@ const Opportunities = () => {
                     <div className="flex flex-row align-middle space-x-3">
                       <div>
                         <button
-                          onChange={() => {
+                          onClick={() => {
                             params.updateJobType("");
                             params.updateLocationType("");
-                            setParams(new Parameters({ ...params }));
+                            params.updatePage("1");
+                            const newHref = `./opportunities.html?${params.toStringParams()}`;
+                            window.location.href = newHref;
                           }}
                           className="focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2  dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
                         >
@@ -729,16 +731,16 @@ const Opportunities = () => {
                       </div>
 
                       <div className="flex">
-                        <a
-                          href={
-                            isRunningLocal
-                              ? `./opportunities.html?${params.toStringParams()}`
-                              : `/opportunities?${params.toStringParams()}`
-                          }
+                        <button
+                          onClick={() => {
+                            params.updatePage("1");
+                            const newHref = `./opportunities.html?${params.toStringParams()}`;
+                            window.location.href = newHref;
+                          }}
                           className=" focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2 mb-2 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
                         >
                           Apply
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </li>
