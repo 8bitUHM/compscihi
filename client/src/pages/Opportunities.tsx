@@ -192,7 +192,9 @@ const Opportunities = () => {
 
             <ul className="list-disc ml-4 mt-1">
               {opportunity.qualifications.map((val, key) => (
-                <li key={key}>{val}</li>
+                <li key={key}>
+                  <small>{val}</small>
+                </li>
               ))}
             </ul>
           </div>
