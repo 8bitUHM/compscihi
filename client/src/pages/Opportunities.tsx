@@ -415,6 +415,7 @@ const Opportunities = () => {
                         } else {
                           params.updateOrdering("posted_date");
                         }
+                        params.updatePage("1");
                         const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
                         window.location.href = newHref;
                       }}
@@ -448,6 +449,7 @@ const Opportunities = () => {
                         } else {
                           params.updateOrdering("title");
                         }
+                        params.updatePage("1");
                         const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
                         window.location.href = newHref;
                       }}
@@ -481,6 +483,7 @@ const Opportunities = () => {
                         } else {
                           params.updateOrdering("pay");
                         }
+                        params.updatePage("1");
                         const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
                         window.location.href = newHref;
                       }}
