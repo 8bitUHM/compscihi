@@ -1,7 +1,7 @@
 from django.contrib import admin
+from django.contrib.auth.models import Group
 from .models import Opportunity, OpportunitySkill, OpportunityQualification, OpportunityBenefit
 
-# Register your models here.
 class OpportunityQualificationInline(admin.StackedInline):
     model = OpportunityQualification
 
@@ -24,8 +24,8 @@ class OpportunityAdmin(admin.ModelAdmin):
         "expire_date"     
     )
     search_fields = ("title", "company", "location")
-    list_filter = ("location_type", "job_type", "active")  
-    ordering = ("-posted_date",) 
+    list_filter = ("location_type", "job_type", "active")
+    ordering = ("-posted_date",)
     readonly_fields = ('id','posted_by')
 
     inlines = [OpportunityQualificationInline, OpportunitySkillInline, OpportunityBenefitInline]
@@ -36,3 +36,22 @@ class OpportunityAdmin(admin.ModelAdmin):
         if not obj.posted_by:
             obj.posted_by = request.user
         super().save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.groups.filter(name='Admin').exists():
+            return qs
+        return qs.filter(posted_by=request.user)
+
+    def has_change_permission(self, request, obj=None):
+        if obj is not None and obj.posted_by != request.user and not request.user.groups.filter(name='Admin').exists():
+            return False
+        return super().has_change_permission(request, obj)
+
+    def has_delete_permission(self, request, obj=None):
+        if obj is not None and obj.posted_by != request.user and not request.user.groups.filter(name='Admin').exists():
+            return False
+        return super().has_delete_permission(request, obj)
+
+    def has_add_permission(self, request):
+        return True
