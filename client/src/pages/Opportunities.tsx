@@ -802,9 +802,11 @@ const Opportunities = () => {
               {hasPrev ? (
                 <li>
                   <button
-                    // href="#"
                     onClick={() => {
-                      setCurrentPage((prevCurrentPage) => prevCurrentPage - 1);
+                      const nextPage = (parseInt(params.page) - 1).toString();
+                      params.updatePage(nextPage);
+                      const newHref = `./opportunities.html?${params.toStringParams()}`;
+                      window.location.href = newHref;
                     }}
                     className="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
@@ -813,12 +815,14 @@ const Opportunities = () => {
                 </li>
               ) : null}
               {Array.from({ length: totalPages }).map((_, index) =>
-                index + 1 === currentPage ? (
+                index + 1 === parseInt(params.page) ? (
                   <li key={index}>
                     <button
-                      // href="#"
                       onClick={() => {
-                        setCurrentPage(index + 1);
+                        const nextPage = (index + 1).toString();
+                        params.updatePage(nextPage);
+                        const newHref = `./opportunities.html?${params.toStringParams()}`;
+                        window.location.href = newHref;
                       }}
                       className="flex items-center justify-center px-4 h-10 leading-tight text-teal-200 bg-teal-700 border border-gray-300 hover:bg-teal-600 hover:text-teal-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
@@ -828,9 +832,11 @@ const Opportunities = () => {
                 ) : (
                   <li key={index}>
                     <button
-                      // href="#"
                       onClick={() => {
-                        setCurrentPage(index + 1);
+                        const nextPage = (index + 1).toString();
+                        params.updatePage(nextPage);
+                        const newHref = `./opportunities.html?${params.toStringParams()}`;
+                        window.location.href = newHref;
                       }}
                       className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
@@ -841,15 +847,17 @@ const Opportunities = () => {
               )}
               {hasNext ? (
                 <li>
-                  <a
-                    href="#"
+                  <button
                     onClick={() => {
-                      setCurrentPage((prevCurrentPage) => prevCurrentPage + 1);
+                      const nextPage = (parseInt(params.page) + 1).toString();
+                      params.updatePage(nextPage);
+                      const newHref = `./opportunities.html?${params.toStringParams()}`;
+                      window.location.href = newHref;
                     }}
                     className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
                     Next
-                  </a>
+                  </button>
                 </li>
               ) : null}
             </ul>
