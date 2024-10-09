@@ -15,11 +15,6 @@ import { getRootOpportunityFetchUrl } from "../util/routing";
 const Opportunities = () => {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
 
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-
-  const [selectedOrder, setSelectedOrder] = useState<string>("posted_date");
-
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [hasNext, setHasNext] = useState<boolean>(false);
   const [hasPrev, setHasPrev] = useState<boolean>(false);
@@ -241,15 +236,6 @@ const Opportunities = () => {
     }
   };
 
-  const handleSortOrderChange = (order: "asc" | "desc") => {
-    setCurrentPage(1);
-    setSortOrder(order);
-  };
-
-  const handleSelectedOrderChange = (order: string) => {
-    setSelectedOrder(order);
-  };
-
   return (
     <>
       <NavBar />
@@ -423,10 +409,19 @@ const Opportunities = () => {
                   <li>
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      onClick={() => handleSelectedOrderChange("posted_date")}
+                      onClick={() => {
+                        if (params.ordering.charAt(0) === "-") {
+                          params.updateOrdering("-posted_date");
+                        } else {
+                          params.updateOrdering("posted_date");
+                        }
+                        const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
+                        window.location.href = newHref;
+                      }}
                     >
                       Date Posted
-                      {selectedOrder === "posted_date" && (
+                      {params.ordering === "posted_date" ||
+                      params.ordering === "-posted_date" ? (
                         <svg
                           className="inline w-4 h-4 ml-2 text-gray-600"
                           fill="none"
@@ -441,16 +436,25 @@ const Opportunities = () => {
                             d="M5 13l4 4L19 7"
                           />
                         </svg>
-                      )}
+                      ) : null}
                     </button>
                   </li>
                   <li>
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      onClick={() => handleSelectedOrderChange("title")}
+                      onClick={() => {
+                        if (params.ordering.charAt(0) === "-") {
+                          params.updateOrdering("-title");
+                        } else {
+                          params.updateOrdering("title");
+                        }
+                        const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
+                        window.location.href = newHref;
+                      }}
                     >
                       Title
-                      {selectedOrder === "title" && (
+                      {params.ordering === "title" ||
+                      params.ordering === "-title" ? (
                         <svg
                           className="inline w-4 h-4 ml-2 text-gray-600"
                           fill="none"
@@ -465,16 +469,25 @@ const Opportunities = () => {
                             d="M5 13l4 4L19 7"
                           />
                         </svg>
-                      )}
+                      ) : null}
                     </button>
                   </li>
                   <li>
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      onClick={() => handleSelectedOrderChange("pay")}
+                      onClick={() => {
+                        if (params.ordering.charAt(0) === "-") {
+                          params.updateOrdering("-pay");
+                        } else {
+                          params.updateOrdering("pay");
+                        }
+                        const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
+                        window.location.href = newHref;
+                      }}
                     >
                       Pay
-                      {selectedOrder === "pay" && (
+                      {params.ordering === "pay" ||
+                      params.ordering === "-pay" ? (
                         <svg
                           className="inline w-4 h-4 ml-2 text-gray-600"
                           fill="none"
@@ -489,7 +502,7 @@ const Opportunities = () => {
                             d="M5 13l4 4L19 7"
                           />
                         </svg>
-                      )}
+                      ) : null}
                     </button>
                   </li>
                 </ul>
