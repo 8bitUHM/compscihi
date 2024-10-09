@@ -5,7 +5,7 @@ import "../styles/styles.css";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
-import { getOpportunitiesRootPage } from "../util/routing";
+import { getOpportunitiesRootPage, isRunningLocal } from "../util/routing";
 import { Opportunity } from "../types/opportunity";
 import { formatDate } from "../util/dateformat";
 import { truncateString } from "../util/strings";
@@ -156,8 +156,17 @@ const Opportunities = () => {
           className="w-full  p-6 bg-white border border-gray-200 rounded-lg shadow"
         >
           {/* Card */}
-          <h5 className=" text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
-            {opportunity.title}
+          <h5 className=" text-2xl font-semibold tracking-tight text-gray-900 dark:text-white ">
+            <a
+              className="hover:underline"
+              href={
+                isRunningLocal
+                  ? `./opportunity.html?opportunity-id=${opportunity.id}`
+                  : `/opportunity?opportunity-id=${opportunity.id}`
+              }
+            >
+              {opportunity.title}
+            </a>
           </h5>
           <div>
             <p>
@@ -187,12 +196,22 @@ const Opportunities = () => {
             </p>
 
             <small className="text-blue-600 hover:underline">
-              <a href="#">Read full job description</a>
+              <a
+                href={
+                  isRunningLocal
+                    ? `./opportunity.html?opportunity-id=${opportunity.id}`
+                    : `/opportunity?opportunity-id=${opportunity.id}`
+                }
+              >
+                Read full job description
+              </a>
             </small>
 
             <ul className="list-disc ml-4 mt-1">
               {opportunity.qualifications.map((val, key) => (
-                <li key={key}>{val}</li>
+                <li key={key} className="leading-4">
+                  <small>{val}</small>
+                </li>
               ))}
             </ul>
           </div>
@@ -200,7 +219,7 @@ const Opportunities = () => {
             {opportunity.skills.map((val, key) => (
               <span
                 key={key}
-                className="me-2 my-1 inline-flex items-center rounded-md bg-teal-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
+                className="me-2 mb-1 inline-flex items-center rounded-md bg-teal-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
               >
                 {val}
               </span>
@@ -723,9 +742,7 @@ const Opportunities = () => {
                           onClick={() => {
                             params.updateJobType("");
                             params.updateLocationType("");
-                            params.updatePage("1");
-                            const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
-                            window.location.href = newHref;
+                            resetPageAndRedirect();
                           }}
                           className="focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2  dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
                         >
@@ -736,9 +753,7 @@ const Opportunities = () => {
                       <div className="flex">
                         <button
                           onClick={() => {
-                            params.updatePage("1");
-                            const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
-                            window.location.href = newHref;
+                            resetPageAndRedirect();
                           }}
                           className=" focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2 mb-2 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
                         >
@@ -759,7 +774,7 @@ const Opportunities = () => {
               {canMap ? (
                 <>
                   {opportunities.length > 0 ? (
-                    <div className="grid md:grid-cols-2 gap-5 my-10 md:mx-0 mx-2">
+                    <div className="grid lg:grid-cols-2 gap-5 my-10 md:mx-0 mx-2">
                       {opportunities.map((val, key) => opportunity(val, key))}
                     </div>
                   ) : (

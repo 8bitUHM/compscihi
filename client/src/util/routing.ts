@@ -14,3 +14,9 @@ export const getRootOpportunityFetchUrl = (): string => {
     ? "http://127.0.0.1:8000"
     : "https://portal.compscihi.com";
 };
+
+export const getRootOpportunityIdFetchUrl = ():string =>{
+  return isRunningLocal()
+    ? "http://127.0.0.1:8000/api/opportunities"
+    : "https://portal.compscihi.com/api/opportunities";
+}
