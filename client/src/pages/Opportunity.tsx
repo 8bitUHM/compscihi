@@ -121,7 +121,7 @@ const Opportunity = () => {
 
                     {/* List of Qualifications */}
                     <div className="space-y-4">
-                      <ul className="list-disc text-medium ">
+                      <ul className="ml-3 list-disc text-medium ">
                         {opportunity.qualifications.map((val, key) => (
                           <li key={key}>{val}</li>
                         ))}
