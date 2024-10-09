@@ -133,6 +133,16 @@ const Opportunities = () => {
     resetPageAndRedirect();
   };
 
+  const handleLocationTypeFilter = (filter: string) => {
+    params.updateLocationType(filter);
+    setParams(new Parameters({ ...params }));
+  };
+
+  const handleJobTypeFilter = (filter: string) => {
+    params.updateJobType(filter);
+    setParams(new Parameters({ ...params }));
+  };
+
   const opportunity = (opportunity: Opportunity, key: number) => {
     if (opportunity.active) {
       return (
@@ -570,8 +580,7 @@ const Opportunities = () => {
                       name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                       onChange={() => {
-                        params.updateLocationType("Remote");
-                        setParams(new Parameters({ ...params }));
+                        handleLocationTypeFilter("Remote");
                       }}
                       checked={params.location_type === "Remote"}
                     />
@@ -590,8 +599,7 @@ const Opportunities = () => {
                       name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                       onChange={() => {
-                        params.updateLocationType("On-site");
-                        setParams(new Parameters({ ...params }));
+                        handleLocationTypeFilter("On-site");
                       }}
                       checked={params.location_type === "On-site"}
                     />
@@ -610,8 +618,7 @@ const Opportunities = () => {
                       name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                       onChange={() => {
-                        params.updateLocationType("Hybrid");
-                        setParams(new Parameters({ ...params }));
+                        handleLocationTypeFilter("Hybrid");
                       }}
                       checked={params.location_type === "Hybrid"}
                     />
@@ -635,8 +642,7 @@ const Opportunities = () => {
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                       onChange={() => {
-                        params.updateJobType("Full-time");
-                        setParams(new Parameters({ ...params }));
+                        handleJobTypeFilter("Full-time");
                       }}
                       checked={params.job_type === "Full-time"}
                     />
@@ -655,8 +661,7 @@ const Opportunities = () => {
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                       onChange={() => {
-                        params.updateJobType("Part-time");
-                        setParams(new Parameters({ ...params }));
+                        handleJobTypeFilter("Part-time");
                       }}
                       checked={params.job_type === "Part-time"}
                     />
@@ -675,8 +680,7 @@ const Opportunities = () => {
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                       onChange={() => {
-                        params.updateJobType("Contract");
-                        setParams(new Parameters({ ...params }));
+                        handleJobTypeFilter("Contract");
                       }}
                       checked={params.job_type === "Contract"}
                     />
@@ -695,8 +699,7 @@ const Opportunities = () => {
                       name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                       onChange={() => {
-                        params.updateJobType("Internship");
-                        setParams(new Parameters({ ...params }));
+                        handleJobTypeFilter("Internship");
                       }}
                       checked={params.job_type === "Internship"}
                     />
