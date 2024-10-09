@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from portal.models import Opportunity
 from django.utils import timezone
 from rest_framework.generics import ListAPIView
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from portal.models import Opportunity
@@ -59,3 +60,13 @@ class OpportunityListView(ListAPIView):
         queryset = super().get_queryset()
         queryset = queryset.filter(expire_date__gte=timezone.now().date())
         return queryset
+    
+class AllOpportunities(RetrieveAPIView):
+    queryset = Opportunity.objects.all()
+    serializer_class = OpportunitySerializer
+    lookup_field = 'opportunity_id'
+
+    def get(self, request, *args, **kwargs):
+        opportunity = self.get_object()
+        serializer = self.get_serializer(opportunity)
+        return JsonResponse(serializer.data)
