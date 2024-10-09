@@ -53,7 +53,7 @@ class OpportunityListView(ListAPIView):
     
     ordering_fields = ['posted_date', 'title','pay']
     
-    search_fields = ['title','description','company']
+    search_fields = ['title','description','company', 'location_type','job_type']
 
     def get_queryset(self):
         queryset = super().get_queryset()
