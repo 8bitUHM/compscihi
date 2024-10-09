@@ -9,23 +9,14 @@ import { isRunningLocal, getOpportunitiesRootPage } from "../util/routing";
 import { Opportunity } from "../types/opportunity";
 import { formatDate } from "../util/dateformat";
 import { truncateString } from "../util/strings";
-import { SearchParameters } from "../types/parameters";
 import { Parameters } from "../types/parameters";
 
 const Opportunities = () => {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
 
-  const [userSearchQuery, setUserSearchQuery] = useState<string>("");
-  const [searchQuery, setSearchQuery] = useState<string>("");
-
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   const [selectedOrder, setSelectedOrder] = useState<string>("posted_date");
-
-  const [userLocationFilter, setUserLocationFilter] = useState<string>("");
-  const [userJobTypeFilter, setUserJobTypeFilter] = useState<string>("");
-  const [locationFilter, setLocationFilter] = useState<string>("");
-  const [jobTypeFilter, setJobTypeFilter] = useState<string>("");
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -266,18 +257,6 @@ const Opportunities = () => {
 
   const handleSelectedOrderChange = (order: string) => {
     setSelectedOrder(order);
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserSearchQuery(e.target.value);
-  };
-
-  const toggleLocationFilter = (locationType: string) => {
-    setUserLocationFilter(locationType);
-  };
-
-  const toggleJobTypeFilter = (jobType: string) => {
-    setUserJobTypeFilter(jobType);
   };
 
   return (
