@@ -51,9 +51,9 @@ class OpportunityListView(ListAPIView):
     
     filterset_fields = ['id', 'location_type', 'job_type']
     
-    ordering_fields = ['posted_date', 'title']
+    ordering_fields = ['posted_date', 'title','pay']
     
-    search_fields = ['title']
+    search_fields = ['title','description','company', 'location_type','job_type']
 
     def get_queryset(self):
         queryset = super().get_queryset()

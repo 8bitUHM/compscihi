@@ -3,356 +3,149 @@ import NavBar from "../components/Navbar";
 import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import Footer from "../components/Footer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
-
-type Opportunity = {
-  id: string;
-  active: boolean;
-  title: string;
-  company: string;
-  location: string;
-  locationType: "Remote" | "On-site" | "Hybrid";
-  pay?: number;
-  payPer?: string;
-  jobType: "Full-time" | "Part-time" | "Contract" | "Internship" | "Co-op";
-  description: string;
-  qualifications: string[];
-  skills: string[];
-  benefits?: string[];
-  postedDate: string;
-  applicationInstructions: string;
-  applyLink?: string;
-  clicks: number;
-};
+import { getOpportunitiesRootPage } from "../util/routing";
+import { Opportunity } from "../types/opportunity";
+import { formatDate } from "../util/dateformat";
+import { truncateString } from "../util/strings";
+import { Parameters } from "../types/parameters";
+import { getRootOpportunityFetchUrl } from "../util/routing";
 
 const Opportunities = () => {
-  // For the dropdown components to work like expected on mobile devices
+  const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
 
-  const [opportunities, setOpportunities] = React.useState<Opportunity[]>([]);
-  const [filterData, setFilterData] = React.useState<Map<string, number>>(
-    new Map()
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [hasNext, setHasNext] = useState<boolean>(false);
+  const [hasPrev, setHasPrev] = useState<boolean>(false);
+
+  const [pageReady, setPageReady] = useState<boolean>(false);
+  const [canMap, setCanMap] = useState<boolean>(false);
+
+  const [params, setParams] = useState<Parameters>(
+    new Parameters({
+      search: "",
+      location_type: "",
+      job_type: "",
+      ordering: "",
+      page: "",
+    })
   );
-  const [searchQuery, setSearchQuery] = React.useState<string>("");
-  const [sortOrder, setSortOrder] = React.useState<"asc" | "desc">("asc");
-  const [selectedOrder, setSelectedOrder] =
-    React.useState<string>("postedDate");
-  const [locationFilters, setLocationFilters] = React.useState<string[]>([]);
-  const [jobTypeFilters, setJobTypeFilters] = React.useState<string[]>([]);
 
-  React.useEffect(() => {
-    initFlowbite();
-
-    const filterData = new Map();
-
-    filterData.set("remote", 0);
-    filterData.set("on-site", 0);
-    filterData.set("hybrid", 0);
-    filterData.set("full-time", 0);
-    filterData.set("part-time", 0);
-    filterData.set("contract", 0);
-    filterData.set("internship", 0);
-
-    mockOpportunities.forEach((opportunity) => {
-      // Switch case for location type
-      switch (opportunity.locationType) {
-        case "Remote":
-          filterData.set("remote", filterData.get("remote")! + 1);
-          break;
-        case "On-site":
-          filterData.set("on-site", filterData.get("on-site")! + 1);
-          break;
-        case "Hybrid":
-          filterData.set("hybrid", filterData.get("hybrid")! + 1);
-          break;
-      }
-
-      // Switch case for job type
-      switch (opportunity.jobType) {
-        case "Full-time":
-          filterData.set("full-time", filterData.get("full-time")! + 1);
-          break;
-        case "Part-time":
-          filterData.set("part-time", filterData.get("part-time")! + 1);
-          break;
-        case "Contract":
-          filterData.set("contract", filterData.get("contract")! + 1);
-          break;
-        case "Internship":
-          filterData.set("internship", filterData.get("internship")! + 1);
-          break;
-      }
-    });
-
-    setFilterData(filterData);
-    setOpportunities(mockOpportunities);
+  useEffect(() => {
+    fetchData();
   }, []);
 
-  const mockOpportunities: Opportunity[] = [
-    {
-      id: "op-001",
-      active: true,
-      title: "Software Engineer Intern",
-      company: "TechCorp",
-      location: "Honolulu, HI",
-      locationType: "Hybrid",
-      pay: 20,
-      payPer: "hour",
-      jobType: "Internship",
-      description:
-        "Work on real-world projects with our software engineering team to develop new web-based applications.",
-      qualifications: [
-        "Currently pursuing a CS degree",
-        "Experience with JavaScript/TypeScript",
-      ],
-      skills: ["JavaScript", "React", "Node.js"],
-      benefits: ["Health insurance", "Flexible hours"],
-      postedDate: "2024-09-18",
-      applicationInstructions: "Apply via our company website.",
-      applyLink: "https://techcorp.com/apply",
-      clicks: 57,
-    },
-    {
-      id: "op-002",
-      active: true,
-      title: "Full Stack Developer",
-      company: "Innovate Solutions",
-      location: "Remote",
-      locationType: "Remote",
-      pay: 85000,
-      payPer: "year",
-      jobType: "Full-time",
-      description:
-        "Develop and maintain web applications using modern frameworks and cloud technologies.",
-      qualifications: [
-        "3+ years experience in web development",
-        "Familiar with cloud services",
-      ],
-      skills: ["JavaScript", "Node.js", "AWS", "React"],
-      benefits: ["401(k)", "Paid time off"],
-      postedDate: "2024-09-15",
-      applicationInstructions: "Send resume to careers@innovatesolutions.com.",
-      applyLink: "https://innovatesolutions.com/apply",
-      clicks: 102,
-    },
-    {
-      id: "op-003",
-      active: true,
-      title: "DevOps Engineer",
-      company: "CloudStream",
-      location: "San Francisco, CA",
-      locationType: "On-site",
-      pay: 110000,
-      payPer: "year",
-      jobType: "Full-time",
-      description:
-        "Maintain and improve CI/CD pipelines, and ensure the smooth deployment of cloud services.",
-      qualifications: [
-        "Experience with CI/CD tools",
-        "Knowledge of Docker and Kubernetes",
-      ],
-      skills: ["Jenkins", "Docker", "Kubernetes", "AWS"],
-      benefits: ["Health insurance", "Stock options"],
-      postedDate: "2024-09-10",
-      applicationInstructions: "Apply via LinkedIn.",
-      clicks: 78,
-    },
-    {
-      id: "op-004",
-      active: true,
-      title: "Data Scientist",
-      company: "Insight Analytics",
-      location: "Austin, TX",
-      locationType: "Hybrid",
-      pay: 95000,
-      payPer: "year",
-      jobType: "Full-time",
-      description:
-        "Analyze large datasets and develop models to drive business insights.",
-      qualifications: [
-        "2+ years experience in data science",
-        "Proficiency in Python and SQL",
-      ],
-      skills: ["Python", "SQL", "Machine Learning", "TensorFlow"],
-      benefits: ["Health insurance", "Remote flexibility"],
-      postedDate: "2024-09-12",
-      applicationInstructions: "Submit your application on our website.",
-      applyLink: "https://insightanalytics.com/careers",
-      clicks: 64,
-    },
-    {
-      id: "op-005",
-      active: false,
-      title: "Front-End Developer",
-      company: "Creative Labs",
-      location: "Mililani, HI",
-      locationType: "On-site",
-      jobType: "Contract",
-      description:
-        "Build and enhance user interfaces for mobile and web platforms using modern technologies.",
-      qualifications: [
-        "Experience with HTML, CSS, and JavaScript",
-        "Familiarity with Figma or other design tools",
-      ],
-      skills: ["HTML", "CSS", "JavaScript", "Vue.js"],
-      postedDate: "2024-09-01",
-      applicationInstructions: "Contact us via email with your portfolio.",
-      clicks: 53,
-    },
-    {
-      id: "op-006",
-      active: true,
-      title: "UI/UX Designer",
-      company: "Digital Creations",
-      location: "New York, NY",
-      locationType: "Hybrid",
-      pay: 75000,
-      payPer: "year",
-      jobType: "Full-time",
-      description:
-        "Design user interfaces and improve user experience for our range of web and mobile applications.",
-      qualifications: [
-        "2+ years experience in UI/UX design",
-        "Proficiency in design tools like Sketch or Figma",
-      ],
-      skills: ["UI Design", "UX Research", "Figma", "Sketch"],
-      benefits: ["Dental insurance", "Remote flexibility"],
-      postedDate: "2024-09-18",
-      applicationInstructions: "Submit portfolio on our careers page.",
-      applyLink: "https://digitalcreations.com/jobs",
-      clicks: 89,
-    },
-    {
-      id: "op-007",
-      active: true,
-      title: "Mobile App Developer",
-      company: "Appify",
-      location: "Los Angeles, CA",
-      locationType: "Remote",
-      jobType: "Contract",
-      description:
-        "Develop cross-platform mobile applications using Flutter and Dart.",
-      qualifications: [
-        "Experience in mobile app development",
-        "Knowledge of Flutter and Dart",
-      ],
-      skills: ["Flutter", "Dart", "iOS", "Android"],
-      postedDate: "2024-09-20",
-      applicationInstructions: "Send your resume to hr@appify.com.",
-      clicks: 77,
-    },
-    {
-      id: "op-008",
-      active: true,
-      title: "Cybersecurity Analyst",
-      company: "SafeNet",
-      location: "Chicago, IL",
-      locationType: "On-site",
-      pay: 85000,
-      payPer: "year",
-      jobType: "Full-time",
-      description:
-        "Monitor and improve the organization's security posture by detecting and responding to threats.",
-      qualifications: ["2+ years in cybersecurity", "Familiar with SIEM tools"],
-      skills: [
-        "Network Security",
-        "Threat Detection",
-        "Incident Response",
-        "SIEM",
-      ],
-      benefits: ["Health insurance", "401(k) matching"],
-      postedDate: "2024-09-16",
-      applicationInstructions: "Apply via company website.",
-      applyLink: "https://safenet.com/careers",
-      clicks: 90,
-    },
-  ];
+  useEffect(() => {
+    initFlowbite();
+  }, [opportunities]);
 
-  const filterOpportunities = () => {
-    let filteredOpportunities = [...mockOpportunities];
+  const fetchData = async () => {
+    setPageReady(false);
+    setCanMap(false);
 
-    if (searchQuery) {
-      filteredOpportunities = filteredOpportunities.filter(
-        (opportunity) =>
-          opportunity.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          opportunity.company.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
+    try {
+      const clientParams = new URLSearchParams(window.location.search);
 
-    if (locationFilters.length > 0) {
-      filteredOpportunities = filteredOpportunities.filter((opportunity) =>
-        locationFilters.every((filter) => filter === opportunity.locationType)
-      );
-    }
+      const parameters = new Parameters({
+        search:
+          clientParams.get("search") === null ? `` : clientParams.get("search"),
+        location_type:
+          clientParams.get("location_type") === null
+            ? ``
+            : clientParams.get("location_type"),
+        job_type:
+          clientParams.get("job_type") === null
+            ? ``
+            : clientParams.get("job_type"),
+        ordering:
+          clientParams.get("ordering") === null
+            ? ``
+            : clientParams.get("ordering"),
+        page: clientParams.get("page") === null ? `` : clientParams.get("page"),
+      });
+      setParams(parameters);
 
-    if (jobTypeFilters.length > 0) {
-      filteredOpportunities = filteredOpportunities.filter((opportunity) =>
-        jobTypeFilters.every((filter) => filter === opportunity.jobType)
-      );
-    }
+      const fetchUrl = `${getRootOpportunityFetchUrl()}/api/opportunities/?${parameters.toStringParams()}`;
+      console.log(fetchUrl);
+      const response = await fetch(fetchUrl);
 
-    filteredOpportunities.sort((a, b) => {
-      let aValue: string | number | undefined;
-      let bValue: string | number | undefined;
-
-      switch (selectedOrder) {
-        case "postedDate":
-          aValue = new Date(a.postedDate).getTime();
-          bValue = new Date(b.postedDate).getTime();
-          break;
-        case "title":
-          aValue = a.title;
-          bValue = b.title;
-          break;
-        case "pay":
-          aValue = a.pay || 0; // Handle undefined pay values
-          bValue = b.pay || 0;
-          break;
-        default:
-          aValue = 0;
-          bValue = 0;
+      if (!response.ok) {
+        setPageReady(true);
+        throw new Error("Failed to fetch opportunities");
       }
 
-      if (sortOrder === "asc") {
-        return aValue > bValue ? 1 : -1;
+      const data = await response.json();
+
+      if (data.previous !== null) {
+        setHasPrev(true);
       } else {
-        return aValue < bValue ? 1 : -1;
+        setHasPrev(false);
       }
-    });
 
-    setOpportunities(filteredOpportunities);
+      if (data.next !== null) {
+        setHasNext(true);
+      } else {
+        setHasNext(false);
+      }
+
+      setTotalPages(Math.ceil(data.count / 10));
+      setOpportunities(data.results);
+      setCanMap(true);
+    } catch (e: any) {
+      console.log(e);
+    } finally {
+      setPageReady(true);
+    }
   };
 
-  React.useEffect(() => {
-    filterOpportunities();
-  }, [searchQuery, locationFilters, jobTypeFilters, sortOrder, selectedOrder]);
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+  const resetPageAndRedirect = () => {
+    params.updatePage("1");
+    const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
+    window.location.href = newHref;
   };
 
-  const toggleLocationFilter = (locationType: string) => {
-    setLocationFilters((prev) =>
-      prev.includes(locationType)
-        ? prev.filter((filter) => filter !== locationType)
-        : [...prev, locationType]
-    );
+  const pageRedirect = () => {
+    const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
+    window.location.href = newHref;
   };
 
-  const toggleJobTypeFilter = (jobType: string) => {
-    setJobTypeFilters((prev) =>
-      prev.includes(jobType)
-        ? prev.filter((filter) => filter !== jobType)
-        : [...prev, jobType]
-    );
+  const handleSearchInput = (newSearch: string) => {
+    params.updateSearch(newSearch);
+    setParams(new Parameters({ ...params }));
   };
 
-  const handleSortOrderChange = (order: "asc" | "desc") => {
-    setSortOrder(order);
+  const handleSortOrder = () => {
+    if (params.ordering.charAt(0) === "-") {
+      params.updateOrdering(params.ordering.substring(1));
+    } else {
+      params.updateOrdering("-" + params.ordering);
+    }
+    pageRedirect();
   };
 
-  const handleSelectedOrderChange = (order: string) => {
-    setSelectedOrder(order);
+  const handleSortBy = (newSortBy: string) => {
+    if (params.ordering.charAt(0) === "-") {
+      params.updateOrdering("-" + newSortBy);
+    } else {
+      params.updateOrdering(newSortBy);
+    }
+    resetPageAndRedirect();
+  };
+
+  const handleLocationTypeFilter = (filter: string) => {
+    params.updateLocationType(filter);
+    setParams(new Parameters({ ...params }));
+  };
+
+  const handleJobTypeFilter = (filter: string) => {
+    params.updateJobType(filter);
+    setParams(new Parameters({ ...params }));
+  };
+
+  const handlePaginationPage = (page: string) => {
+    params.updatePage(page);
+    pageRedirect();
   };
 
   const opportunity = (opportunity: Opportunity, key: number) => {
@@ -369,27 +162,35 @@ const Opportunities = () => {
           <div>
             <p>
               <small className="text-gray-500">
-                {`${opportunity.postedDate} · ${opportunity.company} · 
-                ${opportunity.location} -- ${opportunity.locationType}`}
+                {`${formatDate(opportunity.posted_date)} · ${
+                  opportunity.company
+                } · 
+                ${opportunity.location} -- ${opportunity.location_type}`}
               </small>
             </p>
           </div>
           <p>
-            {opportunity.pay && opportunity.payPer ? (
+            {opportunity.pay && opportunity.pay_per ? (
               <small>
                 $
                 {opportunity.pay
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-                per {opportunity.payPer} ·{" "}
+                {opportunity.pay_per} ·{" "}
               </small>
             ) : null}
-            <small>{opportunity.jobType}</small>
+            <small>{opportunity.job_type}</small>
           </p>
           <div className="text-gray-500 dark:text-gray-400 mb-2">
-            <p className="mt-1 mb-1 font-normal ">{opportunity.description}</p>
+            <p className="mt-1 font-normal">
+              {truncateString(opportunity.description, 150)}
+            </p>
 
-            <ul className="list-disc ml-4">
+            <small className="text-blue-600 hover:underline">
+              <a href="#">Read full job description</a>
+            </small>
+
+            <ul className="list-disc ml-4 mt-1">
               {opportunity.qualifications.map((val, key) => (
                 <li key={key}>{val}</li>
               ))}
@@ -420,7 +221,7 @@ const Opportunities = () => {
 
           {/* Accordian */}
           <div
-            id={`accordion-color-${key}`}
+            id={`accordion-color-${opportunity.id}`}
             data-accordion="collapse"
             data-active-classes="bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-white"
             className="mt-3"
@@ -429,9 +230,9 @@ const Opportunities = () => {
               <button
                 type="button"
                 className="rounded flex items-center justify-between w-full p-3 font-medium rtl:text-right text-gray-500 border  border-teal-200 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-gray-800 gap-3"
-                data-accordion-target={`#accordion-color-body-${key}`}
+                data-accordion-target={`#accordion-color-body-${opportunity.id}`}
                 aria-expanded="false"
-                aria-controls={`accordion-color-body-${key}`}
+                aria-controls={`accordion-color-body-${opportunity.id}`}
               >
                 <span>
                   <p className="font-bold text-lg bg-clip-text bg-gradient-to-r to-cyan-700 from-green-700 text-transparent">
@@ -457,18 +258,18 @@ const Opportunities = () => {
               </button>
             </h2>
             <div
-              id={`accordion-color-body-${key}`}
+              id={`accordion-color-body-${opportunity.id}`}
               className="hidden"
               aria-labelledby="accordion-color-heading-2"
             >
               <div className="p-3 border rounded border-teal-200 dark:border-gray-700">
                 <p className="mb-2 text-gray-500 dark:text-gray-400">
-                  {opportunity.applicationInstructions}
+                  {opportunity.application_instructions}
                 </p>
-                {opportunity.applyLink ? (
+                {opportunity.apply_link ? (
                   <p className="text-base leading-relaxed text-gray-500 underline">
-                    <a target="_blank" href={opportunity.applyLink}>
-                      {opportunity.applyLink}
+                    <a target="_blank" href={opportunity.apply_link}>
+                      {opportunity.apply_link}
                     </a>
                   </p>
                 ) : null}
@@ -487,7 +288,7 @@ const Opportunities = () => {
   return (
     <>
       <NavBar />
-      <div className="container mx-auto mt-5">
+      <div className="container mx-auto my-5">
         <section className="text-gray-600 body-font">
           <div className="container px-5 mx-auto">
             <div className="flex flex-col text-center w-full ">
@@ -505,59 +306,84 @@ const Opportunities = () => {
         {/* Search */}
         <div className="flex flex-col items-center justify-center p-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4">
           <div className="w-full md:w-1/2">
-            <form className="flex items-center">
-              <label htmlFor="simple-search" className="sr-only">
-                Search
-              </label>
-              <div className="relative w-full">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <svg
-                    aria-hidden="true"
-                    className="w-5 h-5 text-gray-500 dark:text-gray-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  id="simple-search"
-                  className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="Search"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  required
-                />
+            {/* <form className="flex items-center"> */}
+            <label htmlFor="simple-search" className="sr-only">
+              Search
+            </label>
+            <div className="relative w-full">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg
+                  aria-hidden="true"
+                  className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clipRule="evenodd"
+                  />
+                </svg>
               </div>
-            </form>
+              <input
+                type="text"
+                id="simple-search"
+                className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500"
+                placeholder="Search"
+                value={params.search}
+                onChange={(e) => {
+                  handleSearchInput(e.target.value);
+                }}
+                required
+              />
+              <button
+                onClick={() => {
+                  resetPageAndRedirect();
+                }}
+                className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-teal-700 rounded-e-lg border border-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+              >
+                <svg
+                  className="w-4 h-4"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  />
+                </svg>
+                <span className="sr-only">Search</span>
+              </button>
+            </div>
+            {/* </form> */}
           </div>
 
           <div className="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
             <div className="flex items-center w-full space-x-3 md:w-auto">
               <button
-                onClick={() =>
-                  handleSortOrderChange(sortOrder === "asc" ? "desc" : "asc")
-                }
+                onClick={() => {
+                  handleSortOrder();
+                }}
                 className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                 style={{ height: 38.48 }}
               >
-                {sortOrder === "asc" ? (
+                {params.ordering.charAt(0) !== "-" ? (
                   <svg
                     className="h-4 w-4 text-gray-600"
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"
-                    stroke-width="2"
+                    strokeWidth="2"
                     stroke="currentColor"
                     fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
                     {" "}
                     <path stroke="none" d="M0 0h24v24H0z" />{" "}
@@ -573,11 +399,11 @@ const Opportunities = () => {
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"
-                    stroke-width="2"
+                    strokeWidth="2"
                     stroke="currentColor"
                     fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
                     {" "}
                     <path stroke="none" d="M0 0h24v24H0z" />{" "}
@@ -588,33 +414,8 @@ const Opportunities = () => {
                     <line x1="18" y1="6" x2="18" y2="18" />
                   </svg>
                 )}
-                {sortOrder === "asc" ? " " : " "}
               </button>
 
-              <div
-                id="orderDropdown"
-                className="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow-xl w-44 dark:bg-gray-700 dark:divide-gray-600"
-              >
-                <ul
-                  className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                  aria-labelledby="actionsDropdownButton"
-                >
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    ></a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Descending
-                    </a>
-                  </li>
-                </ul>
-              </div>
               <button
                 id="sortDropdownButton"
                 data-dropdown-toggle="sortDropdown"
@@ -648,10 +449,13 @@ const Opportunities = () => {
                   <li>
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      onClick={() => handleSelectedOrderChange("postedDate")}
+                      onClick={() => {
+                        handleSortBy("posted_date");
+                      }}
                     >
                       Date Posted
-                      {selectedOrder === "postedDate" && (
+                      {params.ordering === "posted_date" ||
+                      params.ordering === "-posted_date" ? (
                         <svg
                           className="inline w-4 h-4 ml-2 text-gray-600"
                           fill="none"
@@ -666,16 +470,19 @@ const Opportunities = () => {
                             d="M5 13l4 4L19 7"
                           />
                         </svg>
-                      )}
+                      ) : null}
                     </button>
                   </li>
                   <li>
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      onClick={() => handleSelectedOrderChange("title")}
+                      onClick={() => {
+                        handleSortBy("title");
+                      }}
                     >
                       Title
-                      {selectedOrder === "title" && (
+                      {params.ordering === "title" ||
+                      params.ordering === "-title" ? (
                         <svg
                           className="inline w-4 h-4 ml-2 text-gray-600"
                           fill="none"
@@ -690,16 +497,19 @@ const Opportunities = () => {
                             d="M5 13l4 4L19 7"
                           />
                         </svg>
-                      )}
+                      ) : null}
                     </button>
                   </li>
                   <li>
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      onClick={() => handleSelectedOrderChange("pay")}
+                      onClick={() => {
+                        handleSortBy("pay");
+                      }}
                     >
-                      Salary
-                      {selectedOrder === "pay" && (
+                      Pay
+                      {params.ordering === "pay" ||
+                      params.ordering === "-pay" ? (
                         <svg
                           className="inline w-4 h-4 ml-2 text-gray-600"
                           fill="none"
@@ -714,43 +524,8 @@ const Opportunities = () => {
                             d="M5 13l4 4L19 7"
                           />
                         </svg>
-                      )}
+                      ) : null}
                     </button>
-                  </li>
-                </ul>
-              </div>
-
-              <div
-                id="sortDropdown"
-                className="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow-xl w-44 dark:bg-gray-700 dark:divide-gray-600"
-              >
-                <ul
-                  className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                  aria-labelledby="actionsDropdownButton"
-                >
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Date posted
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Name
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Salary
-                    </a>
                   </li>
                 </ul>
               </div>
@@ -806,45 +581,57 @@ const Opportunities = () => {
                   <li className="flex items-center">
                     <input
                       id="remote"
-                      type="checkbox"
+                      type="radio"
+                      name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => toggleLocationFilter("Remote")}
+                      onChange={() => {
+                        handleLocationTypeFilter("Remote");
+                      }}
+                      checked={params.location_type === "Remote"}
                     />
                     <label
                       htmlFor="remote"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Remote ({filterData.get("remote")})
+                      Remote
                     </label>
                   </li>
 
                   <li className="flex items-center">
                     <input
                       id="onsite"
-                      type="checkbox"
+                      type="radio"
+                      name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => toggleLocationFilter("On-site")}
+                      onChange={() => {
+                        handleLocationTypeFilter("On-site");
+                      }}
+                      checked={params.location_type === "On-site"}
                     />
                     <label
                       htmlFor="onsite"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      On-site ({filterData.get("on-site")})
+                      On-site
                     </label>
                   </li>
 
                   <li className="flex items-center">
                     <input
                       id="hybrid"
-                      type="checkbox"
+                      type="radio"
+                      name="locationType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => toggleLocationFilter("Hybrid")}
+                      onChange={() => {
+                        handleLocationTypeFilter("Hybrid");
+                      }}
+                      checked={params.location_type === "Hybrid"}
                     />
                     <label
                       htmlFor="hybrid"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Hybrid ({filterData.get("hybrid")})
+                      Hybrid
                     </label>
                   </li>
 
@@ -856,61 +643,109 @@ const Opportunities = () => {
                   <li className="flex items-center">
                     <input
                       id="fulltime"
-                      type="checkbox"
+                      type="radio"
+                      name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => toggleJobTypeFilter("Full-time")}
+                      onChange={() => {
+                        handleJobTypeFilter("Full-time");
+                      }}
+                      checked={params.job_type === "Full-time"}
                     />
                     <label
                       htmlFor="fulltime"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Full-time ({filterData.get("full-time")})
+                      Full-time
                     </label>
                   </li>
 
                   <li className="flex items-center">
                     <input
                       id="parttime"
-                      type="checkbox"
+                      type="radio"
+                      name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => toggleJobTypeFilter("Part-time")}
+                      onChange={() => {
+                        handleJobTypeFilter("Part-time");
+                      }}
+                      checked={params.job_type === "Part-time"}
                     />
                     <label
                       htmlFor="parttime"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Part-time ({filterData.get("part-time")})
+                      Part-time
                     </label>
                   </li>
 
                   <li className="flex items-center">
                     <input
                       id="contract"
-                      type="checkbox"
+                      type="radio"
+                      name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => toggleJobTypeFilter("Contract")}
+                      onChange={() => {
+                        handleJobTypeFilter("Contract");
+                      }}
+                      checked={params.job_type === "Contract"}
                     />
                     <label
                       htmlFor="contract"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Contract ({filterData.get("contract")})
+                      Contract
                     </label>
                   </li>
 
                   <li className="flex items-center">
                     <input
                       id="internship"
-                      type="checkbox"
+                      type="radio"
+                      name="jobType"
                       className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                      onChange={() => toggleJobTypeFilter("Internship")}
+                      onChange={() => {
+                        handleJobTypeFilter("Internship");
+                      }}
+                      checked={params.job_type === "Internship"}
                     />
                     <label
                       htmlFor="internship"
                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
                     >
-                      Internship ({filterData.get("internship")})
+                      Internship
                     </label>
+                  </li>
+
+                  <li>
+                    <div className="flex flex-row align-middle space-x-3">
+                      <div>
+                        <button
+                          onClick={() => {
+                            params.updateJobType("");
+                            params.updateLocationType("");
+                            params.updatePage("1");
+                            const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
+                            window.location.href = newHref;
+                          }}
+                          className="focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2  dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+                        >
+                          Clear
+                        </button>
+                      </div>
+
+                      <div className="flex">
+                        <button
+                          onClick={() => {
+                            params.updatePage("1");
+                            const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
+                            window.location.href = newHref;
+                          }}
+                          className=" focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2 mb-2 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+                        >
+                          Apply
+                        </button>
+                      </div>
+                    </div>
                   </li>
                 </ul>
               </div>
@@ -918,12 +753,103 @@ const Opportunities = () => {
           </div>
         </div>
 
-        <div
-          className="grid md:grid-cols-2 gap-5 my-10 md:mx-0 mx-2"
-          data-aos="fade-up"
-          data-aos-duration="1250"
-        >
-          {/* {opportunities.map((val, key) => opportunity(val, key))} */}
+        <>
+          {pageReady ? (
+            <>
+              {canMap ? (
+                <>
+                  {opportunities.length > 0 ? (
+                    <div className="grid md:grid-cols-2 gap-5 my-10 md:mx-0 mx-2">
+                      {opportunities.map((val, key) => opportunity(val, key))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-10">
+                      Uh oh! No results found. Try adjusting your search
+                      criteria or filters.
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="text-center py-10">
+                    Uh oh! Something went wrong with our request for data.
+                    Please refresh and try again!
+                  </div>
+                </>
+              )}
+            </>
+          ) : (
+            <div role="status" className="flex justify-center py-10">
+              <svg
+                aria-hidden="true"
+                className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-teal-500"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="currentFill"
+                />
+              </svg>
+              <span className="sr-only">Loading...</span>
+            </div>
+          )}
+        </>
+
+        <div className="flex justify-center">
+          <nav aria-label="Page navigation example">
+            <ul className="inline-flex -space-x-px text-base h-10">
+              {hasPrev ? (
+                <li>
+                  <button
+                    onClick={() => {
+                      handlePaginationPage(
+                        (parseInt(params.page) - 1).toString()
+                      );
+                    }}
+                    className="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  >
+                    Previous
+                  </button>
+                </li>
+              ) : null}
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <li key={index}>
+                  <button
+                    onClick={() => {
+                      handlePaginationPage((index + 1).toString());
+                    }}
+                    className={
+                      index + 1 === parseInt(params.page)
+                        ? "flex items-center justify-center px-4 h-10 leading-tight text-teal-200 bg-teal-700 border border-gray-300 hover:bg-teal-600 hover:text-teal-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        : "flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    }
+                  >
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+              {hasNext ? (
+                <li>
+                  <button
+                    onClick={() => {
+                      handlePaginationPage(
+                        (parseInt(params.page) + 1).toString()
+                      );
+                    }}
+                    className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  >
+                    Next
+                  </button>
+                </li>
+              ) : null}
+            </ul>
+          </nav>
         </div>
       </div>
       <Footer />

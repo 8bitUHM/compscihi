@@ -240,7 +240,9 @@ const NavBar: FC = () => {
               <li>
                 <a
                   href={
-                    isRunningLocal() ? "./opportunities.html" : "/opportunities"
+                    isRunningLocal()
+                      ? "./opportunities.html?search=&location_type=&job_type=&ordering=-posted_date&page=1"
+                      : "/opportunities?search=&location_type=&job_type=&ordering=-posted_date&page=1"
                   }
                   className="flex items-center py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-teal-700 md:p-0 md:dark:hover:text-teal-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
