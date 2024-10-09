@@ -1,0 +1,105 @@
+{% extends "base.html" %} 
+{% block title %} 
+CompSciHi Portal 
+{% endblock %}
+{%block content %} 
+{% load static %}
+<section class="bg-gray-900">
+  <div
+    class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
+  >
+    <a
+      href="https://compscihi.com"
+      class="flex items-center mb-6 text-2xl font-semibold text-white"
+    >
+      <img
+        class="w-8 h-8 mr-2"
+        src="{% static 'portal/logo.svg' %}"
+        alt="logo"
+      />
+      CompSciHi
+    </a>
+    <div
+      class="w-full rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 border-gray-700"
+    >
+      <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+        <h1
+          class="text-xl font-bold leading-tight tracking-tight md:text-2xl text-white"
+        >
+          Create a portal account
+        </h1>
+        <form class="space-y-4 md:space-y-6" method="post">
+          {% csrf_token %}
+          <!-- <div>
+            <label
+              for="username"
+              class="block mb-2 text-sm font-medium text-white"
+              >Your username</label
+            >
+            {{ form.username }}
+          </div> -->
+          <div>
+            <label for="email" class="block mb-2 text-sm font-medium text-white"
+              >Your email</label
+            >
+            {{ form.email }}
+          </div>
+          <div>
+            <label
+              for="password"
+              class="block mb-2 text-sm font-medium text-white"
+              >Password</label
+            >
+            {{ form.password1 }}
+          </div>
+          <div>
+            <label
+              for="confirm-password"
+              class="block mb-2 text-sm font-medium text-white"
+              >Confirm password</label
+            >
+            {{ form.password2 }}
+          </div>
+          <div>
+            <label
+              for="signup-key"
+              class="block mb-2 text-sm font-medium text-white"
+              >Sign up key</label
+            >
+            {{ form.signup_key }}
+          </div>
+
+          <button
+            type="submit"
+            class="w-full text-white bg-teal-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          >
+            Create an account
+          </button>
+          <p class="text-sm font-light text-gray-400">
+            Already have an account?
+            <a
+              href="/admin"
+              class="font-medium hover:underline text-primary-500"
+              >Login here</a
+            >
+          </p>
+          {% if form.errors %}
+          <div >
+            <ul>
+              {% for field, error in form.errors.items %}
+                {% if error == "Success" %}
+                    <small class="text-green-500">Account created successfully. Verify your email with the link sent to your email.</small>
+                {% else %}
+                    <li><small class="text-red-500">{{ error }}</small></li>
+                {% endif %} 
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %} 
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
