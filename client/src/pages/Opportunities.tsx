@@ -5,7 +5,7 @@ import "../styles/styles.css";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
-import { getOpportunitiesRootPage } from "../util/routing";
+import { getOpportunitiesRootPage, isRunningLocal } from "../util/routing";
 import { Opportunity } from "../types/opportunity";
 import { formatDate } from "../util/dateformat";
 import { truncateString } from "../util/strings";
@@ -156,8 +156,17 @@ const Opportunities = () => {
           className="w-full  p-6 bg-white border border-gray-200 rounded-lg shadow"
         >
           {/* Card */}
-          <h5 className=" text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
-            {opportunity.title}
+          <h5 className=" text-2xl font-semibold tracking-tight text-gray-900 dark:text-white ">
+            <a
+              className="hover:underline"
+              href={
+                isRunningLocal
+                  ? `./opportunity.html?opportunity-id=${opportunity.id}`
+                  : `/opportunity?opportunity-id=${opportunity.id}`
+              }
+            >
+              {opportunity.title}
+            </a>
           </h5>
           <div>
             <p>
@@ -187,7 +196,15 @@ const Opportunities = () => {
             </p>
 
             <small className="text-blue-600 hover:underline">
-              <a href="#">Read full job description</a>
+              <a
+                href={
+                  isRunningLocal
+                    ? `./opportunity.html?opportunity-id=${opportunity.id}`
+                    : `/opportunity?opportunity-id=${opportunity.id}`
+                }
+              >
+                Read full job description
+              </a>
             </small>
 
             <ul className="list-disc ml-4 mt-1">
