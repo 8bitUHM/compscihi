@@ -120,10 +120,14 @@ const Opportunity = () => {
                     </h1>
 
                     {/* List of Qualifications */}
-                    <div className="space-y-4 max-w-prose">
-                      <ul className="block list-disc list-inside text-medium text-balance">
+                    <div className="space-y-4">
+                      <ul className="list-disc text-medium ">
                         {opportunity.qualifications.map((val, key) => (
-                          <li key={key}>{val}</li>
+                          <li key={key}>
+                            {val} aoiwnrooai wnroianw roianw rioanwoir a wrnaown
+                            roiawnroi anwrioanw oirnawio rnawior naoiwnr aiown
+                            riawnir aoiwnrioaa
+                          </li>
                         ))}
                       </ul>
 
