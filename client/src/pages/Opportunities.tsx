@@ -190,9 +190,9 @@ const Opportunities = () => {
               <a href="#">Read full job description</a>
             </small>
 
-            <ul className="list-disc ml-4 mt-2">
+            <ul className="list-disc ml-4 mt-1">
               {opportunity.qualifications.map((val, key) => (
-                <li key={key} className="-mt-2">
+                <li key={key} className="leading-4">
                   <small>{val}</small>
                 </li>
               ))}
