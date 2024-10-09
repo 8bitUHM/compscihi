@@ -124,6 +124,15 @@ const Opportunities = () => {
     pageRedirect();
   };
 
+  const handleSortBy = (newSortBy: string) => {
+    if (params.ordering.charAt(0) === "-") {
+      params.updateOrdering("-" + newSortBy);
+    } else {
+      params.updateOrdering(newSortBy);
+    }
+    resetPageAndRedirect();
+  };
+
   const opportunity = (opportunity: Opportunity, key: number) => {
     if (opportunity.active) {
       return (
@@ -426,14 +435,7 @@ const Opportunities = () => {
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       onClick={() => {
-                        if (params.ordering.charAt(0) === "-") {
-                          params.updateOrdering("-posted_date");
-                        } else {
-                          params.updateOrdering("posted_date");
-                        }
-                        params.updatePage("1");
-                        const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
-                        window.location.href = newHref;
+                        handleSortBy("posted_date");
                       }}
                     >
                       Date Posted
@@ -460,14 +462,7 @@ const Opportunities = () => {
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       onClick={() => {
-                        if (params.ordering.charAt(0) === "-") {
-                          params.updateOrdering("-title");
-                        } else {
-                          params.updateOrdering("title");
-                        }
-                        params.updatePage("1");
-                        const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
-                        window.location.href = newHref;
+                        handleSortBy("title");
                       }}
                     >
                       Title
@@ -494,14 +489,7 @@ const Opportunities = () => {
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       onClick={() => {
-                        if (params.ordering.charAt(0) === "-") {
-                          params.updateOrdering("-pay");
-                        } else {
-                          params.updateOrdering("pay");
-                        }
-                        params.updatePage("1");
-                        const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
-                        window.location.href = newHref;
+                        handleSortBy("pay");
                       }}
                     >
                       Pay
