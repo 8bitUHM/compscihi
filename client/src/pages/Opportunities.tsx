@@ -5,7 +5,7 @@ import "../styles/styles.css";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
-import { isRunningLocal } from "../util/routing";
+import { isRunningLocal, getOpportunitiesRootPage } from "../util/routing";
 import { Opportunity } from "../types/opportunity";
 import { formatDate } from "../util/dateformat";
 import { truncateString } from "../util/strings";
@@ -333,12 +333,12 @@ const Opportunities = () => {
                 }}
                 required
               />
-              <a
-                href={
-                  isRunningLocal
-                    ? `./opportunities.html?${params.toStringParams()}`
-                    : `/opportunities?${params.toStringParams()}`
-                }
+              <button
+                onClick={() => {
+                  params.updatePage("1");
+                  const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
+                  window.location.href = newHref;
+                }}
                 className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-teal-700 rounded-e-lg border border-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
               >
                 <svg
@@ -357,7 +357,7 @@ const Opportunities = () => {
                   />
                 </svg>
                 <span className="sr-only">Search</span>
-              </a>
+              </button>
             </div>
             {/* </form> */}
           </div>
@@ -721,7 +721,7 @@ const Opportunities = () => {
                             params.updateJobType("");
                             params.updateLocationType("");
                             params.updatePage("1");
-                            const newHref = `./opportunities.html?${params.toStringParams()}`;
+                            const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
                             window.location.href = newHref;
                           }}
                           className="focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2  dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
@@ -734,7 +734,7 @@ const Opportunities = () => {
                         <button
                           onClick={() => {
                             params.updatePage("1");
-                            const newHref = `./opportunities.html?${params.toStringParams()}`;
+                            const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
                             window.location.href = newHref;
                           }}
                           className=" focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2 mb-2 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
@@ -807,7 +807,7 @@ const Opportunities = () => {
                     onClick={() => {
                       const nextPage = (parseInt(params.page) - 1).toString();
                       params.updatePage(nextPage);
-                      const newHref = `./opportunities.html?${params.toStringParams()}`;
+                      const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
                       window.location.href = newHref;
                     }}
                     className="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -823,7 +823,7 @@ const Opportunities = () => {
                       onClick={() => {
                         const nextPage = (index + 1).toString();
                         params.updatePage(nextPage);
-                        const newHref = `./opportunities.html?${params.toStringParams()}`;
+                        const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
                         window.location.href = newHref;
                       }}
                       className="flex items-center justify-center px-4 h-10 leading-tight text-teal-200 bg-teal-700 border border-gray-300 hover:bg-teal-600 hover:text-teal-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -837,7 +837,7 @@ const Opportunities = () => {
                       onClick={() => {
                         const nextPage = (index + 1).toString();
                         params.updatePage(nextPage);
-                        const newHref = `./opportunities.html?${params.toStringParams()}`;
+                        const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
                         window.location.href = newHref;
                       }}
                       className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -853,7 +853,7 @@ const Opportunities = () => {
                     onClick={() => {
                       const nextPage = (parseInt(params.page) + 1).toString();
                       params.updatePage(nextPage);
-                      const newHref = `./opportunities.html?${params.toStringParams()}`;
+                      const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
                       window.location.href = newHref;
                     }}
                     className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"

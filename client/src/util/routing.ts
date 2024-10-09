@@ -4,3 +4,7 @@ export const isRunningLocal = (): boolean => {
     window.location.hostname === "127.0.0.1"
   );
 };
+
+export const getOpportunitiesRootPage = (): string => {
+  return isRunningLocal() ? "./opportunities.html" : "/opportunities";
+};
