@@ -723,9 +723,7 @@ const Opportunities = () => {
                           onClick={() => {
                             params.updateJobType("");
                             params.updateLocationType("");
-                            params.updatePage("1");
-                            const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
-                            window.location.href = newHref;
+                            resetPageAndRedirect();
                           }}
                           className="focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2  dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
                         >
@@ -736,9 +734,7 @@ const Opportunities = () => {
                       <div className="flex">
                         <button
                           onClick={() => {
-                            params.updatePage("1");
-                            const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
-                            window.location.href = newHref;
+                            resetPageAndRedirect();
                           }}
                           className=" focus:outline-none w-full text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5  me-2 mb-2 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
                         >
@@ -759,7 +755,7 @@ const Opportunities = () => {
               {canMap ? (
                 <>
                   {opportunities.length > 0 ? (
-                    <div className="grid md:grid-cols-2 gap-5 my-10 md:mx-0 mx-2">
+                    <div className="grid lg:grid-cols-2 gap-5 my-10 md:mx-0 mx-2">
                       {opportunities.map((val, key) => opportunity(val, key))}
                     </div>
                   ) : (
