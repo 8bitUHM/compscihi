@@ -190,9 +190,9 @@ const Opportunities = () => {
               <a href="#">Read full job description</a>
             </small>
 
-            <ul className="list-disc ml-4 mt-1">
+            <ul className="list-disc ml-4 mt-2">
               {opportunity.qualifications.map((val, key) => (
-                <li key={key}>
+                <li key={key} className="-mt-2">
                   <small>{val}</small>
                 </li>
               ))}
@@ -202,7 +202,7 @@ const Opportunities = () => {
             {opportunity.skills.map((val, key) => (
               <span
                 key={key}
-                className="me-2 my-1 inline-flex items-center rounded-md bg-teal-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
+                className="me-2 mb-1 inline-flex items-center rounded-md bg-teal-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
               >
                 {val}
               </span>
