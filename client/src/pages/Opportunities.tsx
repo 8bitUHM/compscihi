@@ -143,6 +143,11 @@ const Opportunities = () => {
     setParams(new Parameters({ ...params }));
   };
 
+  const handlePaginationPage = (page: string) => {
+    params.updatePage(page);
+    pageRedirect();
+  };
+
   const opportunity = (opportunity: Opportunity, key: number) => {
     if (opportunity.active) {
       return (
@@ -803,10 +808,9 @@ const Opportunities = () => {
                 <li>
                   <button
                     onClick={() => {
-                      const nextPage = (parseInt(params.page) - 1).toString();
-                      params.updatePage(nextPage);
-                      const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
-                      window.location.href = newHref;
+                      handlePaginationPage(
+                        (parseInt(params.page) - 1).toString()
+                      );
                     }}
                     className="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
@@ -814,45 +818,29 @@ const Opportunities = () => {
                   </button>
                 </li>
               ) : null}
-              {Array.from({ length: totalPages }).map((_, index) =>
-                index + 1 === parseInt(params.page) ? (
-                  <li key={index}>
-                    <button
-                      onClick={() => {
-                        const nextPage = (index + 1).toString();
-                        params.updatePage(nextPage);
-                        const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
-                        window.location.href = newHref;
-                      }}
-                      className="flex items-center justify-center px-4 h-10 leading-tight text-teal-200 bg-teal-700 border border-gray-300 hover:bg-teal-600 hover:text-teal-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                    >
-                      {index + 1}
-                    </button>
-                  </li>
-                ) : (
-                  <li key={index}>
-                    <button
-                      onClick={() => {
-                        const nextPage = (index + 1).toString();
-                        params.updatePage(nextPage);
-                        const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
-                        window.location.href = newHref;
-                      }}
-                      className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                    >
-                      {index + 1}
-                    </button>
-                  </li>
-                )
-              )}
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <li key={index}>
+                  <button
+                    onClick={() => {
+                      handlePaginationPage((index + 1).toString());
+                    }}
+                    className={
+                      index + 1 === parseInt(params.page)
+                        ? "flex items-center justify-center px-4 h-10 leading-tight text-teal-200 bg-teal-700 border border-gray-300 hover:bg-teal-600 hover:text-teal-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        : "flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    }
+                  >
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
               {hasNext ? (
                 <li>
                   <button
                     onClick={() => {
-                      const nextPage = (parseInt(params.page) + 1).toString();
-                      params.updatePage(nextPage);
-                      const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
-                      window.location.href = newHref;
+                      handlePaginationPage(
+                        (parseInt(params.page) + 1).toString()
+                      );
                     }}
                     className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
