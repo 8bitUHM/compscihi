@@ -99,6 +99,31 @@ const Opportunities = () => {
     }
   };
 
+  const resetPageAndRedirect = () => {
+    params.updatePage("1");
+    const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
+    window.location.href = newHref;
+  };
+
+  const pageRedirect = () => {
+    const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
+    window.location.href = newHref;
+  };
+
+  const handleSearchInput = (newSearch: string) => {
+    params.updateSearch(newSearch);
+    setParams(new Parameters({ ...params }));
+  };
+
+  const handleSortOrder = () => {
+    if (params.ordering.charAt(0) === "-") {
+      params.updateOrdering(params.ordering.substring(1));
+    } else {
+      params.updateOrdering("-" + params.ordering);
+    }
+    pageRedirect();
+  };
+
   const opportunity = (opportunity: Opportunity, key: number) => {
     if (opportunity.active) {
       return (
@@ -284,16 +309,13 @@ const Opportunities = () => {
                 placeholder="Search"
                 value={params.search}
                 onChange={(e) => {
-                  params.updateSearch(e.target.value);
-                  setParams(new Parameters({ ...params }));
+                  handleSearchInput(e.target.value);
                 }}
                 required
               />
               <button
                 onClick={() => {
-                  params.updatePage("1");
-                  const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
-                  window.location.href = newHref;
+                  resetPageAndRedirect();
                 }}
                 className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-teal-700 rounded-e-lg border border-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
               >
@@ -322,13 +344,7 @@ const Opportunities = () => {
             <div className="flex items-center w-full space-x-3 md:w-auto">
               <button
                 onClick={() => {
-                  if (params.ordering.charAt(0) === "-") {
-                    params.updateOrdering(params.ordering.substring(1));
-                  } else {
-                    params.updateOrdering("-" + params.ordering);
-                  }
-                  const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
-                  window.location.href = newHref;
+                  handleSortOrder();
                 }}
                 className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                 style={{ height: 38.48 }}
