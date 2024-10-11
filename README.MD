@@ -80,34 +80,6 @@ DATABASES = {
 
 10. Start the app by running `python manage.py runserver` in terminal, the app should be running locally on port 8000, http://127.0.0.1:8000/
 
-## Development
+## CompSciHi Architecture Visualization
 
-### Adding new pages on frontend
-Create a .tsx file for your new page in the src/pages directory and copy the following
-```
-import * as React from "react";
-import { createRoot } from "react-dom/client";
-
-const New-page-function-name = () => {
-  return (
-    <>
-      
-    </>
-  );
-};
-
-const root = document.getElementById("root");
-createRoot(root).render(<New-page-function-name />);
-```
-Replace the "New-page-function-name" with the name of your new page and make sure its capitalized. 
-
-If you were in development mode with ```npm run dev```, kill that terminal and restart development mode to start compiling the new page. 
-
-Create a new HTML file in the admin folder and copy and paste the contents from index.html but make sure to replace the 
-```
-<script src="./dist/Index.js"></script>
-```
-on line 16 with the name of your new javaScript page file
-```
-<script src="./dist/New-page-function-name.js"></script>
-```
+![Architecture-visual](/visualizations/compscihi-visual-v1.png)
