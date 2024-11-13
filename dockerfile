@@ -28,7 +28,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 WORKDIR /app/theme/static_src
 RUN npm install
 
-WORKDIR /website/frontend
+WORKDIR /app/website/frontend
 RUN npm install
 
 # Change back to the app directory to copy the rest of the application code
