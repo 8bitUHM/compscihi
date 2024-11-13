@@ -56,7 +56,7 @@ const Index = () => {
           </div>
           <div className="lg:col-span-5 flex justify-center">
             <LoadingImage
-              imageUri={Image2}
+              imageUri="/static/website/assets/postbuilding.jpg"
               className="rounded lg:flex lg:mt-0 mt-12 h-auto max-w-full"
             />
           </div>

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useEffect, useState, FC } from "react";
 import { auth } from "../firebase/firebase";
-import * as logo from "../assets/logo.svg";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { initFlowbite } from "flowbite";
 import { createRoot } from "react-dom/client";
@@ -46,7 +45,7 @@ const NavBar: FC = () => {
             href="/"
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
-            <img src={logo} className="h-8" alt="Flowbite Logo" />
+            <img src="/static/website/assets/logo.svg" className="h-8" />
             <span className="self-center text-2xl font-bold bg-clip-text bg-gradient-to-r to-cyan-700 from-green-700 text-transparent whitespace-nowrap">
               CompSciHi
             </span>
