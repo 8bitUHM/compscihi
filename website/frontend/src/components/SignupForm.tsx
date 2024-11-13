@@ -6,7 +6,6 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase/firebase";
-import { isRunningLocal } from "../util/routing";
 import { setUserData } from "../firebase/firebase";
 
 const SignupForm: React.FC = () => {
@@ -184,7 +183,7 @@ const SignupForm: React.FC = () => {
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}
                 <a
-                  href={isRunningLocal() ? "./login.html" : "/login"}
+                  href="/login"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
                   Login here

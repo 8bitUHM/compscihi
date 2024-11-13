@@ -2,7 +2,6 @@ import * as React from "react";
 import { FC, useState } from "react";
 import { auth } from "../firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { isRunningLocal } from "../util/routing";
 
 const LoginForm: FC = () => {
   const [email, setEmail] = useState("");
@@ -79,11 +78,7 @@ const LoginForm: FC = () => {
 
                 <div className="flex items-center justify-between">
                   <a
-                    href={
-                      isRunningLocal
-                        ? "./forgot-password.html"
-                        : "/forgot-password"
-                    }
+                    href="/forgot-password"
                     className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
                     Forgot password?
@@ -129,7 +124,7 @@ const LoginForm: FC = () => {
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Don't have an account?{" "}
                   <a
-                    href={isRunningLocal() ? "./signup.html" : "/signup"}
+                    href="/signup"
                     className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
                     Signup here
