@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useEffect, useState, FC } from "react";
 import { auth } from "../firebase/firebase";
-import { isRunningLocal } from "../util/routing";
 import * as logo from "../assets/logo.svg";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { initFlowbite } from "flowbite";
@@ -44,7 +43,7 @@ const NavBar: FC = () => {
       <nav className="bg-white dark:bg-gray-900 sticky w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <a
-            href={isRunningLocal() ? "./" : "/"}
+            href="/"
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
             <img src={logo} className="h-8" alt="Flowbite Logo" />
@@ -124,11 +123,7 @@ const NavBar: FC = () => {
                           >
                             <li>
                               <a
-                                href={
-                                  isRunningLocal()
-                                    ? "./account-details.html"
-                                    : "/account-details"
-                                }
+                                href="/account-details"
                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                               >
                                 Account Details
@@ -154,7 +149,7 @@ const NavBar: FC = () => {
                     <>
                       {/* Login button */}
                       <a
-                        href={isRunningLocal() ? "./login.html" : "/login"}
+                        href="/login"
                         // style={loginDisplay}
                         id="login-button-wrapper"
                       >
@@ -217,7 +212,7 @@ const NavBar: FC = () => {
             <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
               <li>
                 <a
-                  href={isRunningLocal() ? "./" : "/"}
+                  href="/"
                   className="flex items-center py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-teal-700 md:p-0 md:dark:hover:text-teal-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                   aria-current="page"
                 >
@@ -240,11 +235,7 @@ const NavBar: FC = () => {
               </li>
               <li>
                 <a
-                  href={
-                    isRunningLocal()
-                      ? "./opportunities.html?search=&location_type=&job_type=&ordering=-posted_date&page=1"
-                      : "/opportunities?search=&location_type=&job_type=&ordering=-posted_date&page=1"
-                  }
+                  href="/opportunities?search=&location_type=&job_type=&ordering=-posted_date&page=1"
                   className="flex items-center py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-teal-700 md:p-0 md:dark:hover:text-teal-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   <svg
