@@ -89,3 +89,5 @@ DATABASES = {
 ### CompSciHi Opportunity Page Data Fetching Visualization
 
 ![Opportunity-page-fetching-visual](/visualizations/compschihi-opportunity-page-visual-v1.png)
+
+
