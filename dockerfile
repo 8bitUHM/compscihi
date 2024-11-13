@@ -28,11 +28,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 WORKDIR /app/theme/static_src
 RUN npm install
 
+WORKDIR /website/frontend
+RUN npm install
+
 # Change back to the app directory to copy the rest of the application code
 WORKDIR /app
+RUN npm install
 
 # Run Tailwind build and collect static files
-RUN python manage.py tailwind build && python manage.py collectstatic --noinput
+RUN npm run build && python manage.py collectstatic --noinput
 
 # Expose port 8000 for the Django application
 EXPOSE 8000
