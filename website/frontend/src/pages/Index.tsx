@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import * as Image2 from "../assets/postbuilding.jpg";
 import LoadingImage from "../components/LoadingImage";
-import { isRunningLocal } from "../util/routing";
 import { useEffect } from "react";
 import { initFlowbite } from "flowbite";
 

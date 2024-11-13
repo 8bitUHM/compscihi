@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
-import { getOpportunitiesRootPage, isRunningLocal } from "../util/routing";
+import { getOpportunitiesRootPage } from "../util/routing";
 import { Opportunity } from "../types/opportunity";
 import { formatDate } from "../util/dateformat";
 import { truncateString } from "../util/strings";
@@ -157,11 +157,7 @@ const Opportunities = () => {
           <h5 className=" text-2xl font-semibold tracking-tight text-gray-900 dark:text-white ">
             <a
               className="hover:underline"
-              href={
-                isRunningLocal
-                  ? `./opportunity.html?opportunity-id=${opportunity.id}`
-                  : `/opportunity?opportunity-id=${opportunity.id}`
-              }
+              href={`/opportunity?opportunity-id=${opportunity.id}`}
             >
               {opportunity.title}
             </a>
@@ -194,13 +190,7 @@ const Opportunities = () => {
             </p>
 
             <small className="text-blue-600 hover:underline">
-              <a
-                href={
-                  isRunningLocal
-                    ? `./opportunity.html?opportunity-id=${opportunity.id}`
-                    : `/opportunity?opportunity-id=${opportunity.id}`
-                }
-              >
+              <a href={`/opportunity?opportunity-id=${opportunity.id}`}>
                 Read full job description
               </a>
             </small>
