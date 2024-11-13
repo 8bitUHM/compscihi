@@ -1,6 +1,5 @@
 import * as React from "react";
 import { FC } from "react";
-import { isRunningLocal } from "../util/routing";
 import { createRoot } from "react-dom/client";
 
 const Footer: FC = () => {
@@ -46,11 +45,7 @@ const Footer: FC = () => {
                 <a
                   className="mx-1 text-base hover:underline"
                   target="_blank"
-                  href={
-                    isRunningLocal()
-                      ? `http://127.0.0.1:8000/`
-                      : `https://portal.compscihi.com`
-                  }
+                  href="/portal"
                 >
                   Opportunity Portal Login
                 </a>
@@ -93,4 +88,3 @@ const Footer: FC = () => {
 
 const root = document.getElementById("footer-root");
 createRoot(root).render(<Footer />);
-
