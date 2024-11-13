@@ -3,12 +3,10 @@ import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
-import { getOpportunitiesRootPage } from "../util/routing";
 import { Opportunity } from "../types/opportunity";
 import { formatDate } from "../util/dateformat";
 import { truncateString } from "../util/strings";
 import { Parameters } from "../types/parameters";
-import { getRootOpportunityFetchUrl } from "../util/routing";
 
 const Opportunities = () => {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
@@ -64,7 +62,7 @@ const Opportunities = () => {
       });
       setParams(parameters);
 
-      const fetchUrl = `${getRootOpportunityFetchUrl()}/api/opportunities/?${parameters.toStringParams()}`;
+      const fetchUrl = `/api/opportunities/?${parameters.toStringParams()}`;
       console.log(fetchUrl);
       const response = await fetch(fetchUrl);
 
@@ -99,12 +97,12 @@ const Opportunities = () => {
 
   const resetPageAndRedirect = () => {
     params.updatePage("1");
-    const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
+    const newHref = `/opportunities?${params.toStringParams()}`;
     window.location.href = newHref;
   };
 
   const pageRedirect = () => {
-    const newHref = `${getOpportunitiesRootPage()}?${params.toStringParams()}`;
+    const newHref = `/opportunities??${params.toStringParams()}`;
     window.location.href = newHref;
   };
 

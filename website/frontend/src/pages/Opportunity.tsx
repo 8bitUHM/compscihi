@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { initFlowbite } from "flowbite";
 import { useState } from "react";
 import { Opportunity } from "../types/opportunity";
-import { getRootOpportunityIdFetchUrl } from "../util/routing";
 
 const Opportunity = () => {
   const [opportunity, setOpportunity] = useState<Opportunity>();
@@ -28,7 +27,7 @@ const Opportunity = () => {
       const clientParams = new URLSearchParams(window.location.search);
       const opportunityId = clientParams.get("opportunity-id");
 
-      const fetchUrl = `${getRootOpportunityIdFetchUrl()}?id=${opportunityId}`;
+      const fetchUrl = `/api/opportunities?id=${opportunityId}`;
       const response = await fetch(fetchUrl);
 
       if (!response.ok) {
