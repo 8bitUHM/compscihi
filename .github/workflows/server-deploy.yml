@@ -4,7 +4,6 @@ on:
     branches:
       - main
     paths:
-      - 'server/**'
       - '.github/workflows/server-deploy.yml'
 
 jobs:
@@ -25,7 +24,6 @@ jobs:
           python -m venv venv
           . venv/bin/activate
           pip install -r requirements.txt
-        working-directory: ./server
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -45,7 +43,6 @@ jobs:
           CSH_DATABASE_PASSWORD: ${{ secrets.CSH_DATABASE_PASSWORD }}
           CSH_DATABASE_NAME: ${{ secrets.CSH_DATABASE_NAME }}
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        working-directory: ./server  
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -53,7 +50,6 @@ jobs:
 
       - name: Build Docker image
         run: docker build --build-arg SECRET_KEY="${{ secrets.SECRET_KEY }}" -t compscihi .
-        working-directory: ./server 
 
       - name: Tag Docker image
         run: docker tag compscihi:latest 654654366889.dkr.ecr.us-west-2.amazonaws.com/compscihi:latest

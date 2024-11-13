@@ -27,7 +27,7 @@ urlpatterns = [
     path('admin/login/', PortalLoginView.as_view(), name='admin_login'),
     path('admin/logout/', PortalLogoutView.as_view(), name='admin_logout'),
     path('admin/', admin.site.urls),
-    path('', include('portal.urls')),
+    path('portal/', include('portal.urls')),
     path('api/', include('api.urls')),
     url(r'^download/', db_views.get_file, {'add_attachment_headers': True},
     name='db_file_storage.download_file'),

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'portal',
+    'website',
     'api',
     'db_file_storage',
     'corsheaders',
