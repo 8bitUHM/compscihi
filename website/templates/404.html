@@ -1,0 +1,8 @@
+{% extends "website/base.html" %} 
+{% load static %} 
+{% block title %} 404 {% endblock %} 
+
+{% block content %}
+<div id="root"></div>
+<script src="{% static 'website/dist/pages/404.js' %}"></script>
+{% endblock %}
