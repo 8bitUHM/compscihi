@@ -99,7 +99,7 @@ DATABASES = {
         'HOST' : os.getenv('CSH_DATABASE_HOST'),
         'USER': os.getenv('CSH_DATABASE_USER'),
         'PASSWORD': os.getenv('CSH_DATABASE_PASSWORD'),
-        'NAME': 'postgres',
+        'NAME': os.getenv('CSH_DATABASE_NAME'),
         "PORT": "5432",
     }
 }

@@ -43,6 +43,7 @@ jobs:
           CSH_DATABASE_HOST: ${{ secrets.CSH_DATABASE_HOST }}
           CSH_DATABASE_USER: ${{ secrets.CSH_DATABASE_USER }}
           CSH_DATABASE_PASSWORD: ${{ secrets.CSH_DATABASE_PASSWORD }}
+          CSH_DATABASE_NAME: ${{ secrets.CSH_DATABASE_NAME }}
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
         working-directory: ./server  
 
