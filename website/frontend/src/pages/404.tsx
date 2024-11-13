@@ -1,6 +1,4 @@
 import * as React from "react";
-import NavBar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import { useEffect } from "react";
@@ -12,7 +10,6 @@ const Page404 = () => {
 
   return (
     <>
-      <NavBar />
       <section className="bg-white dark:bg-gray-900">
         <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
           <div className="mx-auto max-w-screen-sm text-center">
@@ -35,7 +32,6 @@ const Page404 = () => {
           </div>
         </div>
       </section>
-      <Footer />
     </>
   );
 };

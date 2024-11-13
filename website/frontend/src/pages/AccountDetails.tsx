@@ -1,7 +1,5 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import NavBar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import { initFlowbite } from "flowbite";
@@ -37,7 +35,6 @@ const AccountDetails = () => {
 
   return (
     <>
-      <NavBar />
       <div className="container mx-auto">
         {loading ? (
           <>
@@ -106,7 +103,6 @@ const AccountDetails = () => {
           </>
         )}
       </div>
-      <Footer />
     </>
   );
 };

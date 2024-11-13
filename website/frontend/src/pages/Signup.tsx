@@ -1,7 +1,5 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
-import NavBar from "../components/Navbar";
-import Footer from "../components/Footer";
 import SignupForm from "../components/SignupForm";
 import "../styles/styles.css";
 import { useEffect, useState } from "react";
@@ -38,7 +36,6 @@ const Signup = () => {
 
   return (
     <>
-      <NavBar />
       {loading ? (
         <>
           <LoadingIcon className="my-20 flex justify-center" />
@@ -82,7 +79,6 @@ const Signup = () => {
           )}
         </>
       )}
-      <Footer />
     </>
   );
 };

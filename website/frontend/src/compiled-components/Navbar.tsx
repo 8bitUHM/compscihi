@@ -5,6 +5,7 @@ import { isRunningLocal } from "../util/routing";
 import * as logo from "../assets/logo.svg";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { initFlowbite } from "flowbite";
+import { createRoot } from "react-dom/client";
 
 const NavBar: FC = () => {
   const [email, setEmail] = useState<null | string>(null);
@@ -271,4 +272,5 @@ const NavBar: FC = () => {
   );
 };
 
-export default NavBar;
+const root = document.getElementById("navbar-root");
+createRoot(root).render(<NavBar />);

@@ -1,7 +1,5 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
-import NavBar from "../components/Navbar";
-import Footer from "../components/Footer";
 import "../styles/styles.css";
 import { useEffect } from "react";
 import { initFlowbite } from "flowbite";
@@ -54,7 +52,6 @@ const Opportunity = () => {
 
   return (
     <>
-      <NavBar />
       <div className="w-full container mx-auto px-3 ">
         {pageReady ? (
           <>
@@ -223,7 +220,6 @@ const Opportunity = () => {
           </>
         )}
       </div>
-      <Footer />
     </>
   );
 };

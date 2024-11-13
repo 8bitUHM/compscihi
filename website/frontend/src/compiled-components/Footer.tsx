@@ -1,6 +1,7 @@
 import * as React from "react";
 import { FC } from "react";
 import { isRunningLocal } from "../util/routing";
+import { createRoot } from "react-dom/client";
 
 const Footer: FC = () => {
   return (
@@ -90,4 +91,6 @@ const Footer: FC = () => {
   );
 };
 
-export default Footer;
+const root = document.getElementById("footer-root");
+createRoot(root).render(<Footer />);
+

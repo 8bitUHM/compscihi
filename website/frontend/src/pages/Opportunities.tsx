@@ -1,8 +1,6 @@
 import * as React from "react";
-import NavBar from "../components/Navbar";
 import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
-import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
 import { getOpportunitiesRootPage, isRunningLocal } from "../util/routing";
@@ -306,7 +304,6 @@ const Opportunities = () => {
 
   return (
     <>
-      <NavBar />
       <div className="container mx-auto my-5">
         <section className="text-gray-600 body-font">
           <div className="container px-5 mx-auto">
@@ -867,7 +864,6 @@ const Opportunities = () => {
           </nav>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

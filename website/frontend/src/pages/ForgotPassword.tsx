@@ -1,6 +1,4 @@
 import * as React from "react";
-import NavBar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
 import { useEffect, useState } from "react";
@@ -33,7 +31,6 @@ const ForgotPassword = () => {
 
   return (
     <>
-      <NavBar />
       {/* Implement forgot password in here */}
       <section className="bg-white">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto">
@@ -78,8 +75,6 @@ const ForgotPassword = () => {
           </div>
         </div>
       </section>
-
-      <Footer />
     </>
   );
 };
