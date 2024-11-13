@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - '.github/workflows/server-deploy.yml'
 
 jobs:
   build:
