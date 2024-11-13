@@ -1,18 +1,16 @@
 {
-  "name": "compscihi",
+  "name": "server",
   "version": "1.0.0",
-  "description": "1. [Project Structure](#project-structure) 2. [Getting the app running](#getting-the-app-running) 3. [Development](#development)",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"python server/manage.py runserver\" \"npm --prefix client run dev\"",
-    "dev3": "concurrently \"python3 server/manage.py runserver\" \"npm --prefix client run dev\"",
-    "build": "npm --prefix website run build"
+    "dev": "concurrently \"python manage.py runserver\" \"python manage.py tailwind start\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "concurrently": "^9.0.1"
   }
 }
