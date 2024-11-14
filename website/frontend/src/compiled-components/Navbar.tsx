@@ -4,6 +4,7 @@ import { auth } from "../firebase/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { initFlowbite } from "flowbite";
 import { createRoot } from "react-dom/client";
+import "../styles/styles.css";
 
 const NavBar: FC = () => {
   const [email, setEmail] = useState<null | string>(null);
