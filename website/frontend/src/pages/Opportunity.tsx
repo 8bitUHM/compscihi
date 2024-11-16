@@ -134,20 +134,17 @@ const Opportunity = () => {
                     {/* Application Instructions */}
 
                     <div className="mt-4 flex flex-col gap-4 text-base">
-                      <span className="font-medium">
-                        Interested in Applying?
-                      </span>
                       <div>
+                        <p className="font-medium">Interested in Applying?</p>
+                        <p>{opportunity.application_instructions}</p>
                         {opportunity.apply_link ? (
-                          <p>
-                            {opportunity.application_instructions}{" "}
-                            <span className="underline">
-                              {opportunity.apply_link}
-                            </span>
-                          </p>
-                        ) : (
-                          <p>{opportunity.application_instructions}</p>
-                        )}
+                          <a
+                            href={opportunity.apply_link}
+                            className="hover:underline"
+                          >
+                            {opportunity.apply_link}
+                          </a>
+                        ) : null}
                       </div>
                     </div>
                   </div>
