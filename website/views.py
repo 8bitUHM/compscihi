@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 
 # Create your views here.
 
@@ -28,3 +29,10 @@ def student_profile(request):
 
 def student_profiles(request):
     return render(request, 'website/pages/student-profiles.html')
+
+def root_redirect_to_opportunities(request):
+    url = reverse('opportunities') + '?search=&location_type=&job_type=&ordering=-posted_date&page=1'
+    return redirect(url)
+
+def about(request):
+    return render(request, 'website/pages/about.html')

@@ -1,12 +1,11 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import "../styles/styles.css";
-import * as Image2 from "../assets/postbuilding.jpg";
 import LoadingImage from "../components/LoadingImage";
 import { useEffect } from "react";
 import { initFlowbite } from "flowbite";
 
-const Index = () => {
+const About = () => {
   useEffect(() => initFlowbite(), []);
 
   return (
@@ -67,4 +66,4 @@ const Index = () => {
 };
 
 const root = document.getElementById("root");
-createRoot(root).render(<Index />);
+createRoot(root).render(<About />);
