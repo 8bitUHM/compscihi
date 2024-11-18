@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: compscihi
+  labels:
+    app: compscihi
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: compscihi
+  template:
+    metadata:
+      labels:
+        app: compscihi
+    spec:
+      containers:
+        - name: compscihi-container
+          image: 8bituhm/compscihi:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: compscihi-secrets
+                  key: SECRET_KEY
+
+            - name: EMAIL_ID
+              valueFrom:
+                secretKeyRef:
+                  name: compscihi-secrets
+                  key: EMAIL_ID
+            - name: EMAIL_PW
+              valueFrom:
+                secretKeyRef:
+                  name: compscihi-secrets
+                  key: EMAIL_PW
+
+            - name: EMPLOYER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: compscihi-secrets
+                  key: EMPLOYER_KEY
+            - name: AUTHORIZED_POSTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: compscihi-secrets
+                  key: AUTHORIZED_POSTER_KEY
+            - name: ADMIN_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: compscihi-secrets
+                  key: ADMIN_KEY
+
+            - name: EMAIL_PAGE_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: compscihi-secrets
+                  key: EMAIL_PAGE_DOMAIN
+
+            - name: CSH_DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: compscihi-secrets
+                  key: CSH_DATABASE_HOST
+            - name: CSH_DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: compscihi-secrets
+                  key: CSH_DATABASE_USER
+            - name: CSH_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: compscihi-secrets
+                  key: CSH_DATABASE_PASSWORD
+            - name: CSH_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: compscihi-secrets
+                  key: CSH_DATABASE_NAME
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: compscihi-service
+spec:
+  selector:
+    app: compscihi
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
