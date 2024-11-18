@@ -5,6 +5,7 @@ on:
       - main
     paths-ignore:
       - 'README.MD'
+      - '.github/workflows/k8s-deploy.yaml'
 
 jobs:
   build:

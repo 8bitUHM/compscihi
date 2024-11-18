@@ -25,4 +25,4 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/compscihi:latest
+          docker push 8bituhm/compscihi:latest
