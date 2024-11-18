@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'wasmeti3km.us-west-2.awsapprunner.com', 'portal.compscihi.com', 'compscihi.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'wasmeti3km.us-west-2.awsapprunner.com', 'portal.compscihi.com', 'compscihi.com', '35.88.148.206']
 
 
 # Application definition
@@ -198,7 +198,8 @@ except ImportError:
 # CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGINS = [
     'https://compscihi.com',
-    'http://127.0.0.1:5500'
+    'http://127.0.0.1:5500',
+    'http://35.88.148.206'
 ]
 
 JAZZMIN_SETTINGS = {
@@ -421,6 +422,6 @@ EMAIL_USE_TLS = True
 
 DEFAULT_FROM_EMAIL = 'noreply<no_reply@domain.com>'
 
-CSRF_TRUSTED_ORIGINS = ['https://compscihi.com']
+CSRF_TRUSTED_ORIGINS = ['https://compscihi.com', 'http://35.88.148.206']
 
 
