@@ -41,7 +41,7 @@ const Signup = () => {
           <LoadingIcon className="my-20 flex justify-center" />
         </>
       ) : (
-        <>
+        <div className="mt-16">
           {loggedIn ? (
             <>
               {userVerified ? (
@@ -77,7 +77,7 @@ const Signup = () => {
               <SignupForm />
             </>
           )}
-        </>
+        </div>
       )}
     </>
   );

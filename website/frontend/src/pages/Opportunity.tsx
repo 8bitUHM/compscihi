@@ -50,7 +50,7 @@ const Opportunity = () => {
 
   return (
     <>
-      <div className="w-full container mx-auto px-3 ">
+      <div className="w-full container mx-auto px-3 mt-16">
         {pageReady ? (
           <>
             {canDisplayOpportunity ? (

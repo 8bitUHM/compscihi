@@ -292,7 +292,7 @@ const Opportunities = () => {
 
   return (
     <>
-      <div className="container mx-auto my-5">
+      <div className="container mx-auto my-5 mt-24">
         <section className="text-gray-600 body-font">
           <div className="container px-5 mx-auto">
             <div className="flex flex-col text-center w-full ">

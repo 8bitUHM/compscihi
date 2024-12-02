@@ -16,7 +16,7 @@ const StudentProfile = () => {
 
   return (
     <>
-      <div className="container py-5">This is the student profile page</div>
+      <div className="container py-5 mt-16">This is the student profile page</div>
       <div>{userId}</div>
     </>
   );
