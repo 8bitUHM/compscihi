@@ -78,12 +78,13 @@ DATABASES = {
   }
 }
 ```
-3. Run ```pip install -r requirements.txt``` in root directory to install Python related dependencies
-4. CD into directory /theme/static_src and run ```npm install```
-5. CD into directory /website/frontend and run ```npm install```
-6. Back in root directory, run ```npm install``` for global dev scripts
-7. Run ```python manage.py collectstatic``` to collect all static
-8. Start the app with ```npm run dev``` or ```npm run dev3```, the app should be running locally on port 8000, http://127.0.0.1:8000/
+3. Create a virtual python environment with ```python -m venv venv```
+4. Run ```pip install -r requirements.txt``` in root directory to install Python related dependencies
+5. CD into directory /theme/static_src and run ```npm install```
+6. CD into directory /website/frontend and run ```npm install```
+7. Back in root directory, run ```npm install``` for global dev scripts
+8. Run ```python manage.py collectstatic``` to collect all static
+9. Start the app with ```npm run dev``` or ```npm run dev3```, the app should be running locally on port 8000, http://127.0.0.1:8000/
 
 ## Visualizations
 

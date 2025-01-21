@@ -12,3 +12,4 @@ django-email-verification==0.3.3
 validators==0.34.0
 django-filter==24.3
 django-browser-reload==1.15.0
+Faker==33.3.1
